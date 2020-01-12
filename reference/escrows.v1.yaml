@@ -90,7 +90,9 @@ paths:
                 - emial
                 - kyc
         description: ''
-      description: Create an Avalara Fiscal Rep merchant profile in Lianlian Pay system
+      description: |-
+        Create an Avalara Fiscal Rep merchant profile in Lianlian Pay system.
+        All required supporting document of a profile, such as `regCertificateCopy`, `idFrontImg`, `idBackImg` should be uploaded into Lianlina Pay system before the create profile request.
   '/profiles/{profileId}':
     parameters:
       - schema:
@@ -221,7 +223,7 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Bill'
-      description: Submit a single bill
+      description: "Submit a single bill. \nAfter a successful submitting, Lianlian Pay will process payment to the bill payee."
   '/bills/{billId}/void':
     parameters:
       - schema:
@@ -239,7 +241,10 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Bill'
-      description: Void a single bill
+      description: |
+        Void a unsubmitted bill by bill id.
+        When you void a bill, that bill’s status is recorded as `VOIDED` and unprocessed payment of this bill will not be processed. Bills that have been previously processed and paid to a tax authority are no longer available to be voided.
+        Bills have fundingStatus as `BILL_CANCELING`, `BILL_CANCELED`, `BILL_EXPIRED` or paymentStatus as `PAYMENT_PROCESSING`, `BILL_PAID` cannot be voided.
   '/profiles/{profileId}/accounts':
     parameters:
       - schema:
@@ -253,6 +258,10 @@ paths:
       responses:
         '200':
           description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Account'
       requestBody:
         content:
           application/json:
@@ -270,6 +279,37 @@ paths:
                 - currency
         description: ''
       description: Create an account for a profile
+    get:
+      summary: Get Profile Accounts
+      operationId: get-profiles-profileId-accounts
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Account'
+        '':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Account'
+          description: 'This API returns a list of `Account` object of a profile. If no applicable account exists, empty list will be returned. '
+      description: Get a list of accounts of a profile.
+      parameters:
+        - schema:
+            type: string
+            enum:
+              - FUNDING
+              - PAYMENT
+              - COLLECTION
+          in: query
+          name: type
+          description: Account type
   '/accounts/{accountId}':
     parameters:
       - schema:
@@ -280,15 +320,68 @@ paths:
     get:
       summary: Get Account By ID
       tags: []
-      responses: {}
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Account'
       operationId: get-accounts-accountId
       description: Get a single account details by its account id.
+  /documents:
+    post:
+      summary: Upload Document
+      operationId: post-documents
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Document'
+      description: "Upload an image or PDF attachment. \nImage attachments can be of the format PDF, JPEG, or PNG. To upload a multi-page image, please use the PDF data type."
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                  description: Document name
+                size:
+                  type: integer
+                  description: Document file size
+              required:
+                - name
+                - size
+        description: ''
+  '/documents/{name}':
+    parameters:
+      - schema:
+          type: string
+        name: name
+        in: path
+        required: true
+    get:
+      summary: Your GET endpoint
+      tags: []
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Document'
+      operationId: get-documents-name
+      description: Get document details by name
 components:
   schemas:
     Profile:
       title: Profile
       type: object
-      description: ''
+      description: Profile is a data set of an Avalara customer description in Lianlian Pay system.
       properties:
         id:
           type: string
@@ -312,7 +405,7 @@ components:
     Bill:
       title: Bill
       type: object
-      description: ''
+      description: "Data set of an Avalara customer’s tax obligation description in Lianlian Pay system. \nSuch object helps Avalara to manage merchants’ tax obligation."
       properties:
         id:
           type: string
@@ -406,10 +499,11 @@ components:
         - province
         - country
         - postalCode
+      description: Address object
     Account:
       title: Account
       type: object
-      description: ''
+      description: 'Data object to describe a bank account in Lianlian Pay system. '
       properties:
         balance:
           type: string
@@ -559,7 +653,7 @@ components:
     Account-Info:
       title: Account-Info
       type: object
-      description: ''
+      description: Account details
       properties:
         number:
           type: string
@@ -579,6 +673,8 @@ components:
         region:
           type: string
           description: 'Account region, two letter region code'
+        coverLetter:
+          $ref: '#/components/schemas/Document'
       required:
         - number
         - name
@@ -592,7 +688,7 @@ components:
           type: string
           description: Document name
         size:
-          type: string
+          type: integer
           description: Document size
         createTime:
           type: string
@@ -601,3 +697,23 @@ components:
           example: 'UTC timestamp, e.g. 2019-01-01T00:00:000Z'
       required:
         - name
+      description: File object in Lianlian Pay system
+    Event:
+      title: Event
+      type: object
+      properties:
+        id:
+          type: string
+    TBD-Notification:
+      title: TBD-Notification
+      type: object
+      properties:
+        id:
+          type: string
+      description: ''
+    TBD-Notification-Template:
+      title: Notification-Template
+      type: object
+      properties:
+        id:
+          type: string
