@@ -7,7 +7,7 @@ servers:
 paths:
   /profiles:
     post:
-      summary: Create a profile
+      summary: Create Profile
       operationId: post-profiles
       responses:
         '200':
@@ -27,11 +27,20 @@ paths:
                   description: Merchant id in client system
                 countryOfOrigin:
                   type: string
+                  description: "Merchant's country of origin"
+                  enum:
+                    - US
+                    - CN
                 type:
                   type: string
-                  description: Company type
+                  description: Profile type
+                  enum:
+                    - INDIVIDUAL
+                    - CORPORATION
                 emial:
                   type: string
+                  format: email
+                  description: Merchant email address
                 kyc:
                   type:
                     - string
@@ -54,6 +63,7 @@ paths:
                       description: Company number
                     regCertificateCopy:
                       type: string
+                      description: Company liscens document name
                     legalRep:
                       type: object
                       required:
@@ -63,12 +73,16 @@ paths:
                       properties:
                         name:
                           type: string
+                          description: Legal Representative’s name in English
                         idNumber:
                           type: string
+                          description: Legal Representative’s id number
                         idFrontImg:
                           type: string
+                          description: Legal Representative’s id front document name
                         idBackImg:
                           type: string
+                          description: Legal Representative’s id back document name. Optional if id type is passport
               required:
                 - profileId
                 - countryOfOrigin
@@ -85,7 +99,7 @@ paths:
         in: path
         required: true
     get:
-      summary: Get a single profile detailes by profile id
+      summary: Get Profile By ID
       tags: []
       responses:
         '200':
@@ -95,6 +109,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/Profile'
       operationId: get-profiles-profileId
+      description: Get a single profile details by profile id
   '/profiles/{profileId}/bills':
     parameters:
       - schema:
@@ -103,7 +118,7 @@ paths:
         in: path
         required: true
     post:
-      summary: Create an obligation bill for a profile
+      summary: Create Bill
       operationId: post-profiles-profileId-bills
       responses:
         '200':
@@ -169,6 +184,7 @@ paths:
                 - swift
                 - rfb
         description: ''
+      description: Create a bill obligation for a profile
   '/bills/{billId}':
     parameters:
       - schema:
@@ -177,7 +193,7 @@ paths:
         in: path
         required: true
     get:
-      summary: Get a single bill details by bill id
+      summary: Get Bill By ID
       tags: []
       responses:
         '200':
@@ -187,6 +203,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/Bill'
       operationId: get-profiles-profileId-bills-billId
+      description: Get a bill details by its id
   '/bills/{billId}/submit':
     parameters:
       - schema:
@@ -195,7 +212,7 @@ paths:
         in: path
         required: true
     put:
-      summary: Submit a single bill by id
+      summary: Submit Bill
       operationId: put-bills-billId-submit
       responses:
         '200':
@@ -204,6 +221,7 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Bill'
+      description: Submit a single bill
   '/bills/{billId}/void':
     parameters:
       - schema:
@@ -212,7 +230,7 @@ paths:
         in: path
         required: true
     put:
-      summary: Void a single bill by id
+      summary: Void Bill
       operationId: put-bills-billId-void
       responses:
         '200':
@@ -221,6 +239,7 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Bill'
+      description: Void a single bill
   '/profiles/{profileId}/accounts':
     parameters:
       - schema:
@@ -229,7 +248,7 @@ paths:
         in: path
         required: true
     post:
-      summary: Create a single account for a profile
+      summary: Create Account
       operationId: post-profiles-profileId-accounts
       responses:
         '200':
@@ -250,6 +269,7 @@ paths:
                 - region
                 - currency
         description: ''
+      description: Create an account for a profile
   '/accounts/{accountId}':
     parameters:
       - schema:
@@ -258,10 +278,11 @@ paths:
         in: path
         required: true
     get:
-      summary: Get a single account details by id
+      summary: Get Account By ID
       tags: []
       responses: {}
       operationId: get-accounts-accountId
+      description: Get a single account details by its account id.
 components:
   schemas:
     Profile:
@@ -311,23 +332,41 @@ components:
         dueDate:
           type: string
           description: bill(obligation) due date
+          format: date
+          example: 'YYYY-MM-DD, e.g. 2010-01-21'
         expireDate:
           type: string
           description: bill(obligation) expire date
+          format: date
+          example: 'YYYY-MM-DD, e.g. 2010-01-21'
         payee:
           $ref: '#/components/schemas/Account-Info'
         createTime:
           type: string
+          format: date-time
+          example: 'UTC timestamp, e.g. 2019-01-01T00:00:000Z'
+          description: Bill created time
         modifyTime:
           type: string
+          format: date-time
+          example: 'UTC timestamp, e.g. 2019-01-01T00:00:000Z'
+          description: Bill last modified time
         fundingTime:
           type: string
+          format: date-time
+          example: 'UTC timestamp, e.g. 2019-01-01T00:00:000Z'
+          description: Bill funded time
         fundingStatus:
           type: string
+          description: Funding status
         paymentTime:
           type: string
+          format: date-time
+          example: 'UTC timestamp, e.g. 2019-01-01T00:00:000Z'
+          description: Bill payment time
         paymentStatus:
           type: string
+          description: Funding status
       required:
         - id
         - region
@@ -412,10 +451,13 @@ components:
           $ref: ''
         email:
           type: string
+          description: Merchant email address
+          format: email
         legalRep:
           $ref: '#/components/schemas/Legal-Representative'
         ubo:
           type: array
+          description: 'Profile List<UBO> information '
           items:
             $ref: '#/components/schemas/UBO'
       required:
@@ -426,6 +468,7 @@ components:
     Legal-Representative:
       title: Legal-Representative
       type: object
+      description: ''
       properties:
         name:
           type: string
@@ -434,17 +477,23 @@ components:
         idNumber:
           type: string
         idFrontImg:
-          type: string
+          $ref: '#/components/schemas/Document'
         idBackImg:
-          type: string
+          $ref: '#/components/schemas/Document'
         idIssueDate:
           type: string
+          format: date
+          example: 'YYYY-MM-DD, e.g. 2010-01-21'
         idExpireDate:
           type: string
+          format: date
+          example: 'YYYY-MM-DD, e.g. 2010-01-21'
         nationality:
           type: string
         birthday:
           type: string
+          format: date
+          example: 'YYYY-MM-DD, e.g. 2010-01-21'
         mobile:
           type: string
         residentialAddress:
@@ -460,6 +509,7 @@ components:
       properties:
         name:
           type: string
+          description: UBO name in English
         idType:
           type: string
           description: 'ID type, ID-Card/Passport'
@@ -468,22 +518,31 @@ components:
             - PASSPORT
         idNumber:
           type: string
+          description: UBO id number
         idFrontImg:
-          type: string
+          $ref: '#/components/schemas/Document'
         idBackImg:
-          type: string
+          $ref: '#/components/schemas/Document'
         idIssueDate:
           type: string
+          description: UBO id issue date
+          format: date
+          example: 'YYYY-MM-DD, e.g. 2010-01-21'
         idExpireDate:
           type: string
+          description: UBO id expiration date
+          format: date
+          example: 'YYYY-MM-DD, e.g. 2010-01-21'
         birthday:
           type: string
           format: date
           example: 'YYYY-MM-DD, e.g. 2010-01-21'
+          description: UBO birthday
         residentialAddress:
           $ref: '#/components/schemas/Address'
-        sharholdingRatio:
+        shareholdingRatio:
           type: string
+          description: UBO share holding ratio
       required:
         - name
         - idNumber
@@ -520,6 +579,11 @@ components:
         region:
           type: string
           description: 'Account region, two letter region code'
+      required:
+        - number
+        - name
+        - swift
+        - region
     Document:
       title: Document
       type: object
@@ -532,7 +596,8 @@ components:
           description: Document size
         createTime:
           type: string
-          format: date-time
           description: 'Document create time, UTC timestamp'
+          format: date-time
+          example: 'UTC timestamp, e.g. 2019-01-01T00:00:000Z'
       required:
         - name
