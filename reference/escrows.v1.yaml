@@ -1,0 +1,51 @@
+openapi: 3.0.0
+info:
+  title: escrows
+  version: '1.0'
+servers:
+  - url: 'http://localhost:3000'
+paths: {}
+components:
+  schemas:
+    Profile:
+      title: Profile
+      type: object
+      properties:
+        id:
+          type: string
+    Bill:
+      title: Bill
+      type: object
+      properties:
+        id:
+          type: string
+    Address:
+      title: Address
+      type: object
+      properties:
+        id:
+          type: string
+    Account:
+      title: Account
+      type: object
+      properties:
+        id:
+          type: string
+    CN-Entity-KYC:
+      title: CN-Entity-KYC
+      type: object
+      properties:
+        id:
+          type: string
+    Legal-Representative:
+      title: Legal-Representative
+      type: object
+      properties:
+        id:
+          type: string
+    UBO:
+      title: UBO
+      type: object
+      properties:
+        id:
+          type: string
