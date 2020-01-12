@@ -511,7 +511,7 @@ components:
         currency:
           type: string
           description: Account currency
-        details:
+        accountInfo:
           $ref: '#/components/schemas/Account-Info'
         type:
           type: string
@@ -698,7 +698,7 @@ components:
       required:
         - name
       description: File object in Lianlian Pay system
-    Event:
+    TBD-Event:
       title: Event
       type: object
       properties:
