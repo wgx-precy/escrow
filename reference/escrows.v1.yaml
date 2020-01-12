@@ -4,7 +4,52 @@ info:
   version: '1.0'
 servers:
   - url: 'http://localhost:3000'
-paths: {}
+paths:
+  /profiles:
+    post:
+      summary: ''
+      operationId: post-profiles
+      responses:
+        '200':
+          description: OK
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                profileId:
+                  type: string
+                countryOfOrigin:
+                  type: string
+                type:
+                  type: string
+                emial:
+                  type: string
+                kyc:
+                  type:
+                    - string
+                    - object
+                  properties:
+                    entityName:
+                      type: string
+                    entityType:
+                      type: string
+                    registryNumber:
+                      type: string
+                    regCertificateCopy:
+                      type: string
+                    legalRep:
+                      type: object
+                      properties:
+                        name:
+                          type: string
+                        idNumber:
+                          type: string
+                        idFrontImg:
+                          type: string
+                        idBackImg:
+                          type: string
 components:
   schemas:
     Profile:
@@ -13,39 +58,223 @@ components:
       properties:
         id:
           type: string
+          description: Merchant id in client system
+        countryOfOrigin:
+          type: string
+        type:
+          type: string
+        kyc:
+          type: string
+      required:
+        - id
+        - countryOfOrigin
+        - type
+        - kyc
     Bill:
       title: Bill
       type: object
+      description: ''
       properties:
         id:
           type: string
+          description: bill(obligation) id in client system
+        profileId:
+          type: string
+          description: merchant id in client system
+        region:
+          type: string
+          description: bill(obligation) region
+        currency:
+          type: string
+          description: bill(obligation) currency
+        amount:
+          type: string
+          description: bill(obligation) amount
+        period:
+          type: string
+          description: bill(obligation) period
+        dueDate:
+          type: string
+          description: bill(obligation) due date
+        expireDate:
+          type: string
+          description: bill(obligation) expire date
+        payee:
+          $ref: '#/components/schemas/Account-Info'
+        createTime:
+          type: string
+        modifyTime:
+          type: string
+        fundingTime:
+          type: string
+        fundingStatus:
+          type: string
+        paymentTime:
+          type: string
+        paymentStatus:
+          type: string
+      required:
+        - id
+        - profileId
+        - region
+        - currency
+        - amount
+        - period
+        - dueDate
+        - expireDate
+        - fundingStatus
+        - paymentStatus
     Address:
       title: Address
       type: object
       properties:
-        id:
+        lineOne:
           type: string
+          description: Address Line 1
+        lineTwo:
+          type: string
+          description: Address Line 2
+        city:
+          type: string
+          description: City/Town
+        province:
+          type: string
+          description: Province/Region/State
+        country:
+          type: string
+          description: Country
+        postalCode:
+          type: string
+          description: Postal Code/Zip Code
+      required:
+        - lineOne
+        - city
+        - province
+        - country
+        - postalCode
     Account:
       title: Account
       type: object
       properties:
-        id:
+        balance:
           type: string
-    CN-Entity-KYC:
-      title: CN-Entity-KYC
+        currency:
+          type: string
+        details:
+          $ref: '#/components/schemas/Account-Info'
+    CN-ENTITY-KYC:
+      title: CN ENTITY KYC
       type: object
+      description: ''
       properties:
-        id:
+        entityName:
           type: string
+          description: Company name in English
+        entityType:
+          type: string
+          description: Business type. Enum
+        registryNumber:
+          type: string
+          description: Company number
+        regCertificateCopy:
+          type: string
+        email:
+          type: string
+        legalRep:
+          type: string
+        ubo:
+          type: string
+      required:
+        - entityName
+        - entityType
+        - registryNumber
+        - regCertificateCopy
     Legal-Representative:
       title: Legal-Representative
       type: object
       properties:
-        id:
+        name:
           type: string
+        idType:
+          type: string
+        idNumber:
+          type: string
+        idFrontImg:
+          type: string
+        idBackImg:
+          type: string
+        idIssueDate:
+          type: string
+        idExpireDate:
+          type: string
+        nationality:
+          type: string
+        birthday:
+          type: string
+        mobile:
+          type: string
+        residentialAddress:
+          $ref: '#/components/schemas/Address'
+      required:
+        - name
+        - idNumber
+        - idFrontImg
+        - idBackImg
     UBO:
       title: UBO
       type: object
       properties:
-        id:
+        name:
+          type: string
+        idType:
+          type: string
+        idNumber:
+          type: string
+        idFrontImg:
+          type: string
+        idBackImg:
+          type: string
+        idIssueDate:
+          type: string
+        idExpireDate:
+          type: string
+        birthday:
+          type: string
+        residentialAddress:
+          $ref: '#/components/schemas/Address'
+        sharholdingRatio:
+          type: string
+      required:
+        - name
+        - idNumber
+        - idFrontImg
+        - idBackImg
+    Error:
+      title: Error
+      type: object
+      properties:
+        code:
+          type: string
+        message:
+          type: string
+    Account-Info:
+      title: Account-Info
+      type: object
+      properties:
+        number:
+          type: string
+          description: Bank account number
+        name:
+          type: string
+          description: Bank account name
+        bankName:
+          type: string
+          description: Bank name
+        branchCode:
+          type: string
+          description: Branch code
+        swift:
+          type: string
+          description: Bank SWIFT code
+        region:
           type: string
