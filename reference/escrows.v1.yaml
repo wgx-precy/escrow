@@ -93,6 +93,8 @@ paths:
       description: |-
         Create an Avalara Fiscal Rep merchant profile in Lianlian Pay system.
         All required supporting document of a profile, such as `regCertificateCopy`, `idFrontImg`, `idBackImg` should be uploaded into Lianlina Pay system before the create profile request.
+      tags:
+        - Methods
   '/profiles/{profileId}':
     parameters:
       - schema:
@@ -102,7 +104,8 @@ paths:
         required: true
     get:
       summary: Get Profile By ID
-      tags: []
+      tags:
+        - Methods
       responses:
         '200':
           description: OK
@@ -187,6 +190,8 @@ paths:
                 - rfb
         description: ''
       description: Create a bill obligation for a profile
+      tags:
+        - Methods
   '/bills/{billId}':
     parameters:
       - schema:
@@ -196,7 +201,8 @@ paths:
         required: true
     get:
       summary: Get Bill By ID
-      tags: []
+      tags:
+        - Methods
       responses:
         '200':
           description: OK
@@ -224,6 +230,8 @@ paths:
               schema:
                 $ref: '#/components/schemas/Bill'
       description: "Submit a single bill. \nAfter a successful submitting, Lianlian Pay will process payment to the bill payee."
+      tags:
+        - Methods
   '/bills/{billId}/void':
     parameters:
       - schema:
@@ -245,6 +253,8 @@ paths:
         Void a unsubmitted bill by bill id.
         When you void a bill, that bill’s status is recorded as `VOIDED` and unprocessed payment of this bill will not be processed. Bills that have been previously processed and paid to a tax authority are no longer available to be voided.
         Bills have fundingStatus as `BILL_CANCELING`, `BILL_CANCELED`, `BILL_EXPIRED` or paymentStatus as `PAYMENT_PROCESSING`, `BILL_PAID` cannot be voided.
+      tags:
+        - Methods
   '/profiles/{profileId}/accounts':
     parameters:
       - schema:
@@ -310,6 +320,8 @@ paths:
           in: query
           name: type
           description: Account type
+      tags:
+        - Methods
   '/accounts/{accountId}':
     parameters:
       - schema:
@@ -319,7 +331,8 @@ paths:
         required: true
     get:
       summary: Get Account By ID
-      tags: []
+      tags:
+        - Methods
       responses:
         '200':
           description: OK
@@ -357,6 +370,8 @@ paths:
                 - name
                 - size
         description: ''
+      tags:
+        - Methods
   '/documents/{name}':
     parameters:
       - schema:
@@ -366,7 +381,8 @@ paths:
         required: true
     get:
       summary: Your GET endpoint
-      tags: []
+      tags:
+        - Methods
       responses:
         '200':
           description: OK
@@ -402,6 +418,8 @@ components:
         - countryOfOrigin
         - type
         - kyc
+      x-tags:
+        - Objects
     Bill:
       title: Bill
       type: object
@@ -471,6 +489,8 @@ components:
         - payee
         - fundingStatus
         - paymentStatus
+      x-tags:
+        - Objects
     Address:
       title: Address
       type: object
@@ -500,6 +520,8 @@ components:
         - country
         - postalCode
       description: Address object
+      x-tags:
+        - Objects
     Account:
       title: Account
       type: object
@@ -527,6 +549,8 @@ components:
         - currency
         - type
         - id
+      x-tags:
+        - Objects
     CN-ENTITY-KYC:
       title: CN ENTITY KYC
       type: object
@@ -559,6 +583,8 @@ components:
         - entityType
         - registryNumber
         - regCertificateCopy
+      x-tags:
+        - Objects
     Legal-Representative:
       title: Legal-Representative
       type: object
@@ -597,6 +623,8 @@ components:
         - idNumber
         - idFrontImg
         - idBackImg
+      x-tags:
+        - Objects
     UBO:
       title: UBO
       type: object
@@ -642,6 +670,8 @@ components:
         - idNumber
         - idFrontImg
         - idBackImg
+      x-tags:
+        - Objects
     Error:
       title: Error
       type: object
@@ -650,6 +680,8 @@ components:
           type: string
         message:
           type: string
+      x-tags:
+        - Objects
     Account-Info:
       title: Account-Info
       type: object
@@ -680,6 +712,8 @@ components:
         - name
         - swift
         - region
+      x-tags:
+        - Objects
     Document:
       title: Document
       type: object
@@ -698,6 +732,8 @@ components:
       required:
         - name
       description: File object in Lianlian Pay system
+      x-tags:
+        - Objects
     TBD-Event:
       title: Event
       type: object
