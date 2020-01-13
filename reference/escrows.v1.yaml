@@ -611,43 +611,53 @@ components:
         amount:
           type: string
           description: bill(obligation) amount
+          example: '123.45'
+          pattern: "^(([1-9]{1}\\d*)|(0{1}))(\\.\\d{2})$"
         period:
           type: string
           description: bill(obligation) period
+          example: 2020-01
+          pattern: YYYY-MM
         dueDate:
           type: string
           description: bill(obligation) due date
           format: date
-          example: 'YYYY-MM-DD, e.g. 2010-01-21'
+          example: '2010-01-21'
+          pattern: YYYY-MM-DD
         expireDate:
           type: string
           description: bill(obligation) expire date
           format: date
-          example: 'YYYY-MM-DD, e.g. 2010-01-21'
+          example: '2010-01-21'
+          pattern: YYYY-MM-DD
         payee:
           $ref: '#/components/schemas/Account-Info'
         createTime:
           type: string
-          format: date-time
-          example: 'UTC timestamp, e.g. 2019-01-01T00:00:000Z'
           description: Bill created time
+          format: date-time
+          example: '2019-01-01T00:00:000Z'
+          pattern: UTC timestamp
         modifyTime:
           type: string
-          format: date-time
-          example: 'UTC timestamp, e.g. 2019-01-01T00:00:000Z'
           description: Bill last modified time
+          format: date-time
+          example: '2019-01-01T00:00:000Z'
+          pattern: UTC timestamp
         fundingTime:
           type: string
-          format: date-time
-          example: 'UTC timestamp, e.g. 2019-01-01T00:00:000Z'
           description: Bill funded time
+          format: date-time
+          example: '2019-01-01T00:00:000Z'
+          pattern: UTC timestamp
         fundingStatus:
           $ref: '#/components/schemas/Funding-Status'
         paymentTime:
           type: string
-          format: date-time
-          example: 'UTC timestamp, e.g. 2019-01-01T00:00:000Z'
           description: Bill payment time
+          format: date-time
+          example: '2019-01-01T00:00:000Z'
+          pattern: UTC timestamp
         paymentStatus:
           $ref: '#/components/schemas/Payment-Status'
       required:
@@ -701,6 +711,8 @@ components:
         balance:
           type: string
           description: Account balance in account currency
+          example: '123.45'
+          pattern: "^(([1-9]{1}\\d*)|(0{1}))(\\.\\d{2})$"
         currency:
           $ref: '#/components/schemas/Currency'
         accountInfo:
@@ -736,6 +748,7 @@ components:
           type: string
           description: Merchant email address
           format: email
+          example: abc@xyc.com
         legalRep:
           $ref: '#/components/schemas/Legal-Representative'
         ubo:
@@ -771,21 +784,24 @@ components:
           $ref: '#/components/schemas/Document'
         idIssueDate:
           type: string
-          format: date
-          example: 'YYYY-MM-DD, e.g. 2010-01-21'
           description: "Legal representative's ID issue date"
+          format: date
+          example: '2010-01-21'
+          pattern: YYYY-MM-DD
         idExpireDate:
           type: string
-          format: date
-          example: 'YYYY-MM-DD, e.g. 2010-01-21'
           description: "Legal representative's ID expire date"
+          format: date
+          example: '2010-01-21'
+          pattern: YYYY-MM-DD
         nationality:
           $ref: '#/components/schemas/Country-Of-Origin'
         birthday:
           type: string
-          format: date
-          example: 'YYYY-MM-DD, e.g. 2010-01-21'
           description: "Legal representative's birthday"
+          format: date
+          example: '2010-01-21'
+          pattern: YYYY-MM-DD
         mobile:
           type: string
           description: "Legal representative's mobile number"
@@ -819,17 +835,20 @@ components:
           type: string
           description: UBO id issue date
           format: date
-          example: 'YYYY-MM-DD, e.g. 2010-01-21'
+          example: '2010-01-21'
+          pattern: YYYY-MM-DD
         idExpireDate:
           type: string
           description: UBO id expiration date
           format: date
-          example: 'YYYY-MM-DD, e.g. 2010-01-21'
+          example: '2010-01-21'
+          pattern: YYYY-MM-DD
         birthday:
           type: string
-          format: date
-          example: 'YYYY-MM-DD, e.g. 2010-01-21'
           description: UBO birthday
+          format: date
+          example: '2010-01-21'
+          pattern: YYYY-MM-DD
         residentialAddress:
           $ref: '#/components/schemas/Address'
         shareholdingRatio:
@@ -853,7 +872,7 @@ components:
       required:
         - code
         - message
-      description: Error object in Lianlian Pay system
+      description: Error object defined in Lianlian Pay system.
     Account-Info:
       title: Account-Info
       type: object
@@ -902,7 +921,8 @@ components:
           type: string
           description: 'Document create time, UTC timestamp'
           format: date-time
-          example: 'UTC timestamp, e.g. 2019-01-01T00:00:000Z'
+          example: '2019-01-01T00:00:000Z'
+          pattern: UTC timestamp
         id:
           type: string
           description: Document id in Lianlian Pay system
@@ -917,7 +937,7 @@ components:
       type: object
       x-tags:
         - Objects
-      description: 'Event object generated in Lianlian Pay system. '
+      description: "Event object generated in Lianlian Pay system. \n\nSuch as profile status change, bill status change, etc."
       properties:
         id:
           type: string
@@ -929,9 +949,10 @@ components:
           description: Detailed event description.
         createTime:
           type: string
-          format: date-time
-          example: 'UTC timestamp, e.g. 2019-01-01T00:00:000Z'
           description: Event created time
+          format: date-time
+          example: '2019-01-01T00:00:000Z'
+          pattern: UTC timestamp
         profileId:
           type: string
           description: Profile/merchant id from client system
@@ -1002,9 +1023,15 @@ components:
         createTime:
           type: string
           description: Webhook registration time
+          format: date-time
+          example: '2019-01-01T00:00:000Z'
+          pattern: UTC timestamp
         modifyTime:
           type: string
           description: Webhook last modified time
+          format: date-time
+          example: '2019-01-01T00:00:000Z'
+          pattern: UTC timestamp
       required:
         - id
         - url
@@ -1064,7 +1091,8 @@ components:
 
         | Value | Description |
         |-------|-------------|
-        | COMPANY |  |
+        | COMPANY |  A legal entity formed by a group of individuals |
+        |INDIVIDUAL|  |
       type: string
     Country-Of-Origin:
       title: Country-Of-Origin
@@ -1084,11 +1112,14 @@ components:
       x-tags:
         - Enumerations
       description: |-
-        Entity type enumerations in Lianlian Pay system. One of:
+        Entity type enumerations defined in Lianlian Pay system. One of:
 
         | Value | Description |
         |-------|-------------|
-        |  |  |
+        |  SOLE | Sole Proprietorship |
+        |  L_CORP | L-Corporation |
+        |  S_CORP | S-Corporation |
+        |  PARTNERSHIP | Partnership  |
     ID-Type:
       title: ID-Type
       type: string
@@ -1137,6 +1168,6 @@ components:
 
         | Value | Description |
         |-------|-------------|
-        | COLLECTION ||
-        | FUNDING ||
-        | PAYMENT ||
+        | COLLECTION | Account used for merchant to collect sales incomes from marketplaces |
+        | FUNDING | Merchant ccount to keep bill obligation (reserved)fundings |
+        | PAYMENT | Account support direct debit, used for tax authorities of certain region/jurisdiction to pull money from |
