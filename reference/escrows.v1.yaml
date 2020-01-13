@@ -229,7 +229,7 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Bill'
-      description: "Submit a single bill. \nAfter a successful submitting, Lianlian Pay will process payment to the bill payee."
+      description: "Submit a bill, instruct Lianlian Pay to process its payment. \nAfter a successful submitting, Lianlian Pay will process payment to the bill payee."
       tags:
         - Methods
   '/bills/{billId}/void':
@@ -355,7 +355,7 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Document'
-      description: "Upload an image or PDF attachment. \nImage attachments can be of the format PDF, JPEG, or PNG. To upload a multi-page image, please use the PDF data type."
+      description: "Upload documents into Lianlian Pay system. \nImage attachments can be of the format PDF, JPEG, or PNG. To upload a multi-page image, please use the PDF data type."
       requestBody:
         content:
           application/json:
@@ -517,13 +517,27 @@ paths:
         - Methods
       responses: {}
       operationId: get-events-eventId
+      description: Get Lianlian Pay system generated event by id
   /events:
     get:
       summary: Get Events
       tags:
         - Methods
-      responses: {}
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Event'
       operationId: get-events
+      description: Get a list of Lianlian Pay system generated events
+      parameters:
+        - schema:
+            type: string
+          in: query
 components:
   schemas:
     Profile:
@@ -662,11 +676,7 @@ components:
         accountInfo:
           $ref: '#/components/schemas/Account-Info'
         type:
-          enum:
-            - PAYMENT
-            - FUNDING
-          description: 'Account type, PAYMENT/FUNDING'
-          $ref: ''
+          $ref: '#/components/schemas/Account-Type'
         id:
           type: string
           description: Account id in Lianlina Pay system
@@ -691,7 +701,7 @@ components:
           type: string
           description: Company number
         regCertificateCopy:
-          $ref: ''
+          $ref: '#/components/schemas/Document'
         email:
           type: string
           description: Merchant email address
@@ -717,10 +727,12 @@ components:
       properties:
         name:
           type: string
+          description: "Legal representative's name in English"
         idType:
           $ref: '#/components/schemas/ID-Type'
         idNumber:
           type: string
+          description: "Legal representative's ID number"
         idFrontImg:
           $ref: '#/components/schemas/Document'
         idBackImg:
@@ -729,18 +741,22 @@ components:
           type: string
           format: date
           example: 'YYYY-MM-DD, e.g. 2010-01-21'
+          description: "Legal representative's ID issue date"
         idExpireDate:
           type: string
           format: date
           example: 'YYYY-MM-DD, e.g. 2010-01-21'
+          description: "Legal representative's ID expire date"
         nationality:
           $ref: '#/components/schemas/Country-Of-Origin'
         birthday:
           type: string
           format: date
           example: 'YYYY-MM-DD, e.g. 2010-01-21'
+          description: "Legal representative's birthday"
         mobile:
           type: string
+          description: "Legal representative's mobile number"
         residentialAddress:
           $ref: '#/components/schemas/Address'
       required:
@@ -753,10 +769,11 @@ components:
       type: object
       x-tags:
         - Objects
+      description: "Data set in Lianlian Pay system to describe the Ultimate Beneficial Owner information of a company. \n"
       properties:
         name:
           type: string
-          description: UBO name in English
+          description: UBO name in Chinese
         idType:
           $ref: '#/components/schemas/ID-Type'
         idNumber:
@@ -791,7 +808,6 @@ components:
         - idNumber
         - idFrontImg
         - idBackImg
-      description: "Data set in Lianlian Pay system to describe the Ultimate Beneficial Owner information of a company. \n"
     Error:
       title: Error
       type: object
@@ -864,22 +880,29 @@ components:
       type: object
       x-tags:
         - Objects
+      description: 'Event object generated in Lianlian Pay system. '
       properties:
         id:
           type: string
+          description: Event id in Lianlian Pay system
         topic:
           $ref: '#/components/schemas/Event-Topic'
         message:
           type: string
+          description: Detailed event description.
         createTime:
           type: string
-        modifyTime:
+          format: date-time
+          example: 'UTC timestamp, e.g. 2019-01-01T00:00:000Z'
+          description: Event created time
+        profileId:
           type: string
+          description: Merchant id in client system
       required:
         - id
         - topic
         - message
-      description: 'Event object generated in Lianlian Pay system. '
+        - profileId
     TBD-Notification:
       title: TBD-Notification
       type: object
@@ -941,6 +964,10 @@ components:
         - isEnabled
         - topics
         - createTime
+      description: |-
+        Object used in Lianlian Pay system to describe the client registration of event callbacks.
+
+        Lianlian Pay uses this object to identify events which should be pushed back to client's url.
     Payment-Status:
       title: Payment-Status
       type: string
