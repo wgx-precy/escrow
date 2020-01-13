@@ -295,6 +295,8 @@ paths:
                 currency:
                   type: string
                   description: Account currency
+                type:
+                  type: string
               required:
                 - region
                 - currency
@@ -412,8 +414,8 @@ paths:
                 $ref: '#/components/schemas/Document'
       operationId: get-documents-name
       description: |-
-        Get document details by id
-        Return type is `Document`
+        Get document file by id
+        File will be returned
   /webhooks:
     get:
       summary: Get Webhook Registrations
@@ -588,6 +590,8 @@ components:
           $ref: '#/components/schemas/CN-ENTITY-KYC'
         status:
           $ref: '#/components/schemas/Profile-Status'
+        feedback:
+          $ref: '#/components/schemas/Error'
       required:
         - id
         - countryOfOrigin
@@ -605,9 +609,9 @@ components:
           type: string
           description: Bill(obligation) id from client system
         region:
-          $ref: '#/components/schemas/Region'
+          $ref: '#/components/schemas/Bill-Region'
         currency:
-          $ref: '#/components/schemas/Currency'
+          $ref: '#/components/schemas/Bill-Currency'
         amount:
           type: string
           description: bill(obligation) amount
@@ -621,15 +625,15 @@ components:
         dueDate:
           type: string
           description: bill(obligation) due date
-          format: date
-          example: '2010-01-21'
-          pattern: YYYY-MM-DD
+          format: date-time
+          example: '2019-01-01T00:00:000Z'
+          pattern: UTC+0 timestamp
         expireDate:
           type: string
           description: bill(obligation) expire date
-          format: date
-          example: '2010-01-21'
-          pattern: YYYY-MM-DD
+          format: date-time
+          example: '2019-01-01T00:00:000Z'
+          pattern: UTC+0 timestamp
         payee:
           $ref: '#/components/schemas/Account-Info'
         createTime:
@@ -637,29 +641,33 @@ components:
           description: Bill created time
           format: date-time
           example: '2019-01-01T00:00:000Z'
-          pattern: UTC timestamp
-        modifyTime:
-          type: string
-          description: Bill last modified time
-          format: date-time
-          example: '2019-01-01T00:00:000Z'
-          pattern: UTC timestamp
+          pattern: UTC+0 timestamp
         fundingTime:
           type: string
           description: Bill funded time
           format: date-time
           example: '2019-01-01T00:00:000Z'
-          pattern: UTC timestamp
-        fundingStatus:
-          $ref: '#/components/schemas/Funding-Status'
+          pattern: UTC+0 timestamp
         paymentTime:
           type: string
           description: Bill payment time
           format: date-time
           example: '2019-01-01T00:00:000Z'
           pattern: UTC timestamp
-        paymentStatus:
-          $ref: '#/components/schemas/Payment-Status'
+        status:
+          $ref: '#/components/schemas/Bill-Status'
+        isFullyFunded:
+          type: boolean
+          description: 'Default false, true if fully funded. Ready to pay if isFullyFunded equals to true.'
+        isPaid:
+          type: boolean
+          description: 'Default false, true if bill submitted and paid to payee.'
+        modifyTime:
+          type: string
+          format: date-time
+          example: '2019-01-01T00:00:000Z'
+          pattern: UTC+0 timestamp
+          description: Bill last updated time
       required:
         - id
         - region
@@ -669,8 +677,9 @@ components:
         - dueDate
         - expireDate
         - payee
-        - fundingStatus
-        - paymentStatus
+        - status
+        - isFullyFunded
+        - isPaid
     Address:
       title: Address
       type: object
@@ -714,7 +723,7 @@ components:
           example: '123.45'
           pattern: "^(([1-9]{1}\\d*)|(0{1}))(\\.\\d{2})$"
         currency:
-          $ref: '#/components/schemas/Currency'
+          $ref: '#/components/schemas/Account-Currency'
         accountInfo:
           $ref: '#/components/schemas/Account-Info'
         type:
@@ -734,9 +743,8 @@ components:
       x-tags:
         - Objects
       properties:
-        entityNameInEnglish:
-          type: string
-          description: Company name in English
+        entityName:
+          $ref: '#/components/schemas/Name'
         entityType:
           $ref: '#/components/schemas/Entity-Type'
         registryNumber:
@@ -759,7 +767,7 @@ components:
           items:
             $ref: '#/components/schemas/UBO'
       required:
-        - entityNameInEnglish
+        - entityName
         - entityType
         - registryNumber
         - regCertificateCopy
@@ -771,8 +779,7 @@ components:
         - Objects
       properties:
         name:
-          type: string
-          description: "Legal representative's name in English"
+          $ref: '#/components/schemas/Name'
         idType:
           $ref: '#/components/schemas/ID-Type'
         idNumber:
@@ -864,6 +871,7 @@ components:
       type: object
       x-tags:
         - Objects
+      description: Error object defined in Lianlian Pay system.
       properties:
         code:
           type: string
@@ -872,7 +880,6 @@ components:
       required:
         - code
         - message
-      description: Error object defined in Lianlian Pay system.
     Account-Info:
       title: Account-Info
       type: object
@@ -896,7 +903,7 @@ components:
           type: string
           description: Bank SWIFT code
         region:
-          $ref: '#/components/schemas/Region'
+          $ref: '#/components/schemas/Account-Region'
         coverLetter:
           $ref: '#/components/schemas/Document'
       required:
@@ -926,12 +933,10 @@ components:
         id:
           type: string
           description: Document id in Lianlian Pay system
-        profileId:
-          type: string
-          description: Profile/merchant id from client system
       required:
         - name
-        - id
+        - size
+        - createTime
     Event:
       title: Event
       type: object
@@ -942,11 +947,14 @@ components:
         id:
           type: string
           description: Event id in Lianlian Pay system
-        topic:
-          $ref: '#/components/schemas/Event-Topic'
-        message:
-          type: string
+        type:
+          $ref: '#/components/schemas/Event-Type'
+        data:
           description: Detailed event description.
+          anyOf:
+            - $ref: '#/components/schemas/Bill'
+            - $ref: '#/components/schemas/Profile'
+            - $ref: '#/components/schemas/Account'
         createTime:
           type: string
           description: Event created time
@@ -958,8 +966,8 @@ components:
           description: Profile/merchant id from client system
       required:
         - id
-        - topic
-        - message
+        - type
+        - data
         - profileId
     TBD-Notification:
       title: TBD-Notification
@@ -979,21 +987,23 @@ components:
       x-tags:
         - Objects
       description: ''
-    Event-Topic:
+    Event-Type:
       type: string
       title: Event-Topic
       description: |
         Lianlian Pay system event topics. One of:
 
-        | Value | Description |
+        | Type | Description |
         |--------|------------|
-        | profileStatusChanged | Profile status changed notification |
-        | fundingReceived | Funding received in profile’s receiving account notification |
-        | billEscrow | Escrowed from receiving account notification |
-        | billPayment | Payment processed notification |
-        | billRefund | Payment refunded to receiving account notification |
-        | paymentAccountCreated | Payment account application complete, account assigned notification |
-        | paymentAccountDebited | Tax authority issued ACH direct debit and debited from payment account notification |
+        | profile.failed| Profile KYC failed, Lianlian Pay cannot provide service to this profile. Return type `Profile` object. |
+        | profile.active| Profile KYC passed, profile active in Lianlian Pay system. Return type `Profile` object.  |
+        | profile.error | Profile KYC error, need more information to complete Lianlian Pay KYC. Detailed information can be found in `Profile.feedback`. Return type `Profile` object.  |
+        | profile.updated| Profile KYC information updated, such as UBO information added/changed. Return type `Profile` object.  |
+        | bill.funded | Bill fully funded, `Bill.isFullyFunded` equals `true`. Return type `Bill` object.  |
+        | bill.paid | Bill paid, after receiving payment request(Submit Bill), Lianlian Pay made payment to bill payee. `Bill.ispaid` equals `false`. Return type `Bill` object. |
+        | bill.canceled | After receiving void bill request, Lianlian Pay canceled the bill. Return type `Bill` object. |
+        | bill.expired | No funding or short funding after bill expiration date. Return type `Bill` object. |
+        | account.paymentaccount.created| Payment account created in Lianlian Pay system. Return type `Account` object. |
       x-tags:
         - Enumerations
     Webhook:
@@ -1038,41 +1048,9 @@ components:
         - isEnabled
         - topics
         - createTime
-    Payment-Status:
-      title: Payment-Status
-      type: string
-      x-tags:
-        - Enumerations
-      description: |
-        Bill payment status in Lianlian Pay system. One of:
-
-        | Value | Description |
-        |-------|-------------|
-        | INIT | Waiting for payment request |
-        | PROCESSING | Payment request received, payment is under processing |
-        | PAID | Payment complete |
-        | FAILED | Payment failed |
-    Funding-Status:
-      title: Funding-Status
-      type: string
-      x-tags:
-        - Enumerations
-      description: |
-        Bill funding status in Lianlian Pay system. One of:
-
-        | Value | Description |
-        |-------|-------------|
-        | INIT | Bill created, waiting for processing |
-        | FUNDING_PROCESSING | Waiting for funding from merchant |
-        | FUNDED| Received funding from merchant, bill fully funded |
-        | CANCELING | Received cancel bill request, request is under processing |
-        | CANCELED | Cancel bill request complete |
-        | EXPIRED | Receiving no funding or not enough funding from merchant before bill expiration date |
     Profile-Status:
       title: Profile-Status
       type: string
-      x-tags:
-        - Enumerations
       description: |-
         Profile status in Lianlian Pay system. One of:
 
@@ -1082,6 +1060,8 @@ components:
         | ACTIVE | KYC complete, profile is active |
         | FAILED | Lianlian Pay cannot provide services to this profile |
         | ERROR| KYC error, need aditional information to complete KYC review |
+      x-tags:
+        - Enumerations
     Profile-Type:
       title: Profile-Type
       x-tags:
@@ -1116,10 +1096,11 @@ components:
 
         | Value | Description |
         |-------|-------------|
-        |  SOLE | Sole Proprietorship |
-        |  L_CORP | L-Corporation |
-        |  S_CORP | S-Corporation |
-        |  PARTNERSHIP | Partnership  |
+        | JOINT_STOCK | Joint Stock Company |
+        | SELF_EMPLOYED | Sole Proprietorship |
+        | LISTED_ENTERPRISES | Listed Enterprises |
+        | LIMTED_COMPANY | Limted Company |
+        | PARTNERSHIP | Partnership  |
     ID-Type:
       title: ID-Type
       type: string
@@ -1132,32 +1113,32 @@ components:
         |-------|-------------|
         | PASSPORT |  |
         | IDCARD |  |
-    Currency:
-      title: Currency
+    Account-Currency:
+      title: Account Currency
       type: string
       x-tags:
         - Enumerations
       description: |-
-        Supported currency in Lianlian Pay system. One of:
+        Supported account currencies in Lianlian Pay system. One of:
 
-        | Value | Description | Avaliable in Payment Account | Avaliable in Funding Account | Supported Region |
-        |-------|-------------|------------------------------|------------------------------|------------------|
-        | CNY | Chinese Yuan | | No | CN |
-        | EUR | Euro | Yes | Yes | FR,DE,IT,SP |
-        | GBP | Great Britain Pound | | | UK |
-        | USD | United States dollar | | | US |
+        | Currency | Description |
+        |----------|-------------|
+        | CNY | Chinese Yuan |
+        | EUR | Euro |
+        | GBP | Great Britain Pound |
+        | USD | United States dollar |
     Region:
       title: Region
-      x-tags:
-        - Enumerations
       description: |
         Supported regions in Lianlian Pay system. One of:
 
-        | Value | Description | Avaliable in Bill | Avaliable in Account |
-        |-------|-------------|------|---------|
-        | CN | China | No | No |
-        | FR | France | Yes | Yes |
+        | Region | Description |
+        |-------|-------------|
+        | CN | China |
+        | US | United States |
       type: string
+      x-tags:
+        - Enumerations
     Account-Type:
       title: Account-Type
       type: string
@@ -1166,8 +1147,86 @@ components:
       description: |-
         Account type provided in Lianlian Pay system. One of:
 
-        | Value | Description |
+        | Type | Description |
         |-------|-------------|
         | COLLECTION | Account used for merchant to collect sales incomes from marketplaces |
         | FUNDING | Merchant ccount to keep bill obligation (reserved)fundings |
         | PAYMENT | Account support direct debit, used for tax authorities of certain region/jurisdiction to pull money from |
+    Name:
+      title: Name
+      type: object
+      x-tags:
+        - Objects
+      properties:
+        nameInEnglish:
+          type: string
+        nameOnID:
+          type: string
+    Bill-Region:
+      title: Bill-Region
+      type: string
+      x-tags:
+        - Enumerations
+      description: |-
+        Supported bill region/jurisdiction in Lianlian Pay system.
+
+        | Region | Description |
+        |--------|-------------|
+        | FR | France |
+        | DE | Germany |
+        | UK | United Kingdom |
+    Bill-Currency:
+      title: Bill-Currency
+      type:
+        - object
+        - string
+      x-tags:
+        - Enumerations
+      description: |-
+        Supported bill currency in Lianlian Pay system. One of:
+
+        | Currency | Description |
+        |----------|-------------|
+        | EUR | Euro |
+    Bill-Status:
+      title: Bill-Status
+      type: string
+      description: |-
+        Bill status defined in Lianlian Pay system. One of:
+
+        | Value | Description |
+        |-------|-------------|
+        | INIT | Bill created, waiting for procesing |
+        | CANCELED | Bill voided |
+        | COMPLETE | Bill complete |
+        | EXPIRED | Bill expired |
+      x-tags:
+        - Enumerations
+    Account-Region:
+      title: Account-Region
+      type:
+        - object
+        - string
+      description: |-
+        Supported account regions in Lianlian Pay system
+
+        Collection Account Region
+
+        | Region | Description |
+        |--------|-------------|
+        | UK     |   |
+
+
+        Funding Account Region
+
+        | Region | Description |
+        |--------|-------------|
+        | UK | United Kindoms, supported currency - GBP|
+
+        Payment Account Region
+
+        | Region | Description |
+        |--------|-------------|
+        | FR | France, supported currency - EUR |
+      x-tags:
+        - Enumerations
