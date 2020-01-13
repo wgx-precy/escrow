@@ -382,7 +382,7 @@ paths:
         in: path
         required: true
     get:
-      summary: Your GET endpoint
+      summary: Get Document
       tags:
         - Methods
       responses:
@@ -561,8 +561,7 @@ components:
           type: string
           description: bill(obligation) id in client system
         region:
-          type: string
-          description: bill(obligation) region
+          $ref: '#/components/schemas/Region'
         currency:
           $ref: '#/components/schemas/Currency'
         amount:
@@ -621,6 +620,9 @@ components:
     Address:
       title: Address
       type: object
+      description: Address object
+      x-tags:
+        - Objects
       properties:
         lineOne:
           type: string
@@ -633,10 +635,9 @@ components:
           description: City/Town
         province:
           type: string
-          description: Province/Region/State
-        country:
-          type: string
-          description: Country
+          description: Province/State
+        region:
+          $ref: '#/components/schemas/Region'
         postalCode:
           type: string
           description: Postal Code/Zip Code
@@ -644,15 +645,12 @@ components:
         - lineOne
         - city
         - province
-        - country
+        - region
         - postalCode
-      description: Address object
-      x-tags:
-        - Objects
     Account:
       title: Account
       type: object
-      description: 'Data object to describe a bank account in Lianlian Pay system. '
+      description: 'Data object to describe an account in Lianlian Pay system. '
       x-tags:
         - Objects
       properties:
@@ -664,11 +662,11 @@ components:
         accountInfo:
           $ref: '#/components/schemas/Account-Info'
         type:
-          type: string
           enum:
             - PAYMENT
             - FUNDING
           description: 'Account type, PAYMENT/FUNDING'
+          $ref: ''
         id:
           type: string
           description: Account id in Lianlina Pay system
@@ -793,7 +791,7 @@ components:
         - idNumber
         - idFrontImg
         - idBackImg
-      description: ''
+      description: "Data set in Lianlian Pay system to describe the Ultimate Beneficial Owner information of a company. \n"
     Error:
       title: Error
       type: object
@@ -807,10 +805,13 @@ components:
       required:
         - code
         - message
+      description: Error object in Lianlian Pay system
     Account-Info:
       title: Account-Info
       type: object
       description: Account details
+      x-tags:
+        - Objects
       properties:
         number:
           type: string
@@ -828,8 +829,7 @@ components:
           type: string
           description: Bank SWIFT code
         region:
-          type: string
-          description: 'Account region, two letter region code'
+          $ref: '#/components/schemas/Region'
         coverLetter:
           $ref: '#/components/schemas/Document'
       required:
@@ -837,8 +837,6 @@ components:
         - name
         - swift
         - region
-      x-tags:
-        - Objects
     Document:
       title: Document
       type: object
@@ -881,6 +879,7 @@ components:
         - id
         - topic
         - message
+      description: 'Event object generated in Lianlian Pay system. '
     TBD-Notification:
       title: TBD-Notification
       type: object
@@ -903,7 +902,7 @@ components:
       type: string
       title: Event-Topic-Enumeration
       description: |
-        Lianlian Pay system notification topics. One of:
+        Lianlian Pay system event topics. One of:
 
         | Value | Description |
         |--------|------------|
@@ -1045,3 +1044,28 @@ components:
         |-------|-------------|-----------------|-----------------|
         | CNY | | | |
         | EUR | | | |
+    Region:
+      title: Region
+      x-tags:
+        - Enumerations
+      description: |
+        Supported regions in Lianlian Pay system. One of:
+
+        | Value | Description | Bill | Account |
+        |-------|-------------|------|---------|
+        | CN | | | |
+        | FR | | | |
+      type: string
+    Account-Type:
+      title: Account-Type
+      type: string
+      x-tags:
+        - Enumerations
+      description: |-
+        Account type provided in Lianlian Pay system. One of:
+
+        | Value | Description |
+        |-------|-------------|
+        | COLLECTION ||
+        | FUNDING ||
+        | PAYMENT ||
