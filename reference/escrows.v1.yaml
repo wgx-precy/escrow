@@ -374,11 +374,11 @@ paths:
         description: ''
       tags:
         - Methods
-  '/documents/{name}':
+  '/documents/{documentId}':
     parameters:
       - schema:
           type: string
-        name: name
+        name: documentId
         in: path
         required: true
     get:
@@ -393,7 +393,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/Document'
       operationId: get-documents-name
-      description: Get document details by name
+      description: Get document details by id
   /webhooks:
     get:
       summary: Get Webhook Registration List
@@ -504,6 +504,26 @@ paths:
       description: Delete a webhook registration by id.
       tags:
         - Methods
+  '/events/{eventId}':
+    parameters:
+      - schema:
+          type: string
+        name: eventId
+        in: path
+        required: true
+    get:
+      summary: Get Event
+      tags:
+        - Methods
+      responses: {}
+      operationId: get-events-eventId
+  /events:
+    get:
+      summary: Get Events
+      tags:
+        - Methods
+      responses: {}
+      operationId: get-events
 components:
   schemas:
     Profile:
@@ -832,6 +852,9 @@ components:
     Document:
       title: Document
       type: object
+      description: File object in Lianlian Pay system
+      x-tags:
+        - Objects
       properties:
         name:
           type: string
@@ -844,11 +867,10 @@ components:
           description: 'Document create time, UTC timestamp'
           format: date-time
           example: 'UTC timestamp, e.g. 2019-01-01T00:00:000Z'
+        id:
+          type: string
       required:
         - name
-      description: File object in Lianlian Pay system
-      x-tags:
-        - Objects
     Event:
       title: Event
       type: object
@@ -876,18 +898,34 @@ components:
         id:
           type: string
       description: ''
+      x-tags:
+        - Methods
     TBD-Notification-Template:
       title: Notification-Template
       type: object
       properties:
         id:
           type: string
-    Event-Topic:
-      title: Event-Topic-Enumeration
-      type: string
       x-tags:
-        - Enumeration
-      description: Lianlian Pay system notification topics
+        - Objects
+      description: ''
+    Event-Topic:
+      type: string
+      title: Event-Topic-Enumeration
+      description: |
+        Lianlian Pay system notification topics. One of:
+
+        | Value | Description |
+        |--------|------------|
+        | profileStatusChanged | Profile status changed notification |
+        | fundingReceived | Funding received in profile’s receiving account notification |
+        | billEscrow | Escrowed from receiving account notification |
+        | billPayment | Payment processed notification |
+        | billRefund | Payment refunded to receiving account notification |
+        | paymentAccountCreated | Payment account application complete, account assigned notification |
+        | paymentAccountDebited | Tax authority issued ACH direct debit and debited from payment account notification |
+      x-tags:
+        - Enumerations
     Webhook:
       title: Webhook
       type: object
@@ -914,3 +952,19 @@ components:
         - isEnabled
         - topics
         - createTime
+    Payment-Status:
+      title: Payment-Status
+      type: object
+      properties:
+        id:
+          type: string
+      x-tags:
+        - Enumerations
+    Funding-Status:
+      title: Funding-Status
+      type: object
+      properties:
+        id:
+          type: string
+      x-tags:
+        - Enumerations
