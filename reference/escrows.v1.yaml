@@ -530,32 +530,32 @@ components:
       title: Profile
       type: object
       description: Profile is a data set of an Avalara customer description in Lianlian Pay system.
+      x-tags:
+        - Objects
       properties:
         id:
           type: string
           description: Merchant id in client system
         countryOfOrigin:
-          type: string
-          description: "Merchant's country of origin"
+          $ref: '#/components/schemas/Country-Of-Origin'
         type:
-          type: string
-          description: Merchant type
-          enum:
-            - INDIVIDUAL
-            - COMPANY
+          $ref: '#/components/schemas/Profile-Type'
         kyc:
           $ref: '#/components/schemas/CN-ENTITY-KYC'
+        status:
+          $ref: '#/components/schemas/Profile-Status'
       required:
         - id
         - countryOfOrigin
         - type
         - kyc
-      x-tags:
-        - Objects
+        - status
     Bill:
       title: Bill
       type: object
       description: "Data set of an Avalara customer’s tax obligation description in Lianlian Pay system. \nSuch object helps Avalara to manage merchants’ tax obligation."
+      x-tags:
+        - Objects
       properties:
         id:
           type: string
@@ -564,8 +564,7 @@ components:
           type: string
           description: bill(obligation) region
         currency:
-          type: string
-          description: bill(obligation) currency
+          $ref: '#/components/schemas/Currency'
         amount:
           type: string
           description: bill(obligation) amount
@@ -600,16 +599,14 @@ components:
           example: 'UTC timestamp, e.g. 2019-01-01T00:00:000Z'
           description: Bill funded time
         fundingStatus:
-          type: string
-          description: Funding status
+          $ref: '#/components/schemas/Funding-Status'
         paymentTime:
           type: string
           format: date-time
           example: 'UTC timestamp, e.g. 2019-01-01T00:00:000Z'
           description: Bill payment time
         paymentStatus:
-          type: string
-          description: Funding status
+          $ref: '#/components/schemas/Payment-Status'
       required:
         - id
         - region
@@ -621,8 +618,6 @@ components:
         - payee
         - fundingStatus
         - paymentStatus
-      x-tags:
-        - Objects
     Address:
       title: Address
       type: object
@@ -658,13 +653,14 @@ components:
       title: Account
       type: object
       description: 'Data object to describe a bank account in Lianlian Pay system. '
+      x-tags:
+        - Objects
       properties:
         balance:
           type: string
           description: Account balance in account currency
         currency:
-          type: string
-          description: Account currency
+          $ref: '#/components/schemas/Currency'
         accountInfo:
           $ref: '#/components/schemas/Account-Info'
         type:
@@ -681,19 +677,18 @@ components:
         - currency
         - type
         - id
-      x-tags:
-        - Objects
     CN-ENTITY-KYC:
       title: CN ENTITY KYC
       type: object
       description: ''
+      x-tags:
+        - Objects
       properties:
         entityName:
           type: string
           description: Company name in English
         entityType:
-          type: string
-          description: Business type. Enum
+          $ref: '#/components/schemas/Entity-Type'
         registryNumber:
           type: string
           description: Company number
@@ -715,17 +710,17 @@ components:
         - entityType
         - registryNumber
         - regCertificateCopy
-      x-tags:
-        - Objects
     Legal-Representative:
       title: Legal-Representative
       type: object
       description: ''
+      x-tags:
+        - Objects
       properties:
         name:
           type: string
         idType:
-          type: string
+          $ref: '#/components/schemas/ID-Type'
         idNumber:
           type: string
         idFrontImg:
@@ -741,7 +736,7 @@ components:
           format: date
           example: 'YYYY-MM-DD, e.g. 2010-01-21'
         nationality:
-          type: string
+          $ref: '#/components/schemas/Country-Of-Origin'
         birthday:
           type: string
           format: date
@@ -755,21 +750,17 @@ components:
         - idNumber
         - idFrontImg
         - idBackImg
-      x-tags:
-        - Objects
     UBO:
       title: UBO
       type: object
+      x-tags:
+        - Objects
       properties:
         name:
           type: string
           description: UBO name in English
         idType:
-          type: string
-          description: 'ID type, ID-Card/Passport'
-          enum:
-            - IDCARD
-            - PASSPORT
+          $ref: '#/components/schemas/ID-Type'
         idNumber:
           type: string
           description: UBO id number
@@ -802,8 +793,7 @@ components:
         - idNumber
         - idFrontImg
         - idBackImg
-      x-tags:
-        - Objects
+      description: ''
     Error:
       title: Error
       type: object
@@ -954,17 +944,104 @@ components:
         - createTime
     Payment-Status:
       title: Payment-Status
-      type: object
-      properties:
-        id:
-          type: string
+      type: string
       x-tags:
         - Enumerations
+      description: |
+        Bill payment status in Lianlian Pay system. One of:
+
+        | Value | Description |
+        |-------|-------------|
+        | INIT | Waiting for payment request |
+        | PROCESSING | Payment request received, payment is under processing |
+        | PAID | Payment complete |
+        | FAILED | Payment failed |
     Funding-Status:
       title: Funding-Status
-      type: object
-      properties:
-        id:
-          type: string
+      type: string
       x-tags:
         - Enumerations
+      description: |
+        Bill funding status in Lianlian Pay system. One of:
+
+        | Value | Description |
+        |-------|-------------|
+        | INIT | Bill created, waiting for processing |
+        | FUNDING_PROCESSING | Waiting for funding from merchant |
+        | FUNDED| Received funding from merchant, bill fully funded |
+        | CANCELING | Received cancel bill request, request is under processing |
+        | CANCELED | Cancel bill request complete |
+        | EXPIRED | Receiving no funding or not enough funding from merchant before bill expiration date |
+    Profile-Status:
+      title: Profile-Status
+      type: string
+      x-tags:
+        - Enumerations
+      description: |-
+        Profile status in Lianlian Pay system. One of:
+
+        | Value | Description |
+        |-------|-------------|
+        | UNDER_REVIEW | |
+        | ACTIVE | |
+        | FAILED | |
+        | ERROR| |
+    Profile-Type:
+      title: Profile-Type
+      x-tags:
+        - Enumerations
+      description: |-
+        Profile type enumerations in Lianlian Pay system. One of:
+
+        | Value | Description |
+        |-------|-------------|
+        | INDIVIDUAL | |
+        | COMPANY |  |
+      type: string
+    Country-Of-Origin:
+      title: Country-Of-Origin
+      type: string
+      x-tags:
+        - Enumerations
+      description: |-
+        Supported country of origin in Lianlian Pay system. One of:
+
+        | Value | Description |
+        |-------|-------------|
+        | CN | |
+        | US | |
+    Entity-Type:
+      title: Entity-Type
+      type: string
+      x-tags:
+        - Enumerations
+      description: |-
+        Entity type enumerations in Lianlian Pay system. One of:
+
+        | Value | Description |
+        |-------|-------------|
+        |  |  |
+    ID-Type:
+      title: ID-Type
+      type: string
+      x-tags:
+        - Enumerations
+      description: |-
+        Supported ID types in Lianlian Pay system. One of:
+
+        | Value | Description |
+        |-------|-------------|
+        | PASSPORT |  |
+        | IDCARD |  |
+    Currency:
+      title: Currency
+      type: string
+      x-tags:
+        - Enumerations
+      description: |-
+        Supported currency in Lianlian Pay system. One of:
+
+        | Value | Description | Payment Account | Funding Account |
+        |-------|-------------|-----------------|-----------------|
+        | CNY | | | |
+        | EUR | | | |
