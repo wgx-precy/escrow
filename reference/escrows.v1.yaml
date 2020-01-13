@@ -549,7 +549,7 @@ components:
       properties:
         id:
           type: string
-          description: Merchant id in client system
+          description: Profile/merchant id from client system
         countryOfOrigin:
           $ref: '#/components/schemas/Country-Of-Origin'
         type:
@@ -573,7 +573,7 @@ components:
       properties:
         id:
           type: string
-          description: bill(obligation) id in client system
+          description: Bill(obligation) id from client system
         region:
           $ref: '#/components/schemas/Region'
         currency:
@@ -688,11 +688,11 @@ components:
     CN-ENTITY-KYC:
       title: CN ENTITY KYC
       type: object
-      description: ''
+      description: KYC object for Chinese companies used in Lianlian Pay system.
       x-tags:
         - Objects
       properties:
-        entityName:
+        entityNameInEnglish:
           type: string
           description: Company name in English
         entityType:
@@ -710,11 +710,13 @@ components:
           $ref: '#/components/schemas/Legal-Representative'
         ubo:
           type: array
-          description: 'Profile List<UBO> information '
+          description: 'Profile List<UBO> information. '
+          maxItems: 4
+          minItems: 0
           items:
             $ref: '#/components/schemas/UBO'
       required:
-        - entityName
+        - entityNameInEnglish
         - entityType
         - registryNumber
         - regCertificateCopy
@@ -873,8 +875,13 @@ components:
           example: 'UTC timestamp, e.g. 2019-01-01T00:00:000Z'
         id:
           type: string
+          description: Document id in Lianlian Pay system
+        profileId:
+          type: string
+          description: Profile/merchant id from client system
       required:
         - name
+        - id
     Event:
       title: Event
       type: object
@@ -897,7 +904,7 @@ components:
           description: Event created time
         profileId:
           type: string
-          description: Merchant id in client system
+          description: Profile/merchant id from client system
       required:
         - id
         - topic
@@ -943,31 +950,37 @@ components:
       type: object
       x-tags:
         - Objects
+      description: |-
+        Object used in Lianlian Pay system to describe the client registration of event callbacks.
+
+        Lianlian Pay uses this object to identify events which should be pushed back to client's url.
       properties:
         id:
           type: string
+          description: Webhook registration id in Lianlian Pay system
         url:
           type: string
+          description: Client webhook url
         isEnabled:
           type: boolean
+          description: Enable/disable callbacks
         topics:
           type: array
+          description: Event topics in Lianlian Pay system
           items:
             $ref: '#/components/schemas/Event-Topic'
         createTime:
           type: string
+          description: Webhook registration time
         modifyTime:
           type: string
+          description: Webhook last modified time
       required:
         - id
         - url
         - isEnabled
         - topics
         - createTime
-      description: |-
-        Object used in Lianlian Pay system to describe the client registration of event callbacks.
-
-        Lianlian Pay uses this object to identify events which should be pushed back to client's url.
     Payment-Status:
       title: Payment-Status
       type: string
