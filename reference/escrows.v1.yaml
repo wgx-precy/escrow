@@ -1067,7 +1067,7 @@ components:
         | INDIVIDUAL |  |
       type: string
     Region-Of-Origin:
-      title: Country Of Origin
+      title: Region Of Origin
       type: string
       x-tags:
         - Enumerations
@@ -1172,9 +1172,7 @@ components:
         | UK | United Kindom|
     Bill-Currency:
       title: Bill Currency
-      type:
-        - object
-        - string
+      type: string
       x-tags:
         - Enumerations
       description: |-
