@@ -8,10 +8,10 @@ info:
     name: Lianlian Pay
     url: 'https://global.lianlianpay.com'
 servers:
-  - url: 'http://api.lianlianglobal.com/escrow/v1'
-    description: Production Endpoint
-  - description: Sandbox Endpoint
-    url: 'http://api-sandbox.lianlianglobal.com/escrow/v1'
+  - url: 'http://global-api.lianlianpay.com/escrow/v1'
+    description: Production
+  - description: Sandbox
+    url: 'http://global-api-sandbox.lianlianpay.com/escrow/v1'
 paths:
   /profiles:
     post:
@@ -961,7 +961,7 @@ components:
           $ref: '#/components/schemas/Event-Type'
         data:
           description: Detailed event description.
-          anyOf:
+          oneOf:
             - $ref: '#/components/schemas/Bill'
             - $ref: '#/components/schemas/Profile'
             - $ref: '#/components/schemas/Account'
@@ -1159,7 +1159,7 @@ components:
       x-tags:
         - Enumerations
       description: |-
-        Supported bill region/jurisdiction in Lianlian Pay system.
+        Supported bill region/jurisdiction in Lianlian Pay system. One of:
 
         | Region | Description |
         |--------|-------------|
