@@ -89,33 +89,6 @@ RSA.verify( LLPAY-Signature,
             Lianlian Pay Public Key )
 ```
 
-
-# Results
-
-#### Success
-
-A successful API call returns a conventional HTTP response with status 2xx indicating success.  The result objects are standard REST resources.  Example:
-
-```
-{
-  "name": "Merchant Name",
-  ...
-}
-```
-or
-```
-[
-  {
-    "name": "Merchant Name",
-    ...
-  },
-  {
-    "name": "Merchant Name 2",
-    ...
-  }
-]
-```
-
 #### Errors
 
 LianLian uses conventional HTTP response codes to indicate the success or failure of an API request. In general: Codes in the 2xx range indicate success. Codes in the 4xx range indicate an error that failed given the information provided (e.g., a required parameter was omitted, a charge failed, etc.). Codes in the 5xx range indicate an error with LianLian's servers (these are rare).
@@ -144,11 +117,7 @@ One of ERROR CODES as described in table below
 
 | Code | Message |
 |------|---------|
-|154008 | Client has insufficient balance to pay merchant|
-|154011 | Currency not supported|
-|154016 | Merchant is blocked from receiving payments|
-|154015 | Duplicate payment `client_id` - *This is not the case if the original result is returend* |
-|999995 | Invalid Parameter|
+
 
 ### Body
 
@@ -159,33 +128,10 @@ One of ERROR CODES as described in table below
 }
 ```
 
-# Idempotent Requests
-
-All POST, PUT, and DELETE requests are idempotent for safely retrying requests without accidentally performing the same operation twice. 
-
-This is useful when an API call is disrupted in transit and you do not receive a response. For example, if a request to create a charge does not respond due to a network connection error, you can retry the request with the same idempotency key to guarantee that no more than one charge is created.
-
-LianLian's idempotency works by saving the resulting status code and body of the first request made for any given idempotency key, regardless of whether it succeeded or failed. Subsequent requests with the same BODY & Signature return the same result, except for internal 500 errors.
-
 # Request IDs
 
 Each API request has an associated request identifier. You can find this value in the response headers, under `Request-Id`. If you need to contact us about a specific request, providing the request identifier will ensure the fastest possible resolution.
 
-
-# Argument and Field Naming
-
-LianLian arguments and object field names follow standard underscore naming such as:
-
-```
-https://api...com/resource/?filter_by="filter"
-```
-
-```
-{
-  "store_name": "My Store",
-  "kyc_status": "success"
-}
-```
 
 
 # Webhook Endpoints

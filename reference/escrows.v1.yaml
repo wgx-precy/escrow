@@ -592,7 +592,9 @@ components:
     Profile:
       title: Profile
       type: object
-      description: Data set of an client customer description in Lianlian Pay system.
+      description: |-
+        Profile Object
+        Data set of an client customer description in Lianlian Pay system.
       x-tags:
         - Objects
       properties:
@@ -618,7 +620,7 @@ components:
     Bill:
       title: Bill
       type: object
-      description: 'Data set of an Avalara customer’s tax obligation description in Lianlian Pay system. '
+      description: "Bill Object\nData set of an Avalara customer’s tax obligation description in Lianlian Pay system. "
       x-tags:
         - Objects
       properties:
@@ -728,7 +730,7 @@ components:
     Account:
       title: Account
       type: object
-      description: 'Data object to describe an account in Lianlian Pay system. '
+      description: "Account Object\nData object to describe an account in Lianlian Pay system. "
       x-tags:
         - Objects
       properties:
@@ -739,7 +741,7 @@ components:
           pattern: "^(([1-9]{1}\\d*)|(0{1}))(\\.\\d{2})$"
         currency:
           $ref: '#/components/schemas/Account-Currency'
-        bankAccountInfo:
+        virtualAccountInfo:
           $ref: '#/components/schemas/Bank-Account-Info'
         type:
           $ref: '#/components/schemas/Account-Type'
@@ -1019,7 +1021,7 @@ components:
         isEnabled:
           type: boolean
           description: Enable/disable callbacks
-        topics:
+        type:
           type: array
           description: Event topics in Lianlian Pay system
           items:
@@ -1040,7 +1042,7 @@ components:
         - id
         - url
         - isEnabled
-        - topics
+        - type
         - createTime
     Profile-Status:
       title: Profile Status
