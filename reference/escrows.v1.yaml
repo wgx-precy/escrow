@@ -917,6 +917,8 @@ components:
           $ref: '#/components/schemas/Bank-Account-Region'
         routingNo:
           type: string
+        sortCode:
+          type: string
       required:
         - number
         - name
