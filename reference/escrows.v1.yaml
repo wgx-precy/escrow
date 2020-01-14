@@ -391,6 +391,7 @@ paths:
               required:
                 - name
                 - size
+            examples: {}
         description: ''
       tags:
         - Methods
@@ -570,6 +571,14 @@ paths:
         - schema:
             type: string
           in: query
+          name: profileId
+          required: true
+          description: Profile/merchant id from client system
+        - schema:
+            type: array
+          in: query
+          name: type
+          description: Event type defined in Lianlian Pay system.
 components:
   schemas:
     Profile:
@@ -881,7 +890,7 @@ components:
         - code
         - message
     Account-Info:
-      title: Account-Info
+      title: Account Info
       type: object
       description: Account details
       x-tags:
@@ -989,9 +998,9 @@ components:
       description: ''
     Event-Type:
       type: string
-      title: Event-Topic
+      title: Event Type
       description: |
-        Lianlian Pay system event topics. One of:
+        Lianlian Pay system event types. One of:
 
         | Type | Description |
         |--------|------------|
@@ -1049,7 +1058,7 @@ components:
         - topics
         - createTime
     Profile-Status:
-      title: Profile-Status
+      title: Profile Status
       type: string
       description: |-
         Profile status in Lianlian Pay system. One of:
@@ -1063,7 +1072,7 @@ components:
       x-tags:
         - Enumerations
     Profile-Type:
-      title: Profile-Type
+      title: Profile Type
       x-tags:
         - Enumerations
       description: |-
@@ -1075,7 +1084,7 @@ components:
         |INDIVIDUAL|  |
       type: string
     Country-Of-Origin:
-      title: Country-Of-Origin
+      title: Country Of Origin
       type: string
       x-tags:
         - Enumerations
@@ -1087,7 +1096,7 @@ components:
         | CN | China |
         | US | United States |
     Entity-Type:
-      title: Entity-Type
+      title: Entity Type
       type: string
       x-tags:
         - Enumerations
@@ -1102,7 +1111,7 @@ components:
         | LIMTED_COMPANY | Limted Company |
         | PARTNERSHIP | Partnership  |
     ID-Type:
-      title: ID-Type
+      title: ID Type
       type: string
       x-tags:
         - Enumerations
@@ -1140,7 +1149,7 @@ components:
       x-tags:
         - Enumerations
     Account-Type:
-      title: Account-Type
+      title: Account Type
       type: string
       x-tags:
         - Enumerations
@@ -1163,7 +1172,7 @@ components:
         nameOnID:
           type: string
     Bill-Region:
-      title: Bill-Region
+      title: Bill Region
       type: string
       x-tags:
         - Enumerations
@@ -1176,7 +1185,7 @@ components:
         | DE | Germany |
         | UK | United Kingdom |
     Bill-Currency:
-      title: Bill-Currency
+      title: Bill Currency
       type:
         - object
         - string
@@ -1189,7 +1198,7 @@ components:
         |----------|-------------|
         | EUR | Euro |
     Bill-Status:
-      title: Bill-Status
+      title: Bill Status
       type: string
       description: |-
         Bill status defined in Lianlian Pay system. One of:
@@ -1203,7 +1212,7 @@ components:
       x-tags:
         - Enumerations
     Account-Region:
-      title: Account-Region
+      title: Account Region
       type:
         - object
         - string
