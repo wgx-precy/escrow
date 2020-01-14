@@ -8,10 +8,10 @@ info:
     name: Lianlian Pay
     url: 'https://global.lianlianpay.com'
 servers:
-  - url: 'http://global-api.lianlianpay.com/escrow/v1'
-    description: Production
   - description: Sandbox
-    url: 'http://global-api-sandbox.lianlianpay.com/escrow/v1'
+    url: 'https://global-api-sandbox.lianlianpay.com/escrow/v1'
+  - url: 'https://global-api.lianlianpay.com/escrow/v1'
+    description: Production
 paths:
   /profiles:
     post:
@@ -42,9 +42,7 @@ paths:
                   format: email
                   description: Merchant email address
                 kyc:
-                  type:
-                    - string
-                    - object
+                  type: object
                   required:
                     - entityName
                     - entityType
