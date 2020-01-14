@@ -42,7 +42,9 @@ paths:
                   format: email
                   description: Merchant email address
                 kyc:
-                  type: object
+                  type:
+                    - string
+                    - object
                   required:
                     - entityName
                     - entityType
@@ -590,7 +592,7 @@ components:
     Profile:
       title: Profile
       type: object
-      description: Profile is a data set of an Avalara customer description in Lianlian Pay system.
+      description: Data set of an client customer description in Lianlian Pay system.
       x-tags:
         - Objects
       properties:
@@ -616,7 +618,7 @@ components:
     Bill:
       title: Bill
       type: object
-      description: "Data set of an Avalara customer’s tax obligation description in Lianlian Pay system. \nSuch object helps Avalara to manage merchants’ tax obligation."
+      description: 'Data set of an Avalara customer’s tax obligation description in Lianlian Pay system. '
       x-tags:
         - Objects
       properties:
@@ -696,7 +698,7 @@ components:
     Address:
       title: Address
       type: object
-      description: Address object
+      description: Address object defined in Lianlian Pay system.
       x-tags:
         - Objects
       properties:
@@ -787,7 +789,7 @@ components:
     Legal-Representative:
       title: Legal-Representative
       type: object
-      description: ''
+      description: Date set used to describe legal representative in Lianlian Pay system.
       x-tags:
         - Objects
       properties:
@@ -895,7 +897,7 @@ components:
     Bank-Account-Info:
       title: Bank Account Info
       type: object
-      description: Account details
+      description: Bank account details
       x-tags:
         - Objects
       properties:
@@ -922,7 +924,7 @@ components:
     Document:
       title: Document
       type: object
-      description: File object in Lianlian Pay system
+      description: File object in Lianlian Pay system.
       x-tags:
         - Objects
       properties:
@@ -950,7 +952,7 @@ components:
       type: object
       x-tags:
         - Objects
-      description: "Event object generated in Lianlian Pay system. \n\nSuch as profile status change, bill status change, etc."
+      description: 'Event object generated during business processing in Lianlian Pay system. '
       properties:
         id:
           type: string
@@ -1057,7 +1059,7 @@ components:
       x-tags:
         - Enumerations
       description: |-
-        Profile type enumerations in Lianlian Pay system. One of:
+        Profile type defined in Lianlian Pay system. One of:
 
         | Value | Description |
         |-------|-------------|
@@ -1082,7 +1084,7 @@ components:
       x-tags:
         - Enumerations
       description: |-
-        Entity type enumerations defined in Lianlian Pay system. One of:
+        Entity type defined in Lianlian Pay system. One of:
 
         | Value | Description |
         |-------|-------------|
@@ -1101,8 +1103,8 @@ components:
 
         | Value | Description |
         |-------|-------------|
-        | PASSPORT |  |
-        | IDCARD |  |
+        | PASSPORT | Passport |
+        | IDCARD | ID Card |
     Account-Currency:
       title: Account Currency
       type: string
@@ -1137,7 +1139,7 @@ components:
 
         | Type | Description |
         |-------|-------------|
-        | FUNDING | Merchant account to keep bill obligations (reserved)fundings |
+        | FUNDING | Merchant account to keep bill obligations fundings |
         | PAYMENT | Account support direct debit, used for tax authorities of certain region/jurisdiction to pull money from |
     Name:
       title: Name
@@ -1151,6 +1153,7 @@ components:
         nameInOrigin:
           type: string
           description: Name in origin or native letters
+      description: Name object used in Lianlian Pay system.
     Bill-Region:
       title: Bill Region
       type: string
@@ -1199,27 +1202,7 @@ components:
       type:
         - object
         - string
-      description: |-
-        Supported account regions in Lianlian Pay system
-
-        Payment Bank Account Region
-
-        | Region | Description |
-        |--------|-------------|
-        | FR | France, supported currency - EUR |
-
-
-        Payee Bank Account Region
-
-        | Region | Description |
-        |--------|-------------|
-        | CZ | Czech Republic |
-        | DE | Germany |
-        | ES | Spain |
-        | FR | France |
-        | IT | Italy |
-        | PO | Poland |
-        | UK | United Kindom|
+      description: "Supported account regions in Lianlian Pay system. \n\nPayment Bank Account Region, one of:\n\n| Region | Description |\n|--------|-------------|\n| FR | France, supported currency - EUR |\n\n\nPayee Bank Account Region, one of:\n\n| Region | Description |\n|--------|-------------|\n| CZ | Czech Republic |\n| DE | Germany |\n| ES | Spain |\n| FR | France |\n| IT | Italy |\n| PO | Poland |\n| UK | United Kindom|"
       x-tags:
         - Enumerations
   securitySchemes: {}
