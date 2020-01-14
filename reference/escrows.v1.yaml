@@ -590,7 +590,7 @@ paths:
 components:
   schemas:
     Profile:
-      title: 1. Profile
+      title: Profile
       type: object
       description: Profile is a data set of an Avalara customer description in Lianlian Pay system.
       x-tags:
@@ -616,7 +616,7 @@ components:
         - kyc
         - status
     Bill:
-      title: 2. Bill
+      title: Bill
       type: object
       description: "Data set of an Avalara customer’s tax obligation description in Lianlian Pay system. \nSuch object helps Avalara to manage merchants’ tax obligation."
       x-tags:
@@ -726,7 +726,7 @@ components:
         - region
         - postalCode
     Account:
-      title: 10. Account
+      title: Account
       type: object
       description: 'Data object to describe an account in Lianlian Pay system. '
       x-tags:
