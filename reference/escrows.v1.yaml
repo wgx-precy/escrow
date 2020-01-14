@@ -8,10 +8,10 @@ info:
     name: Lianlian Pay
     url: 'https://global.lianlianpay.com'
 servers:
-  - description: Sandbox
-    url: 'https://global-api-sandbox.lianlianpay.com/escrow/v1'
   - url: 'https://global-api.lianlianpay.com/escrow/v1'
     description: Production
+  - url: 'https://global-api-sandbox.lianlianpay.com/escrow/v1'
+    description: Sandbox
 paths:
   /profiles:
     post:
