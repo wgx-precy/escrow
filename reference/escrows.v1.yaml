@@ -6,7 +6,7 @@ info:
   contact:
     email: fx_support@lianlianpay.com
     name: Lianlian Pay
-    url: global.lianlianpay.com
+    url: 'https://global.lianlianpay.com'
 servers:
   - url: 'http://api.lianlianglobal.com/escrow/v1'
     description: Production Endpoint
@@ -34,17 +34,9 @@ paths:
                   type: string
                   description: Merchant id in client system
                 countryOfOrigin:
-                  type: string
-                  description: "Merchant's country of origin"
-                  enum:
-                    - US
-                    - CN
+                  $ref: '#/components/schemas/Region'
                 type:
-                  type: string
-                  description: Profile type
-                  enum:
-                    - INDIVIDUAL
-                    - CORPORATION
+                  $ref: '#/components/schemas/Profile-Type'
                 emial:
                   type: string
                   format: email
@@ -61,11 +53,9 @@ paths:
                     - legalRep
                   properties:
                     entityName:
-                      type: string
-                      description: Company name in English
+                      $ref: '#/components/schemas/Name'
                     entityType:
-                      type: string
-                      description: Business type
+                      $ref: '#/components/schemas/Entity-Type'
                     registryNumber:
                       type: string
                       description: Company number
@@ -80,8 +70,7 @@ paths:
                         - idFrontImg
                       properties:
                         name:
-                          type: string
-                          description: Legal Representative’s name in English
+                          $ref: '#/components/schemas/Name'
                         idNumber:
                           type: string
                           description: Legal Representative’s id number
@@ -178,7 +167,7 @@ paths:
                 bankName:
                   type: string
                   description: Payee bank name
-                branchCode:
+                routingNo:
                   type: string
                   description: Payee branch code
                 swift:
@@ -193,13 +182,11 @@ paths:
                 - region
                 - currency
                 - amount
-                - period
-                - dueDate
                 - expireDate
                 - accountNo
                 - accountName
                 - bankName
-                - branchCode
+                - routingNo
                 - swift
                 - rfb
         description: ''
@@ -270,8 +257,6 @@ paths:
                 $ref: '#/components/schemas/Bill'
       description: |
         Void a unsubmitted bill by bill id.
-        When you void a bill, that bill’s status is recorded as `VOIDED` and unprocessed payment of this bill will not be processed. Bills that have been previously processed and paid to a tax authority are no longer available to be voided.
-        Bills have fundingStatus as `BILL_CANCELING`, `BILL_CANCELED`, `BILL_EXPIRED` or paymentStatus as `PAYMENT_PROCESSING`, `BILL_PAID` cannot be voided.
 
         Return type is `Bill`
       tags:
@@ -341,13 +326,9 @@ paths:
       parameters:
         - schema:
             type: string
-            enum:
-              - FUNDING
-              - PAYMENT
-              - COLLECTION
           in: query
           name: type
-          description: Account type
+          description: Account types defined in Lianlina Pay system
       tags:
         - Methods
   '/accounts/{accountId}':
@@ -594,10 +575,22 @@ paths:
           in: query
           name: type
           description: Event type defined in Lianlian Pay system.
+        - schema:
+            type: string
+            default: '0'
+          in: query
+          name: offset
+          description: 'If nonzero, skip this number of results before returning data. Used with `limit` to provide pagination for large datasets.'
+        - schema:
+            type: string
+            default: '50'
+          in: query
+          name: limit
+          description: 'If nonzero, return no more than this number of results. Used with `offset` to provide pagination for large datasets. Unless otherwise specified, the maximum number of records that can be returned from an API call is 50 records'
 components:
   schemas:
     Profile:
-      title: Profile
+      title: 1. Profile
       type: object
       description: Profile is a data set of an Avalara customer description in Lianlian Pay system.
       x-tags:
@@ -606,8 +599,8 @@ components:
         id:
           type: string
           description: Profile/merchant id from client system
-        countryOfOrigin:
-          $ref: '#/components/schemas/Country-Of-Origin'
+        regionOfOrigin:
+          $ref: '#/components/schemas/Region-Of-Origin'
         type:
           $ref: '#/components/schemas/Profile-Type'
         kyc:
@@ -618,12 +611,12 @@ components:
           $ref: '#/components/schemas/Error'
       required:
         - id
-        - countryOfOrigin
+        - regionOfOrigin
         - type
         - kyc
         - status
     Bill:
-      title: Bill
+      title: 2. Bill
       type: object
       description: "Data set of an Avalara customer’s tax obligation description in Lianlian Pay system. \nSuch object helps Avalara to manage merchants’ tax obligation."
       x-tags:
@@ -659,7 +652,7 @@ components:
           example: '2019-01-01T00:00:000Z'
           pattern: UTC+0 timestamp
         payee:
-          $ref: '#/components/schemas/Account-Info'
+          $ref: '#/components/schemas/Bank-Account-Info'
         createTime:
           type: string
           description: Bill created time
@@ -680,7 +673,7 @@ components:
           pattern: UTC timestamp
         status:
           $ref: '#/components/schemas/Bill-Status'
-        isFullyFunded:
+        isFunded:
           type: boolean
           description: 'Default false, true if fully funded. Ready to pay if isFullyFunded equals to true.'
         isPaid:
@@ -697,12 +690,10 @@ components:
         - region
         - currency
         - amount
-        - period
-        - dueDate
         - expireDate
         - payee
         - status
-        - isFullyFunded
+        - isFunded
         - isPaid
     Address:
       title: Address
@@ -735,7 +726,7 @@ components:
         - region
         - postalCode
     Account:
-      title: Account
+      title: 10. Account
       type: object
       description: 'Data object to describe an account in Lianlian Pay system. '
       x-tags:
@@ -748,8 +739,8 @@ components:
           pattern: "^(([1-9]{1}\\d*)|(0{1}))(\\.\\d{2})$"
         currency:
           $ref: '#/components/schemas/Account-Currency'
-        accountInfo:
-          $ref: '#/components/schemas/Account-Info'
+        bankAccountInfo:
+          $ref: '#/components/schemas/Bank-Account-Info'
         type:
           $ref: '#/components/schemas/Account-Type'
         id:
@@ -826,7 +817,7 @@ components:
           example: '2010-01-21'
           pattern: YYYY-MM-DD
         nationality:
-          $ref: '#/components/schemas/Country-Of-Origin'
+          $ref: '#/components/schemas/Region-Of-Origin'
         birthday:
           type: string
           description: "Legal representative's birthday"
@@ -903,8 +894,8 @@ components:
       required:
         - code
         - message
-    Account-Info:
-      title: Account Info
+    Bank-Account-Info:
+      title: Bank Account Info
       type: object
       description: Account details
       x-tags:
@@ -919,20 +910,16 @@ components:
         bankName:
           type: string
           description: Bank name
-        branchCode:
-          type: string
-          description: Branch code
-        swift:
+        swiftCode:
           type: string
           description: Bank SWIFT code
         region:
-          $ref: '#/components/schemas/Account-Region'
-        coverLetter:
-          $ref: '#/components/schemas/Document'
+          $ref: '#/components/schemas/Bank-Account-Region'
+        routingNo:
+          type: string
       required:
         - number
         - name
-        - swift
         - region
     Document:
       title: Document
@@ -992,24 +979,6 @@ components:
         - type
         - data
         - profileId
-    TBD-Notification:
-      title: TBD-Notification
-      type: object
-      properties:
-        id:
-          type: string
-      description: ''
-      x-tags:
-        - Methods
-    TBD-Notification-Template:
-      title: Notification-Template
-      type: object
-      properties:
-        id:
-          type: string
-      x-tags:
-        - Objects
-      description: ''
     Event-Type:
       type: string
       title: Event Type
@@ -1082,7 +1051,7 @@ components:
         | UNDER_REVIEW | Profile is currenlty under KYC review|
         | ACTIVE | KYC complete, profile is active |
         | FAILED | Lianlian Pay cannot provide services to this profile |
-        | ERROR| KYC error, need aditional information to complete KYC review |
+        | ERROR | KYC error, need aditional information to complete KYC review |
       x-tags:
         - Enumerations
     Profile-Type:
@@ -1095,15 +1064,15 @@ components:
         | Value | Description |
         |-------|-------------|
         | COMPANY |  A legal entity formed by a group of individuals |
-        |INDIVIDUAL|  |
+        | INDIVIDUAL |  |
       type: string
-    Country-Of-Origin:
+    Region-Of-Origin:
       title: Country Of Origin
       type: string
       x-tags:
         - Enumerations
       description: |-
-        Supported country of origin in Lianlian Pay system. One of:
+        Supported country/region of origin in Lianlian Pay system. One of:
 
         | Value | Description |
         |-------|-------------|
@@ -1146,9 +1115,7 @@ components:
 
         | Currency | Description |
         |----------|-------------|
-        | CNY | Chinese Yuan |
         | EUR | Euro |
-        | GBP | Great Britain Pound |
         | USD | United States dollar |
     Region:
       title: Region
@@ -1172,8 +1139,7 @@ components:
 
         | Type | Description |
         |-------|-------------|
-        | COLLECTION | Account used for merchant to collect sales incomes from marketplaces |
-        | FUNDING | Merchant ccount to keep bill obligation (reserved)fundings |
+        | FUNDING | Merchant account to keep bill obligations (reserved)fundings |
         | PAYMENT | Account support direct debit, used for tax authorities of certain region/jurisdiction to pull money from |
     Name:
       title: Name
@@ -1183,8 +1149,10 @@ components:
       properties:
         nameInEnglish:
           type: string
+          description: Name in English or western letters
         nameInOrigin:
           type: string
+          description: Name in origin or native letters
     Bill-Region:
       title: Bill Region
       type: string
@@ -1195,9 +1163,13 @@ components:
 
         | Region | Description |
         |--------|-------------|
-        | FR | France |
+        | CZ | Czech Republic |
         | DE | Germany |
-        | UK | United Kingdom |
+        | ES | Spain |
+        | FR | France |
+        | IT | Italy |
+        | PO | Poland |
+        | UK | United Kindom|
     Bill-Currency:
       title: Bill Currency
       type:
@@ -1223,34 +1195,35 @@ components:
         | CANCELED | Bill voided |
         | COMPLETE | Bill complete |
         | EXPIRED | Bill expired |
+        | PAYMENT_FAILED | Bill payment failed |
       x-tags:
         - Enumerations
-    Account-Region:
-      title: Account Region
+    Bank-Account-Region:
+      title: Bank Account Region
       type:
         - object
         - string
       description: |-
         Supported account regions in Lianlian Pay system
 
-        Collection Account Region
-
-        | Region | Description |
-        |--------|-------------|
-        | UK     |   |
-
-
-        Funding Account Region
-
-        | Region | Description |
-        |--------|-------------|
-        | UK | United Kindoms, supported currency - GBP|
-
-        Payment Account Region
+        Payment Bank Account Region
 
         | Region | Description |
         |--------|-------------|
         | FR | France, supported currency - EUR |
+
+
+        Payee Bank Account Region
+
+        | Region | Description |
+        |--------|-------------|
+        | CZ | Czech Republic |
+        | DE | Germany |
+        | ES | Spain |
+        | FR | France |
+        | IT | Italy |
+        | PO | Poland |
+        | UK | United Kindom|
       x-tags:
         - Enumerations
   securitySchemes: {}
