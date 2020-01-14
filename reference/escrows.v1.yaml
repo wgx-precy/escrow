@@ -1110,13 +1110,7 @@ components:
       type: string
       x-tags:
         - Enumerations
-      description: |-
-        Supported account currencies in Lianlian Pay system. One of:
-
-        | Currency | Description |
-        |----------|-------------|
-        | EUR | Euro |
-        | USD | United States dollar |
+      description: "Supported account currencies in Lianlian Pay system. \n\nFunding Account Currencies, one of:\n\n| Currency | Description |\n|----------|-------------|\n| EUR | Euro |\n| USD | United States dollar |\n\n\nPayment Account Currencies, one of:\n\n| Currency | Description |\n|----------|-------------|\n| EUR | Euro |"
     Region:
       title: Region
       description: |
