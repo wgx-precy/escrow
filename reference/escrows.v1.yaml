@@ -42,9 +42,7 @@ paths:
                   format: email
                   description: Merchant email address
                 kyc:
-                  type:
-                    - string
-                    - object
+                  type: object
                   required:
                     - entityName
                     - entityType
@@ -285,7 +283,7 @@ paths:
               type: object
               properties:
                 region:
-                  $ref: '#/components/schemas/Account-Region'
+                  $ref: '#/components/schemas/Bank-Account-Region'
                 currency:
                   $ref: '#/components/schemas/Account-Currency'
                 type:
@@ -449,7 +447,7 @@ paths:
                 topic:
                   type: array
                   items:
-                    $ref: '#/components/schemas/Event-Topic'
+                    $ref: '#/components/schemas/Event-Type'
                 url:
                   type: string
                 isEnabled:
@@ -507,7 +505,7 @@ paths:
                 topic:
                   type: array
                   items:
-                    $ref: '#/components/schemas/Event-Topic'
+                    $ref: '#/components/schemas/Event-Type'
               required:
                 - isEnabled
                 - url
