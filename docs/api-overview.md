@@ -138,6 +138,5 @@ Each API request has an associated request identifier. You can find this value i
 
 You can configure webhook endpoints via the API to be notified about events that happen in your Lianlian Pay account.
 
-Note: The Webhook APIs are not implemented yet.  This is a Draft of the API design coming soon...
 
 
