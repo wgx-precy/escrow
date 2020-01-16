@@ -122,7 +122,7 @@ paths:
         in: path
         required: true
     post:
-      summary: 3. Create Bill
+      summary: 1. Create Bill
       operationId: post-profiles-profileId-bills
       responses:
         '200':
@@ -192,7 +192,7 @@ paths:
         Create a bill obligation for a profile
         Return type is `Bill`
       tags:
-        - Profiles
+        - Bills
   '/bills/{billId}':
     parameters:
       - schema:
@@ -201,7 +201,7 @@ paths:
         in: path
         required: true
     get:
-      summary: 1. Get Bill
+      summary: 2. Get Bill
       tags:
         - Bills
       responses:
@@ -224,7 +224,7 @@ paths:
         in: path
         required: true
     put:
-      summary: 2. Submit Bill
+      summary: 3. Submit Bill
       operationId: put-bills-billId-submit
       responses:
         '200':
@@ -248,7 +248,7 @@ paths:
         in: path
         required: true
     put:
-      summary: 3. Void Bill
+      summary: 4. Void Bill
       operationId: put-bills-billId-void
       responses:
         '200':
@@ -271,7 +271,7 @@ paths:
         in: path
         required: true
     post:
-      summary: 4. Create Account
+      summary: 1. Create Account
       operationId: post-profiles-profileId-accounts
       responses:
         '200':
@@ -301,9 +301,9 @@ paths:
         Create an account for a profile
         Return type is `Account`
       tags:
-        - Profiles
+        - Accounts
     get:
-      summary: 5. Get Profile Accounts
+      summary: 2. Get Accounts
       operationId: get-profiles-profileId-accounts
       responses:
         '200':
@@ -332,7 +332,7 @@ paths:
           name: type
           description: Account types defined in Lianlina Pay system
       tags:
-        - Profiles
+        - Accounts
   '/accounts/{accountId}':
     parameters:
       - schema:
@@ -341,7 +341,7 @@ paths:
         in: path
         required: true
     get:
-      summary: Get Account
+      summary: 3. Get Account
       tags:
         - Accounts
       responses:
@@ -358,7 +358,7 @@ paths:
         Return type is `Account`
   /documents:
     post:
-      summary: Upload Document
+      summary: 1. Upload Document
       operationId: post-documents
       responses:
         '200':
@@ -395,7 +395,7 @@ paths:
         in: path
         required: true
     get:
-      summary: Get Document
+      summary: 2. Get Document
       tags:
         - Documents
       responses:
