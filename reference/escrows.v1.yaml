@@ -303,7 +303,7 @@ paths:
       tags:
         - Accounts
     get:
-      summary: 2. Get Accounts
+      summary: 2. List All Accounts
       operationId: get-profiles-profileId-accounts
       responses:
         '200':
@@ -410,7 +410,7 @@ paths:
         Get document file by id
   /webhooks:
     get:
-      summary: 2. Get Webhook Registrations
+      summary: 2. List All Webhook Registrations
       responses:
         '200':
           description: OK
@@ -548,7 +548,7 @@ paths:
         Return type is `Event`
   /events:
     get:
-      summary: 1. Get Events
+      summary: 1. List All Events
       tags:
         - Events
       responses:
@@ -628,6 +628,8 @@ components:
       title: '| Bill Object'
       type: object
       description: "**Bill Object**\nData set of a client customer’s tax obligation description in Lianlian Pay system. "
+      x-tags:
+        - Bills
       properties:
         id:
           type: string
@@ -692,6 +694,10 @@ components:
           example: '2019-01-01T00:00:000Z'
           pattern: UTC+0 timestamp
           description: Bill last updated time
+        rfb:
+          type: string
+        memo:
+          type: string
       required:
         - id
         - region
@@ -702,8 +708,6 @@ components:
         - status
         - isFunded
         - isPaid
-      x-tags:
-        - Bills
     Address:
       title: '| Address Object'
       type: object
@@ -921,7 +925,7 @@ components:
         - code
         - message
       x-tags:
-        - Error
+        - Other
     Bank-Account-Info:
       title: '| Bank Account Info Object'
       type: object
