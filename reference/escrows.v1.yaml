@@ -15,7 +15,7 @@ servers:
 paths:
   /profiles:
     post:
-      summary: Create Profile
+      summary: 1. Create Profile
       operationId: post-profiles
       responses:
         '200':
@@ -91,7 +91,7 @@ paths:
 
         Return type is `Profile`
       tags:
-        - Methods
+        - Profiles
   '/profiles/{profileId}':
     parameters:
       - schema:
@@ -100,9 +100,9 @@ paths:
         in: path
         required: true
     get:
-      summary: Get Profile
+      summary: 2. Get Profile
       tags:
-        - Methods
+        - Profiles
       responses:
         '200':
           description: OK
@@ -122,7 +122,7 @@ paths:
         in: path
         required: true
     post:
-      summary: Create Bill
+      summary: 3. Create Bill
       operationId: post-profiles-profileId-bills
       responses:
         '200':
@@ -192,7 +192,7 @@ paths:
         Create a bill obligation for a profile
         Return type is `Bill`
       tags:
-        - Methods
+        - Profiles
   '/bills/{billId}':
     parameters:
       - schema:
@@ -201,9 +201,9 @@ paths:
         in: path
         required: true
     get:
-      summary: Get Bill
+      summary: 1. Get Bill
       tags:
-        - Methods
+        - Bills
       responses:
         '200':
           description: OK
@@ -213,7 +213,7 @@ paths:
                 $ref: '#/components/schemas/Bill'
       operationId: get-profiles-profileId-bills-billId
       description: |-
-        Get a bill details by id
+        Get a bill details by id.
 
         Return type is `List<Bill>`
   '/bills/{billId}/submit':
@@ -224,7 +224,7 @@ paths:
         in: path
         required: true
     put:
-      summary: Submit Bill
+      summary: 2. Submit Bill
       operationId: put-bills-billId-submit
       responses:
         '200':
@@ -233,9 +233,13 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Bill'
-      description: "Submit a bill, instruct Lianlian Pay to process its payment. \nAfter a successful submitting, Lianlian Pay will process payment to the bill payee.\n\nReturn type is `Bill`"
+      description: |-
+        Submit a bill, instruct Lianlian Pay to process its payment.
+        After a successful submitting, Lianlian Pay will process payment to the bill payee.
+
+        Return type is `Bill`
       tags:
-        - Methods
+        - Bills
   '/bills/{billId}/void':
     parameters:
       - schema:
@@ -244,7 +248,7 @@ paths:
         in: path
         required: true
     put:
-      summary: Void Bill
+      summary: 3. Void Bill
       operationId: put-bills-billId-void
       responses:
         '200':
@@ -258,7 +262,7 @@ paths:
 
         Return type is `Bill`
       tags:
-        - Methods
+        - Bills
   '/profiles/{profileId}/accounts':
     parameters:
       - schema:
@@ -267,7 +271,7 @@ paths:
         in: path
         required: true
     post:
-      summary: Create Account
+      summary: 4. Create Account
       operationId: post-profiles-profileId-accounts
       responses:
         '200':
@@ -297,9 +301,9 @@ paths:
         Create an account for a profile
         Return type is `Account`
       tags:
-        - Methods
+        - Profiles
     get:
-      summary: Get Profile Accounts
+      summary: 5. Get Profile Accounts
       operationId: get-profiles-profileId-accounts
       responses:
         '200':
@@ -328,7 +332,7 @@ paths:
           name: type
           description: Account types defined in Lianlina Pay system
       tags:
-        - Methods
+        - Profiles
   '/accounts/{accountId}':
     parameters:
       - schema:
@@ -339,7 +343,7 @@ paths:
     get:
       summary: Get Account
       tags:
-        - Methods
+        - Accounts
       responses:
         '200':
           description: OK
@@ -363,7 +367,7 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Document'
-      description: "Upload document to Lianlian Pay system. \nImage attachments can be of the format PDF, JPEG, or PNG. To upload a multi-page image, please use the PDF data type.\nReturn type is `Document`"
+      description: "Upload document to Lianlian Pay system. \nImage attachments can be one of the format PDF, JPEG, or PNG. To upload a multi-page image, please use the PDF data type.\nReturn type is `Document`"
       requestBody:
         content:
           application/json:
@@ -382,7 +386,7 @@ paths:
             examples: {}
         description: ''
       tags:
-        - Methods
+        - Documents
   '/documents/{documentId}':
     parameters:
       - schema:
@@ -393,7 +397,7 @@ paths:
     get:
       summary: Get Document
       tags:
-        - Methods
+        - Documents
       responses:
         '200':
           description: OK
@@ -406,9 +410,7 @@ paths:
         Get document file by id
   /webhooks:
     get:
-      summary: Get Webhook Registrations
-      tags:
-        - Methods
+      summary: 2. Get Webhook Registrations
       responses:
         '200':
           description: OK
@@ -420,8 +422,10 @@ paths:
       description: |-
         Get a list of webhook registrations of a client. If no registrations, empty list will be returned.
         Return type is `List<Webhook>`
+      tags:
+        - Webhooks
     post:
-      summary: Register Webhook
+      summary: 1. Register Webhook
       operationId: post-webhooks
       responses:
         '200':
@@ -433,8 +437,6 @@ paths:
       description: |-
         Register a webhook in Lianlian Pay system. Registered webhook will be used to send events generated by Lianlian Pay system.
         Return type is `Webhook`
-      tags:
-        - Methods
       requestBody:
         content:
           application/json:
@@ -456,6 +458,8 @@ paths:
                 - topic
                 - url
                 - isEnabled
+      tags:
+        - Webhooks
   '/webhook/{webhookId}':
     parameters:
       - schema:
@@ -464,9 +468,7 @@ paths:
         in: path
         required: true
     get:
-      summary: Get Webhook Registration
-      tags:
-        - Methods
+      summary: 3. Get Webhook Registration
       responses:
         '200':
           description: OK
@@ -476,10 +478,12 @@ paths:
                 $ref: '#/components/schemas/Webhook'
       operationId: get-webhook-webhookId
       description: |-
-        Get a webhook registration details by id
+        Get a webhook registration details by id.
         Return type is `Webhook`
+      tags:
+        - Webhooks
     put:
-      summary: Edit Webhook Registration
+      summary: 4. Edit Webhook Registration
       operationId: put-webhook-webhookId
       responses:
         '200':
@@ -510,16 +514,16 @@ paths:
                 - url
                 - topic
       tags:
-        - Methods
+        - Webhooks
     delete:
-      summary: Delete Webhook Registration
+      summary: 5. Delete Webhook Registration
       operationId: delete-webhook-webhookId
       responses:
         '200':
           description: OK
       description: Delete a webhook registration by id.
       tags:
-        - Methods
+        - Webhooks
   '/events/{eventId}':
     parameters:
       - schema:
@@ -528,9 +532,9 @@ paths:
         in: path
         required: true
     get:
-      summary: Get Event
+      summary: 2. Get Event
       tags:
-        - Methods
+        - Events
       responses:
         '200':
           description: OK
@@ -544,9 +548,9 @@ paths:
         Return type is `Event`
   /events:
     get:
-      summary: Get Events
+      summary: 1. Get Events
       tags:
-        - Methods
+        - Events
       responses:
         '200':
           description: OK
@@ -587,7 +591,7 @@ paths:
 components:
   schemas:
     Profile:
-      title: Profile
+      title: '| Profile Object'
       type: object
       description: |-
         **Profile Object**
@@ -598,8 +602,6 @@ components:
         >
         > feedback is used when there are actions revelent to a profile that client may need to take. Such as profile KYC information updated.
         >
-      x-tags:
-        - Objects
       properties:
         id:
           type: string
@@ -620,12 +622,12 @@ components:
         - type
         - kyc
         - status
+      x-tags:
+        - Profiles
     Bill:
-      title: Bill
+      title: '| Bill Object'
       type: object
       description: "**Bill Object**\nData set of a client customer’s tax obligation description in Lianlian Pay system. "
-      x-tags:
-        - Objects
       properties:
         id:
           type: string
@@ -700,12 +702,12 @@ components:
         - status
         - isFunded
         - isPaid
+      x-tags:
+        - Bills
     Address:
-      title: Address
+      title: '| Address Object'
       type: object
       description: Address object defined in Lianlian Pay system.
-      x-tags:
-        - Objects
       properties:
         lineOne:
           type: string
@@ -730,12 +732,12 @@ components:
         - province
         - region
         - postalCode
+      x-tags:
+        - Profiles
     Account:
-      title: Account
+      title: '| Account Object'
       type: object
       description: "**Account Object**\nData object to describe an account in Lianlian Pay system. \nAccount such as `Funding Account` and `Payment Account`"
-      x-tags:
-        - Objects
       x-examples:
         Funding Account:
           id: '20200115123456781'
@@ -775,12 +777,12 @@ components:
         - currency
         - type
         - id
+      x-tags:
+        - Accounts
     CN-ENTITY-KYC:
-      title: CN ENTITY KYC
+      title: '| CN ENTITY KYC Object'
       type: object
       description: KYC object for Chinese companies used in Lianlian Pay system.
-      x-tags:
-        - Objects
       properties:
         entityName:
           $ref: '#/components/schemas/Name'
@@ -810,12 +812,12 @@ components:
         - entityType
         - registryNumber
         - regCertificateCopy
+      x-tags:
+        - Profiles
     Legal-Representative:
-      title: Legal-Representative
+      title: '| Legal-Representative Object'
       type: object
       description: Date set used to describe legal representative information in Lianlian Pay system.
-      x-tags:
-        - Objects
       properties:
         name:
           $ref: '#/components/schemas/Name'
@@ -858,11 +860,11 @@ components:
         - idNumber
         - idFrontImg
         - idBackImg
-    UBO:
-      title: UBO
-      type: object
       x-tags:
-        - Objects
+        - Profiles
+    UBO:
+      title: '| UBO Object'
+      type: object
       description: "Data set in Lianlian Pay system to describe the Ultimate Beneficial Owner information of a company. \n"
       properties:
         name:
@@ -904,11 +906,11 @@ components:
         - idNumber
         - idFrontImg
         - idBackImg
-    Error:
-      title: Error
-      type: object
       x-tags:
-        - Objects
+        - Profiles
+    Error:
+      title: '| Error Object'
+      type: object
       description: Error object defined in Lianlian Pay system.
       properties:
         code:
@@ -918,12 +920,12 @@ components:
       required:
         - code
         - message
+      x-tags:
+        - Error
     Bank-Account-Info:
-      title: Bank Account Info
+      title: '| Bank Account Info Object'
       type: object
       description: Bank account information details
-      x-tags:
-        - Objects
       properties:
         number:
           type: string
@@ -947,12 +949,12 @@ components:
         - number
         - name
         - region
+      x-tags:
+        - Accounts
     Document:
-      title: Document
+      title: '| Document Object'
       type: object
       description: File object in Lianlian Pay system.
-      x-tags:
-        - Objects
       properties:
         name:
           type: string
@@ -973,11 +975,11 @@ components:
         - name
         - size
         - createTime
-    Event:
-      title: Event
-      type: object
       x-tags:
-        - Objects
+        - Documents
+    Event:
+      title: '| Event Object'
+      type: object
       description: 'Event object generated during business processing in Lianlian Pay system. '
       properties:
         id:
@@ -1005,9 +1007,11 @@ components:
         - type
         - data
         - profileId
+      x-tags:
+        - Events
     Event-Type:
       type: string
-      title: Event Type
+      title: '| Event Type Enumeration'
       description: |
         Lianlian Pay system event types. One of:
 
@@ -1023,12 +1027,10 @@ components:
         | bill.expired | No funding or short funding after bill expiration date. Return data `Bill` object. |
         | account.paymentaccount.created | Payment account created in Lianlian Pay system. Return data `Account` object. |
       x-tags:
-        - Enumerations
+        - Events
     Webhook:
-      title: Webhook
+      title: '| Webhook Object'
       type: object
-      x-tags:
-        - Objects
       description: |-
         Object used in Lianlian Pay system to describe the client registration of event callbacks.
 
@@ -1066,8 +1068,10 @@ components:
         - isEnabled
         - type
         - createTime
+      x-tags:
+        - Webhooks
     Profile-Status:
-      title: Profile Status
+      title: '| Profile Status Enumeration'
       type: string
       description: |-
         Profile status defined in Lianlian Pay system. One of:
@@ -1079,11 +1083,9 @@ components:
         | FAILED | Lianlian Pay cannot provide service to this profile |
         | ERROR | KYC error, need aditional information to complete KYC review |
       x-tags:
-        - Enumerations
+        - Profiles
     Profile-Type:
-      title: Profile Type
-      x-tags:
-        - Enumerations
+      title: '| Profile Type Enumeration'
       description: |-
         Profile type defined in Lianlian Pay system. One of:
 
@@ -1092,11 +1094,11 @@ components:
         | COMPANY |  A legal entity formed by a group of individuals |
         | INDIVIDUAL |  |
       type: string
-    Region-Of-Origin:
-      title: Region Of Origin
-      type: string
       x-tags:
-        - Enumerations
+        - Profiles
+    Region-Of-Origin:
+      title: '| Region Of Origin Enumeration'
+      type: string
       description: |-
         Supported country/region of origin in Lianlian Pay system. One of:
 
@@ -1104,11 +1106,11 @@ components:
         |-------|-------------|
         | CN | China |
         | US | United States |
-    Entity-Type:
-      title: Entity Type
-      type: string
       x-tags:
-        - Enumerations
+        - Profiles
+    Entity-Type:
+      title: '| Entity Type Enumeration'
+      type: string
       description: |-
         Entity type defined in Lianlian Pay system. One of:
 
@@ -1119,11 +1121,11 @@ components:
         | LISTED_ENTERPRISES | Listed Enterprises |
         | LIMTED_COMPANY | Limted Company |
         | PARTNERSHIP | Partnership  |
-    ID-Type:
-      title: ID Type
-      type: string
       x-tags:
-        - Enumerations
+        - Profiles
+    ID-Type:
+      title: '| ID Type Enumeration'
+      type: string
       description: |-
         Supported ID types in Lianlian Pay system. One of:
 
@@ -1131,14 +1133,16 @@ components:
         |-------|-------------|
         | PASSPORT | Passport |
         | IDCARD | ID Card |
-    Account-Currency:
-      title: Account Currency
-      type: string
       x-tags:
-        - Enumerations
+        - Profiles
+    Account-Currency:
+      title: '| Account Currency Enumeration'
+      type: string
       description: "Supported account currencies in Lianlian Pay system. \n\n**Funding Account Currencies**, one of:\n\n| Currency | Description |\n|----------|-------------|\n| EUR | Euro |\n| USD | United States dollar |\n\n\n**Payment Account Currencies**, one of:\n\n| Currency | Description |\n|----------|-------------|\n| EUR | Euro |"
+      x-tags:
+        - Accounts
     Region:
-      title: Region
+      title: '| Region Enumeration'
       description: |
         Supported regions in Lianlian Pay system. One of:
 
@@ -1148,12 +1152,10 @@ components:
         | US | United States |
       type: string
       x-tags:
-        - Enumerations
+        - Profiles
     Account-Type:
-      title: Account Type
+      title: '| Account Type Enumeration'
       type: string
-      x-tags:
-        - Enumerations
       description: |-
         Account types provided in Lianlian Pay system. One of:
 
@@ -1161,11 +1163,11 @@ components:
         |-------|-------------|
         | FUNDING | Merchant account to keep bill obligations fundings |
         | PAYMENT | Account support direct debit, used for tax authorities of certain region/jurisdiction to pull money from |
-    Name:
-      title: Name
-      type: object
       x-tags:
-        - Objects
+        - Accounts
+    Name:
+      title: '| Name Object'
+      type: object
       description: Name object used in Lianlian Pay system.
       properties:
         nameInEnglish:
@@ -1174,11 +1176,11 @@ components:
         nameInOrigin:
           type: string
           description: Name in origin or with native letters
-    Bill-Region:
-      title: Bill Region
-      type: string
       x-tags:
-        - Enumerations
+        - Profiles
+    Bill-Region:
+      title: '| Bill Region Enumeration'
+      type: string
       description: |-
         Supported bill region/jurisdiction in Lianlian Pay system. One of:
 
@@ -1191,19 +1193,21 @@ components:
         | IT | Italy |
         | PO | Poland |
         | UK | United Kindom|
-    Bill-Currency:
-      title: Bill Currency
-      type: string
       x-tags:
-        - Enumerations
+        - Bills
+    Bill-Currency:
+      title: '| Bill Currency Enumeration'
+      type: string
       description: |-
         Supported bill currencies in Lianlian Pay system. One of:
 
         | Currency | Description |
         |----------|-------------|
         | EUR | Euro |
+      x-tags:
+        - Bills
     Bill-Status:
-      title: Bill Status
+      title: '| Bill Status Enumeration'
       type: string
       description: |-
         Bill status defined in Lianlian Pay system. One of:
@@ -1216,13 +1220,13 @@ components:
         | EXPIRED | Bill expired |
         | PAYMENT_FAILED | Bill payment failed |
       x-tags:
-        - Enumerations
+        - Bills
     Bank-Account-Region:
-      title: Bank Account Region
+      title: '| Bank Account Region Enumeration'
       type:
         - object
         - string
       description: "Supported account regions in Lianlian Pay system. \n\n**Payment Bank Account Regions**, one of:\n\n| Region | Description |\n|--------|-------------|\n| FR | France, supported currency - EUR |\n\n\n**Payee Bank Account Regions**, one of:\n\n| Region | Description |\n|--------|-------------|\n| CZ | Czech Republic |\n| DE | Germany |\n| ES | Spain |\n| FR | France |\n| IT | Italy |\n| PO | Poland |\n| UK | United Kindom|"
       x-tags:
-        - Enumerations
+        - Accounts
   securitySchemes: {}
