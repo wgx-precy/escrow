@@ -159,7 +159,12 @@ paths:
                           type: string
                         mobile:
                           type: string
+                        ssn:
+                          type: string
                       description: US Individual/Sole Trader
+                    - description: HK Entity
+                    - description: HK Individual/Sole Trander
+                  description: Profile KYC data set
                   type: object
               required:
                 - profileId
@@ -889,7 +894,7 @@ components:
     CN-ENTITY-KYC:
       title: '| CN ENTITY KYC Object'
       type: object
-      description: KYC object for CN companies used in Lianlian Pay system.
+      description: KYC object for CN company used in Lianlian Pay system.
       x-tags:
         - Profiles
       properties:
@@ -1200,18 +1205,6 @@ components:
       type: string
       x-tags:
         - Profiles
-    Region-Of-Origin:
-      title: '| Region Of Origin Enumeration'
-      type: string
-      description: |-
-        Supported country/region of origin in Lianlian Pay system. One of:
-
-        | Value | Description |
-        |-------|-------------|
-        | CN | China |
-        | US | United States |
-      x-tags:
-        - Other
     Entity-Type:
       title: '| Entity Type Enumeration'
       type: string
@@ -1244,6 +1237,7 @@ components:
         | Region | Description |
         |-------|-------------|
         | CN | China |
+        | HK | Hongkong |
         | US | United States |
       type: string
       x-tags:
@@ -1327,7 +1321,7 @@ components:
     US-ENTITY-KYC:
       title: '| US-ENTITY-KYC'
       type: object
-      description: KYC object for United States companies used in Lianlian Pay system.
+      description: KYC object for United States company used in Lianlian Pay system.
       x-tags:
         - Profiles
       properties:
@@ -1414,6 +1408,9 @@ components:
     CN-INDIVIDUAL-KYC:
       title: '| CN-INDIVIDUAL-KYC'
       type: object
+      description: KYC object for CN individual or sole trader used in Lianlian Pay system.
+      x-tags:
+        - Profiles
       properties:
         name:
           $ref: '#/components/schemas/Name'
@@ -1437,21 +1434,16 @@ components:
           type: string
         residentialAddress:
           $ref: '#/components/schemas/Address'
-        portraitWithIdInHand:
-          $ref: '#/components/schemas/Document'
       required:
         - name
         - idNumber
         - mobile
         - idFrontImg
         - idBackImg
-      description: KYC object for CN individuals or sole traders used in Lianlian Pay system.
-      x-tags:
-        - Profiles
     US-INDIVIDUAL-KYC:
       title: '| US-INDIVIDUAL-KYC'
       type: object
-      description: KYC object for US individuals or sole traders used in Lianlian Pay system.
+      description: KYC object for US individual or sole trader used in Lianlian Pay system.
       x-tags:
         - Profiles
       properties:
@@ -1471,4 +1463,55 @@ components:
           $ref: '#/components/schemas/Document'
         mobile:
           type: string
+    HK-ENTITY-KYC:
+      title: '| HK-ENTITY-KYC'
+      type: object
+      x-tags:
+        - Profiles
+      description: KYC object for hk company used in Lianlian Pay system.
+      properties:
+        entityName:
+          type: string
+        entityType:
+          type: string
+        regBusiness:
+          type: string
+        operatingAddress:
+          type: string
+        registryNumber:
+          type: string
+        CINumber:
+          type: string
+    HK-INDIVIDUAL-KYC:
+      title: '| HK-INDIVIDUAL-KYC'
+      type: object
+      x-tags:
+        - Profiles
+      properties:
+        name:
+          type: string
+        idType:
+          type: string
+        idNumber:
+          type: string
+        mobile:
+          type: string
+        idFrontImg:
+          type: string
+        idIssueDate:
+          type: string
+        idExpireDate:
+          type: string
+        birthday:
+          type: string
+        nationality:
+          type: string
+        residentialAddress:
+          type: string
+      required:
+        - name
+        - idNumber
+        - mobile
+        - idFrontImg
+      description: KYC object for HK individual or sole trader used in Lianlian Pay system.
   securitySchemes: {}
