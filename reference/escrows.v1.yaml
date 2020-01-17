@@ -43,42 +43,124 @@ paths:
                   format: email
                   description: Merchant email address
                 kyc:
-                  type: object
-                  required:
-                    - entityName
-                    - entityType
-                    - registryNumber
-                    - regCertificateCopy
-                    - legalRep
-                  properties:
-                    entityName:
-                      $ref: '#/components/schemas/Name'
-                    entityType:
-                      $ref: '#/components/schemas/Entity-Type'
-                    registryNumber:
-                      type: string
-                      description: Company number
-                    regCertificateCopy:
-                      type: string
-                      description: Company liscens document name
-                    legalRep:
-                      type: object
-                      required:
-                        - name
-                        - idNumber
-                        - idFrontImg
+                  oneOf:
+                    - description: CN Entity
                       properties:
+                        entityName:
+                          $ref: '#/components/schemas/Name'
+                        entityType:
+                          $ref: '#/components/schemas/Entity-Type'
+                        registryNumber:
+                          type: string
+                          description: Company number
+                        regCertificateCopy:
+                          type: string
+                          description: Company liscens document name
+                        legalRep:
+                          type: object
+                          required:
+                            - name
+                            - idNumber
+                            - idFrontImg
+                          properties:
+                            name:
+                              $ref: '#/components/schemas/Name'
+                            idNumber:
+                              type: string
+                              description: Legal Representative’s id number
+                            idFrontImg:
+                              type: string
+                              description: Legal Representative’s id front document name
+                            idBackImg:
+                              type: string
+                              description: Legal Representative’s id back document name. Optional if id type is passport
+                      required:
+                        - entityName
+                        - entityType
+                        - registryNumber
+                        - regCertificateCopy
+                        - legalRep
+                    - properties:
                         name:
                           $ref: '#/components/schemas/Name'
                         idNumber:
                           type: string
-                          description: Legal Representative’s id number
                         idFrontImg:
                           type: string
-                          description: Legal Representative’s id front document name
                         idBackImg:
                           type: string
-                          description: Legal Representative’s id back document name. Optional if id type is passport
+                        mobile:
+                          type: string
+                      description: CN Individual/Sole Trander
+                      required:
+                        - name
+                        - idNumber
+                        - idFrontImg
+                        - idBackImg
+                        - mobile
+                    - properties:
+                        entityName:
+                          type: string
+                        entityType:
+                          type: string
+                        EINNumber:
+                          type: string
+                        regCertificateCopy:
+                          type: string
+                        regAddress:
+                          type: string
+                        operatingAddress:
+                          type: string
+                        legalRep:
+                          type: object
+                          properties:
+                            name:
+                              $ref: '#/components/schemas/Name'
+                            residentialAddress:
+                              $ref: '#/components/schemas/Address'
+                            birthday:
+                              type: string
+                            ssn:
+                              type: string
+                            idFrontImg:
+                              type: string
+                            idBackImg:
+                              type: string
+                            mobile:
+                              type: string
+                        ubo:
+                          type: array
+                          items:
+                            type: object
+                            properties:
+                              name:
+                                $ref: '#/components/schemas/Name'
+                              residentialAddress:
+                                $ref: '#/components/schemas/Address'
+                              birthday:
+                                type: string
+                              ssn:
+                                type: string
+                              idFrontImg:
+                                type: string
+                              idBackImg:
+                                type: string
+                      description: US Entity
+                    - properties:
+                        name:
+                          $ref: '#/components/schemas/Name'
+                        residentialAddress:
+                          $ref: '#/components/schemas/Address'
+                        birthday:
+                          type: string
+                        idFrontImg:
+                          type: string
+                        idBackImg:
+                          type: string
+                        mobile:
+                          type: string
+                      description: US Individual/Sole Trader
+                  type: object
               required:
                 - profileId
                 - countryOfOrigin
@@ -758,7 +840,7 @@ components:
         - region
         - postalCode
       x-tags:
-        - Profiles
+        - Other
     Account:
       title: '| Account Object'
       type: object
@@ -807,7 +889,7 @@ components:
     CN-ENTITY-KYC:
       title: '| CN ENTITY KYC Object'
       type: object
-      description: KYC object for Chinese companies used in Lianlian Pay system.
+      description: KYC object for CN companies used in Lianlian Pay system.
       x-tags:
         - Profiles
       properties:
@@ -838,6 +920,8 @@ components:
       title: '| Legal-Representative Object'
       type: object
       description: "Date set used to describe CN company's legal representative information in Lianlian Pay system."
+      x-tags:
+        - Profiles
       properties:
         name:
           $ref: '#/components/schemas/Name'
@@ -880,10 +964,8 @@ components:
         - idNumber
         - idFrontImg
         - idBackImg
-      x-tags:
-        - Profiles
     CN-UBO:
-      title: '| UBO Object'
+      title: '| CN UBO Object'
       type: object
       description: "Data set in Lianlian Pay system to describe the Ultimate Beneficial Owner information of a CN company. \n"
       x-tags:
@@ -1114,7 +1196,7 @@ components:
         | Value | Description |
         |-------|-------------|
         | COMPANY |  A legal entity formed by a group of individuals |
-        | INDIVIDUAL |  |
+        | INDIVIDUAL | Individual or Sole Trader |
       type: string
       x-tags:
         - Profiles
@@ -1129,20 +1211,11 @@ components:
         | CN | China |
         | US | United States |
       x-tags:
-        - Profiles
+        - Other
     Entity-Type:
       title: '| Entity Type Enumeration'
       type: string
-      description: |-
-        Entity type defined in Lianlian Pay system. One of:
-
-        | Value | Description |
-        |-------|-------------|
-        | JOINT_STOCK | Joint Stock Company |
-        | SELF_EMPLOYED | Sole Proprietorship |
-        | LISTED_ENTERPRISES | Listed Enterprises |
-        | LIMTED_COMPANY | Limted Company |
-        | PARTNERSHIP | Partnership  |
+      description: "Entity type defined in Lianlian Pay system. \n\nCN Entity types. One of:\n\n| Value | Description |\n|-------|-------------|\n| JOINT_STOCK | Joint Stock Company |\n| SELF_EMPLOYED | Sole Proprietorship |\n| LISTED_ENTERPRISES | Listed Enterprises |\n| LIMTED_COMPANY | Limted Company |\n| PARTNERSHIP | Partnership  |\n\nUS Entity types. One of:\n\n| Value | Description |\n|-------|-------------|\n| SOLE_PROPRIETORSHIP | Sole Proprietorship|\n| SELF_EMPLOYED | L-Corporation |\n| LISTED_ENTERPRISES | S-Corporation |\n| PARTNERSHIP | Partnership |"
       x-tags:
         - Profiles
     ID-Type:
@@ -1174,7 +1247,7 @@ components:
         | US | United States |
       type: string
       x-tags:
-        - Profiles
+        - Other
     Account-Type:
       title: '| Account Type Enumeration'
       type: string
@@ -1252,9 +1325,11 @@ components:
       x-tags:
         - Accounts
     US-ENTITY-KYC:
-      title: US-ENTITY-KYC
+      title: '| US-ENTITY-KYC'
       type: object
       description: KYC object for United States companies used in Lianlian Pay system.
+      x-tags:
+        - Profiles
       properties:
         entityName:
           $ref: '#/components/schemas/Name'
@@ -1285,9 +1360,11 @@ components:
         - legalRep
         - ubo
     US-UBO:
-      title: US-UBO
+      title: '| US-UBO'
       type: object
       description: 'Data set in Lianlian Pay system to describe the Ultimate Beneficial Owner information of a US company. '
+      x-tags:
+        - Profiles
       properties:
         name:
           $ref: '#/components/schemas/Name'
@@ -1304,9 +1381,11 @@ components:
         idBackImg:
           $ref: '#/components/schemas/Document'
     US-Legal-Representative:
-      title: US-Legal-Rep
+      title: '| US-Legal-Rep'
       type: object
       description: "Date set used to describe US company's legal representative information in Lianlian Pay system."
+      x-tags:
+        - Profiles
       properties:
         name:
           $ref: '#/components/schemas/Name'
@@ -1333,15 +1412,63 @@ components:
         - idBackImg
         - mobile
     CN-INDIVIDUAL-KYC:
-      title: CN-INDIVIDUAL-KYC
+      title: '| CN-INDIVIDUAL-KYC'
       type: object
       properties:
-        id:
+        name:
+          $ref: '#/components/schemas/Name'
+        idType:
+          $ref: '#/components/schemas/ID-Type'
+        idNumber:
           type: string
+        mobile:
+          type: string
+        idFrontImg:
+          $ref: '#/components/schemas/Document'
+        idBackImg:
+          $ref: '#/components/schemas/Document'
+        idIssueDate:
+          type: string
+        idExpireDate:
+          type: string
+        nationality:
+          type: string
+        birthday:
+          type: string
+        residentialAddress:
+          $ref: '#/components/schemas/Address'
+        portraitWithIdInHand:
+          $ref: '#/components/schemas/Document'
+      required:
+        - name
+        - idNumber
+        - mobile
+        - idFrontImg
+        - idBackImg
+      description: KYC object for CN individuals or sole traders used in Lianlian Pay system.
+      x-tags:
+        - Profiles
     US-INDIVIDUAL-KYC:
-      title: US-INDIVIDUAL-KYC
+      title: '| US-INDIVIDUAL-KYC'
       type: object
+      description: KYC object for US individuals or sole traders used in Lianlian Pay system.
+      x-tags:
+        - Profiles
       properties:
-        id:
+        name:
+          $ref: '#/components/schemas/Name'
+        residentialAddress:
+          $ref: '#/components/schemas/Address'
+        birthday:
+          type: string
+          description: Date of birth
+        ssn:
+          type: string
+          description: Social Security Number
+        idFrontImg:
+          $ref: '#/components/schemas/Document'
+        idBackImg:
+          $ref: '#/components/schemas/Document'
+        mobile:
           type: string
   securitySchemes: {}
