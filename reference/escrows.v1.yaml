@@ -80,37 +80,38 @@ paths:
                         - registryNumber
                         - regCertificateCopy
                         - legalRep
-                    - properties:
+                    - description: CN Individual/Sole Trander
+                      properties:
                         name:
                           $ref: '#/components/schemas/Name'
                         idNumber:
                           type: string
+                          description: ID or Passport number
                         idFrontImg:
                           type: string
+                          description: Id front copy or passport copy
                         idBackImg:
                           type: string
-                        mobile:
-                          type: string
-                      description: CN Individual/Sole Trander
+                          description: Id back copy
                       required:
                         - name
                         - idNumber
                         - idFrontImg
                         - idBackImg
-                        - mobile
-                    - properties:
+                    - description: US Entity
+                      properties:
                         entityName:
-                          type: string
+                          $ref: '#/components/schemas/Name'
                         entityType:
-                          type: string
+                          $ref: '#/components/schemas/Entity-Type'
                         EINNumber:
                           type: string
                         regCertificateCopy:
                           type: string
                         regAddress:
-                          type: string
+                          $ref: '#/components/schemas/Address'
                         operatingAddress:
-                          type: string
+                          $ref: '#/components/schemas/Address'
                         legalRep:
                           type: object
                           properties:
@@ -120,6 +121,7 @@ paths:
                               $ref: '#/components/schemas/Address'
                             birthday:
                               type: string
+                              description: Date of birth
                             ssn:
                               type: string
                             idFrontImg:
@@ -139,27 +141,48 @@ paths:
                                 $ref: '#/components/schemas/Address'
                               birthday:
                                 type: string
+                                description: Date of birth
                               ssn:
                                 type: string
                               idFrontImg:
                                 type: string
                               idBackImg:
                                 type: string
-                      description: US Entity
-                    - properties:
+                      required:
+                        - entityName
+                        - entityType
+                        - EINNumber
+                        - regCertificateCopy
+                        - regAddress
+                        - operatingAddress
+                        - legalRep
+                        - ubo
+                    - description: US Individual/Sole Trader
+                      properties:
                         name:
                           $ref: '#/components/schemas/Name'
                         residentialAddress:
                           $ref: '#/components/schemas/Address'
                         birthday:
                           type: string
+                          description: Date of birth
                         idFrontImg:
                           type: string
                         idBackImg:
                           type: string
                         mobile:
                           type: string
-                      description: US Individual/Sole Trader
+                        ssn:
+                          type: string
+                      required:
+                        - name
+                        - residentialAddress
+                        - birthday
+                        - idFrontImg
+                        - idBackImg
+                        - mobile
+                        - ssn
+                  description: Profile KYC data object. Choose one of the following data set
                   type: object
               required:
                 - profileId
@@ -904,7 +927,7 @@ components:
           $ref: '#/components/schemas/Document'
         legalRep:
           $ref: '#/components/schemas/CN-Legal-Representative'
-        ubo:
+        ubos:
           type: array
           description: 'Profile List<UBO> information. '
           maxItems: 4
@@ -967,7 +990,7 @@ components:
     CN-UBO:
       title: '| CN UBO Object'
       type: object
-      description: "Data set in Lianlian Pay system to describe the Ultimate Beneficial Owner information of a CN company. \n"
+      description: "**CN UBO Object**\nData set in Lianlian Pay system to describe the Ultimate Beneficial Owner information of a CN company. \n"
       x-tags:
         - Profiles
       properties:
@@ -1200,18 +1223,6 @@ components:
       type: string
       x-tags:
         - Profiles
-    Region-Of-Origin:
-      title: '| Region Of Origin Enumeration'
-      type: string
-      description: |-
-        Supported country/region of origin in Lianlian Pay system. One of:
-
-        | Value | Description |
-        |-------|-------------|
-        | CN | China |
-        | US | United States |
-      x-tags:
-        - Other
     Entity-Type:
       title: '| Entity Type Enumeration'
       type: string
@@ -1244,6 +1255,7 @@ components:
         | Region | Description |
         |-------|-------------|
         | CN | China |
+        | HK | Hongkong|
         | US | United States |
       type: string
       x-tags:
@@ -1337,6 +1349,7 @@ components:
           $ref: '#/components/schemas/Entity-Type'
         EINNumber:
           type: string
+          description: EIN Number (Business Tax ID Number)
         regCertificateCopy:
           $ref: '#/components/schemas/Document'
         operatingAddress:
@@ -1345,7 +1358,7 @@ components:
           $ref: '#/components/schemas/Address'
         legalRep:
           $ref: '#/components/schemas/US-Legal-Representative'
-        ubo:
+        ubos:
           type: array
           minItems: 1
           items:
@@ -1358,11 +1371,11 @@ components:
         - operatingAddress
         - regAddress
         - legalRep
-        - ubo
+        - ubos
     US-UBO:
       title: '| US-UBO'
       type: object
-      description: 'Data set in Lianlian Pay system to describe the Ultimate Beneficial Owner information of a US company. '
+      description: "**US UBO Object**\nData set in Lianlian Pay system to describe the Ultimate Beneficial Owner information of a US company. "
       x-tags:
         - Profiles
       properties:
@@ -1380,6 +1393,13 @@ components:
           $ref: '#/components/schemas/Document'
         idBackImg:
           $ref: '#/components/schemas/Document'
+      required:
+        - name
+        - residentialAddress
+        - birthday
+        - ssn
+        - idFrontImg
+        - idBackImg
     US-Legal-Representative:
       title: '| US-Legal-Rep'
       type: object
@@ -1414,6 +1434,9 @@ components:
     CN-INDIVIDUAL-KYC:
       title: '| CN-INDIVIDUAL-KYC'
       type: object
+      description: KYC object for CN individuals or sole traders used in Lianlian Pay system.
+      x-tags:
+        - Profiles
       properties:
         name:
           $ref: '#/components/schemas/Name'
@@ -1421,6 +1444,7 @@ components:
           $ref: '#/components/schemas/ID-Type'
         idNumber:
           type: string
+          description: Mobile number
         mobile:
           type: string
         idFrontImg:
@@ -1445,9 +1469,6 @@ components:
         - mobile
         - idFrontImg
         - idBackImg
-      description: KYC object for CN individuals or sole traders used in Lianlian Pay system.
-      x-tags:
-        - Profiles
     US-INDIVIDUAL-KYC:
       title: '| US-INDIVIDUAL-KYC'
       type: object
@@ -1471,4 +1492,13 @@ components:
           $ref: '#/components/schemas/Document'
         mobile:
           type: string
+          description: Mobile number
+      required:
+        - name
+        - residentialAddress
+        - birthday
+        - ssn
+        - idFrontImg
+        - idBackImg
+        - mobile
   securitySchemes: {}
