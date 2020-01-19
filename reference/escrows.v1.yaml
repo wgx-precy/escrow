@@ -38,16 +38,24 @@ paths:
                   $ref: '#/components/schemas/Region'
                 type:
                   $ref: '#/components/schemas/Profile-Type'
-                emial:
+                email:
                   type: string
                   format: email
                   description: Merchant email address
                 kyc:
                   oneOf:
-                    - description: CN Entity
+                    - description: '**CN Entity**'
                       properties:
                         entityName:
-                          $ref: '#/components/schemas/Name'
+                          type: object
+                          description: Entity name. One of
+                          properties:
+                            nameInEnglish:
+                              type: string
+                              description: Name in English or Pinyin
+                            originalName:
+                              type: string
+                              description: Original name(Name on ID/document)
                         entityType:
                           $ref: '#/components/schemas/Entity-Type'
                         registryNumber:
@@ -64,7 +72,15 @@ paths:
                             - idFrontImg
                           properties:
                             name:
-                              $ref: '#/components/schemas/Name'
+                              type: object
+                              description: Legal Representative’s name. One of
+                              properties:
+                                nameInEnglish:
+                                  type: string
+                                  description: Name in English or Pinyin
+                                originalName:
+                                  type: string
+                                  description: Original name(Name on ID/document)
                             idNumber:
                               type: string
                               description: Legal Representative’s id number
@@ -80,10 +96,18 @@ paths:
                         - registryNumber
                         - regCertificateCopy
                         - legalRep
-                    - description: CN Individual/Sole Trander
+                    - description: '**CN Individual/Sole Trander**'
                       properties:
                         name:
-                          $ref: '#/components/schemas/Name'
+                          type: object
+                          description: Name. One of
+                          properties:
+                            nameInEnglish:
+                              type: string
+                              description: Name in English or Pinyin
+                            originalName:
+                              type: string
+                              description: Original name(Name on ID/document)
                         idNumber:
                           type: string
                           description: ID or Passport number
@@ -98,10 +122,18 @@ paths:
                         - idNumber
                         - idFrontImg
                         - idBackImg
-                    - description: US Entity
+                    - description: '**US Entity**'
                       properties:
                         entityName:
-                          $ref: '#/components/schemas/Name'
+                          type: object
+                          description: Entity name. One of
+                          properties:
+                            nameInEnglish:
+                              type: string
+                              description: Name in English or Pinyin
+                            originalName:
+                              type: string
+                              description: Original name(Name on ID/document)
                         entityType:
                           $ref: '#/components/schemas/Entity-Type'
                         EINNumber:
@@ -114,9 +146,19 @@ paths:
                           $ref: '#/components/schemas/Address'
                         legalRep:
                           type: object
+                          required:
+                            - name
                           properties:
                             name:
-                              $ref: '#/components/schemas/Name'
+                              type: object
+                              description: Legal Representative’s name. One of
+                              properties:
+                                nameInEnglish:
+                                  type: string
+                                  description: Name in English or Pinyin
+                                originalName:
+                                  type: string
+                                  description: Original name(Name on ID/document)
                             residentialAddress:
                               $ref: '#/components/schemas/Address'
                             birthday:
@@ -124,19 +166,31 @@ paths:
                               description: Date of birth
                             ssn:
                               type: string
+                              description: Social security number
                             idFrontImg:
                               type: string
+                              description: ID front copy document name
                             idBackImg:
                               type: string
+                              description: ID back copy document name
                             mobile:
                               type: string
+                              description: Mobile number
                         ubo:
                           type: array
                           items:
                             type: object
                             properties:
                               name:
-                                $ref: '#/components/schemas/Name'
+                                type: object
+                                description: "UBO's legal name. One of"
+                                properties:
+                                  nameInEnglish:
+                                    type: string
+                                    description: Name in English or Pinyin
+                                  originalName:
+                                    type: string
+                                    description: Original name(Name on ID/document)
                               residentialAddress:
                                 $ref: '#/components/schemas/Address'
                               birthday:
@@ -148,6 +202,8 @@ paths:
                                 type: string
                               idBackImg:
                                 type: string
+                            required:
+                              - name
                       required:
                         - entityName
                         - entityType
@@ -157,10 +213,18 @@ paths:
                         - operatingAddress
                         - legalRep
                         - ubo
-                    - description: US Individual/Sole Trader
+                    - description: '**US Individual/Sole Trader**'
                       properties:
                         name:
-                          $ref: '#/components/schemas/Name'
+                          type: object
+                          description: Name. One of
+                          properties:
+                            nameInEnglish:
+                              type: string
+                              description: Original name(Name on ID/document)
+                            originalName:
+                              type: string
+                              description: Original name(Name on ID/document)
                         residentialAddress:
                           $ref: '#/components/schemas/Address'
                         birthday:
@@ -168,12 +232,16 @@ paths:
                           description: Date of birth
                         idFrontImg:
                           type: string
+                          description: ID front copy document name
                         idBackImg:
                           type: string
+                          description: ID back copy document name
                         mobile:
                           type: string
+                          description: Mobile number
                         ssn:
                           type: string
+                          description: Social security number
                       required:
                         - name
                         - residentialAddress
@@ -182,13 +250,101 @@ paths:
                         - idBackImg
                         - mobile
                         - ssn
+                    - properties:
+                        entityName:
+                          description: 'Entity name, one of'
+                          type: object
+                          properties:
+                            nameInEnglish:
+                              type: string
+                              description: Name in English or Pinyin
+                            originalName:
+                              type: string
+                              description: Original name(Name on ID/document)
+                        entityType:
+                          type: string
+                          description: Entity type
+                        registryNumber:
+                          type: string
+                          description: Business registration certificate number
+                        ciNumber:
+                          type: string
+                          description: Certificate of incorporation number
+                        nnc1:
+                          type: string
+                          description: NNC1/NAR1
+                        regCertificateCopy:
+                          type: string
+                          description: Copy of business registration certificate
+                        incorporationCertificateCopy:
+                          type: string
+                          description: Copy of certificate of incorporation
+                        directors:
+                          type: array
+                          description: Directors information
+                          items:
+                            type: object
+                            properties:
+                              name:
+                                type: object
+                                description: Director name. One of
+                                properties:
+                                  nameInEnglish:
+                                    type: string
+                                    description: Name in English or Pinyin
+                                  originalName:
+                                    type: string
+                                    description: Original name(Name on ID/document)
+                              idNumber:
+                                type: string
+                              idFrontImg:
+                                type: string
+                            required:
+                              - name
+                              - idNumber
+                              - idFrontImg
+                      description: '**HK Entity**'
+                      required:
+                        - entityName
+                        - entityType
+                        - registryNumber
+                        - ciNumber
+                        - nnc1
+                        - regCertificateCopy
+                        - incorporationCertificateCopy
+                        - directors
+                    - properties:
+                        name:
+                          type: object
+                          description: Name. One of
+                          properties:
+                            nameInEnglish:
+                              type: string
+                              description: Name in English or Pinyin
+                            originalName:
+                              type: string
+                              description: Original name(Name on ID/document)
+                        idNumber:
+                          type: string
+                          description: ID Number
+                        idFrontImg:
+                          type: string
+                          description: ID front document name
+                        residentalAddress:
+                          $ref: '#/components/schemas/Address'
+                      description: '**HK Individual**'
+                      required:
+                        - name
+                        - idNumber
+                        - idFrontImg
+                        - residentalAddress
                   description: '**KYC Data Object** Choose one of the following data set'
                   type: object
               required:
                 - profileId
                 - countryOfOrigin
                 - type
-                - emial
+                - email
                 - kyc
         description: ''
       description: |-
@@ -839,7 +995,9 @@ components:
     Address:
       title: '| Address Object'
       type: object
-      description: Address object defined in Lianlian Pay system.
+      description: |-
+        **Address Object**
+        Address data set defined in Lianlian Pay system.
       properties:
         lineOne:
           type: string
@@ -1280,15 +1438,15 @@ components:
       title: '| Name Object'
       type: object
       description: Name object used in Lianlian Pay system.
+      x-tags:
+        - Profiles
       properties:
         nameInEnglish:
           type: string
-          description: Name in English or name with western letters
-        nameInOrigin:
+          description: Name in English or Pinyin
+        originalName:
           type: string
-          description: Name in origin or with native letters
-      x-tags:
-        - Profiles
+          description: Original name
     Bill-Region:
       title: '| Bill Region Enumeration'
       type: string
