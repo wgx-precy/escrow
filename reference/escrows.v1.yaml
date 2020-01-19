@@ -566,6 +566,7 @@ paths:
         description: ''
       description: |-
         Create an account for a profile
+
         Return type is `Account`
       tags:
         - Accounts
@@ -591,6 +592,7 @@ paths:
           description: 'This API returns a list of `Account` object of a profile. If no applicable account exists, empty list will be returned. '
       description: |-
         Get a list of accounts of a profile.
+
         Return type is List<`Account`>
       parameters:
         - schema:
@@ -1495,13 +1497,17 @@ components:
       x-tags:
         - Bills
     Bank-Account-Region:
+      type: string
       title: '| Bank Account Region Enumeration'
-      type:
-        - object
-        - string
       description: "Supported account regions in Lianlian Pay system. \n\n**Payment Bank Account Regions**, one of:\n\n| Region | Description |\n|--------|-------------|\n| FR | France, supported currency - EUR |\n\n\n**Payee Bank Account Regions**, one of:\n\n| Region | Description |\n|--------|-------------|\n| CZ | Czech Republic |\n| DE | Germany |\n| ES | Spain |\n| FR | France |\n| IT | Italy |\n| PO | Poland |\n| UK | United Kindom|"
-      x-tags:
-        - Accounts
+      enum:
+        - CZ
+        - DE
+        - ES
+        - FR
+        - IT
+        - PO
+        - UK
     US-ENTITY-KYC:
       title: '| US-ENTITY-KYC'
       type: object
