@@ -182,7 +182,7 @@ paths:
                         - idBackImg
                         - mobile
                         - ssn
-                  description: Profile KYC data object. Choose one of the following data set
+                  description: '**KYC Data Object** Choose one of the following data set'
                   type: object
               required:
                 - profileId
@@ -731,7 +731,9 @@ components:
             - $ref: '#/components/schemas/US-ENTITY-KYC'
             - $ref: '#/components/schemas/CN-INDIVIDUAL-KYC'
             - $ref: '#/components/schemas/US-INDIVIDUAL-KYC'
-          description: Profile KYC data set
+            - $ref: '#/components/schemas/HK-INDIVIDUAL-KYC'
+            - $ref: '#/components/schemas/HK-ENTITY-KYC'
+          description: '**KYC Object** One of the below:'
         status:
           $ref: '#/components/schemas/Profile-Status'
         feedback:
@@ -942,7 +944,9 @@ components:
     CN-Legal-Representative:
       title: '| Legal-Representative Object'
       type: object
-      description: "Date set used to describe CN company's legal representative information in Lianlian Pay system."
+      description: |-
+        **Legal Representative Object**
+        Date set used to describe CN company's legal representative information in Lianlian Pay system.
       x-tags:
         - Profiles
       properties:
@@ -970,7 +974,7 @@ components:
           example: '2010-01-21'
           pattern: YYYY-MM-DD
         nationality:
-          $ref: '#/components/schemas/Region-Of-Origin'
+          $ref: '#/components/schemas/Region'
         birthday:
           type: string
           description: "Legal representative's birthday"
@@ -1456,7 +1460,7 @@ components:
         idExpireDate:
           type: string
         nationality:
-          type: string
+          $ref: '#/components/schemas/Region'
         birthday:
           type: string
         residentialAddress:
@@ -1501,4 +1505,131 @@ components:
         - idFrontImg
         - idBackImg
         - mobile
+    HK-INDIVIDUAL-KYC:
+      title: HK-INDIVIDUAL-KYC
+      type: object
+      description: "Date set used to describe HK company's legal representative information in Lianlian Pay system."
+      x-tags:
+        - Profiles
+      properties:
+        name:
+          $ref: '#/components/schemas/Name'
+        idType:
+          $ref: '#/components/schemas/ID-Type'
+        idNumber:
+          type: string
+        mobile:
+          type: string
+        idFrontImg:
+          $ref: '#/components/schemas/Document'
+        idIssueDate:
+          type: string
+        idExpireDate:
+          type: string
+        residentialAddress:
+          $ref: '#/components/schemas/Address'
+        birthday:
+          type: string
+        nationality:
+          $ref: '#/components/schemas/Region'
+      required:
+        - name
+        - idNumber
+        - idFrontImg
+        - residentialAddress
+    HK-ENTITY-KYC:
+      title: HK-ENTITY-KYC
+      type: object
+      description: KYC object for HK companies used in Lianlian Pay system.
+      properties:
+        entityName:
+          type: string
+        entityType:
+          type: string
+        ciNumber:
+          type: string
+        registryNumber:
+          type: string
+        regCertificateCopy:
+          type: string
+          description: Photocopy of business registration certificate
+        incorporationCertificateCopy:
+          type: string
+          description: Photocopy of certificate of incorporation
+        nnc:
+          $ref: '#/components/schemas/Document'
+        directors:
+          type: array
+          items:
+            $ref: '#/components/schemas/HK-Director'
+        ubos:
+          type: string
+      required:
+        - entityName
+        - entityType
+        - ciNumber
+        - registryNumber
+        - regCertificateCopy
+        - incorporationCertificateCopy
+        - nnc
+        - directors
+      x-tags:
+        - Profiles
+    HK-Director:
+      title: HK-Director
+      type: object
+      x-tags:
+        - Profiles
+      properties:
+        name:
+          $ref: '#/components/schemas/Name'
+        idType:
+          $ref: '#/components/schemas/ID-Type'
+        idNumber:
+          type: string
+        mobile:
+          type: string
+        idFrontImg:
+          $ref: '#/components/schemas/Document'
+        idIssueDate:
+          type: string
+        idExpireDate:
+          type: string
+        nationality:
+          $ref: '#/components/schemas/Region'
+        birthday:
+          type: string
+        residentialAddress:
+          $ref: '#/components/schemas/Address'
+      description: |-
+        **Director Object**
+        Date set used to describe HK company's director information in Lianlian Pay system.
+    HK-UBO:
+      title: HK-UBO
+      type: object
+      properties:
+        name:
+          $ref: '#/components/schemas/Name'
+        idType:
+          $ref: '#/components/schemas/ID-Type'
+        idNumber:
+          type: string
+        idFrontImg:
+          $ref: '#/components/schemas/Document'
+        idIssueDate:
+          type: string
+        idExpireDate:
+          type: string
+        birthday:
+          type: string
+        residentialAddress:
+          $ref: '#/components/schemas/Address'
+        shareholdingRatio:
+          type: string
+      required:
+        - name
+        - idNumber
+        - idFrontImg
+        - residentialAddress
+      description: "**HK UBO Object**\nData set in Lianlian Pay system to describe the Ultimate Beneficial Owner information of a HK company. "
   securitySchemes: {}
