@@ -597,6 +597,9 @@ paths:
       parameters:
         - schema:
             type: string
+            enum:
+              - FUNDING
+              - PAYMENT
           in: query
           name: type
           description: Account types defined in Lianlina Pay system
@@ -927,10 +930,9 @@ components:
         currency:
           $ref: '#/components/schemas/Bill-Currency'
         amount:
-          type: string
+          type: number
           description: bill(obligation) amount
           example: '123.45'
-          pattern: "^(([1-9]{1}\\d*)|(0{1}))(\\.\\d{2})$"
         period:
           type: string
           description: bill(obligation) period
@@ -1053,12 +1055,13 @@ components:
             sortCode: null
             swiftCode: FR Bank SWIFT
             routingNo: null
+      x-tags:
+        - Accounts
       properties:
         balance:
-          type: string
+          type: number
           description: Account balance in account currency
           example: '123.45'
-          pattern: "^(([1-9]{1}\\d*)|(0{1}))(\\.\\d{2})$"
         currency:
           $ref: '#/components/schemas/Account-Currency'
         virtualAccountInfo:
@@ -1073,8 +1076,6 @@ components:
         - currency
         - type
         - id
-      x-tags:
-        - Accounts
     CN-ENTITY-KYC:
       title: '| CN ENTITY KYC Object'
       type: object
@@ -1454,8 +1455,8 @@ components:
           type: string
           description: Original name(Name on ID/Document)
     Bill-Region:
-      title: '| Bill Region Enumeration'
       type: string
+      title: '| Bill Region Enumeration'
       description: |-
         Supported bill region/jurisdiction in Lianlian Pay system. One of:
 
@@ -1468,8 +1469,14 @@ components:
         | IT | Italy |
         | PO | Poland |
         | UK | United Kindom|
-      x-tags:
-        - Bills
+      enum:
+        - CZ
+        - DE
+        - ES
+        - FR
+        - IT
+        - PO
+        - UK
     Bill-Currency:
       title: '| Bill Currency Enumeration'
       type: string
