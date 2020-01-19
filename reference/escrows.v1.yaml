@@ -457,6 +457,7 @@ paths:
         description: ''
       description: |-
         Create a bill obligation for a profile
+
         Return type is `Bill`
       tags:
         - Bills
@@ -1478,19 +1479,21 @@ components:
         - PO
         - UK
     Bill-Currency:
-      title: '| Bill Currency Enumeration'
       type: string
+      title: '| Bill Currency Enumeration'
       description: |-
         Supported bill currencies in Lianlian Pay system. One of:
 
         | Currency | Description |
         |----------|-------------|
         | EUR | Euro |
-      x-tags:
-        - Bills
+      enum:
+        - EUR
+        - PLN
+        - GBP
     Bill-Status:
-      title: '| Bill Status Enumeration'
       type: string
+      title: '| Bill Status Enumeration'
       description: |-
         Bill status defined in Lianlian Pay system. One of:
 
@@ -1501,8 +1504,12 @@ components:
         | COMPLETE | Bill complete |
         | EXPIRED | Bill expired |
         | PAYMENT_FAILED | Bill payment failed |
-      x-tags:
-        - Bills
+      enum:
+        - INIT
+        - CANCELED
+        - COMPLETE
+        - EXPIRED
+        - PAYMENT_FAILED
     Bank-Account-Region:
       type: string
       title: '| Bank Account Region Enumeration'
