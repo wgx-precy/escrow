@@ -482,7 +482,7 @@ paths:
       description: |-
         Get a bill details by id.
 
-        Return type is `List<Bill>`
+        Return type is List<`Bill`>
   '/bills/{billId}/submit':
     parameters:
       - schema:
@@ -591,7 +591,7 @@ paths:
           description: 'This API returns a list of `Account` object of a profile. If no applicable account exists, empty list will be returned. '
       description: |-
         Get a list of accounts of a profile.
-        Return type is `List<Account>`
+        Return type is List<`Account`>
       parameters:
         - schema:
             type: string
@@ -675,6 +675,8 @@ paths:
       operationId: get-documents-name
       description: |
         Get document file by id
+
+        Return type is `Document`
   /webhooks:
     get:
       summary: 2. List All Webhook Registrations
@@ -688,7 +690,7 @@ paths:
       operationId: get-webhooks
       description: |-
         Get a list of webhook registrations of a client. If no registrations, empty list will be returned.
-        Return type is `List<Webhook>`
+        Return type is List<`Webhook`>
       tags:
         - Webhooks
     post:
@@ -812,6 +814,7 @@ paths:
       operationId: get-events-eventId
       description: |-
         Get Lianlian Pay system generated event by id
+
         Return type is `Event`
   /events:
     get:
@@ -830,7 +833,8 @@ paths:
       operationId: get-events
       description: |-
         Get a list of Lianlian Pay system generated events
-        Return type is `List<Event>`
+
+        Return type is List<`Event`>
       parameters:
         - schema:
             type: string
@@ -1684,7 +1688,7 @@ components:
         - idBackImg
         - mobile
     HK-INDIVIDUAL-KYC:
-      title: HK-INDIVIDUAL-KYC
+      title: '| HK-INDIVIDUAL-KYC'
       type: object
       description: "Date set used to describe HK company's legal representative information in Lianlian Pay system."
       x-tags:
@@ -1728,7 +1732,7 @@ components:
         - idFrontImg
         - residentialAddress
     HK-ENTITY-KYC:
-      title: HK-ENTITY-KYC
+      title: '| HK-ENTITY-KYC'
       type: object
       description: KYC object for HK companies used in Lianlian Pay system.
       x-tags:
@@ -1771,7 +1775,7 @@ components:
         - nnc
         - directors
     HK-Director:
-      title: HK-Director
+      title: '| HK-Director'
       type: object
       x-tags:
         - Profiles
@@ -1818,7 +1822,7 @@ components:
         - idNumber
         - idFrontImg
     HK-UBO:
-      title: HK-UBO
+      title: '| HK-UBO'
       type: object
       description: "**HK UBO Object**\nData set in Lianlian Pay system to describe the Ultimate Beneficial Owner information of a HK company. "
       properties:
