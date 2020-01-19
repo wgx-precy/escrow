@@ -408,8 +408,11 @@ paths:
                 currency:
                   $ref: '#/components/schemas/Bill-Currency'
                 amount:
-                  type: string
+                  type: number
                   description: Bill amount
+                  format: double
+                  example: '123.45'
+                  minimum: 0
                 period:
                   type: string
                   description: Bill period
@@ -439,6 +442,7 @@ paths:
                 rfb:
                   type: string
                   maxLength: 105
+                  description: Reference for benificiary
                 memo:
                   type: string
                   maxLength: 512
@@ -888,7 +892,7 @@ components:
           minLength: 0
           maxLength: 32
         regionOfOrigin:
-          $ref: '#/components/schemas/Region-Of-Origin'
+          $ref: '#/components/schemas/Region'
         type:
           $ref: '#/components/schemas/Profile-Type'
         kyc:
@@ -933,6 +937,7 @@ components:
         amount:
           type: number
           description: bill(obligation) amount
+          format: double
           example: '123.45'
         period:
           type: string
@@ -1062,6 +1067,7 @@ components:
         balance:
           type: number
           description: Account balance in account currency
+          format: double
           example: '123.45'
         currency:
           $ref: '#/components/schemas/Account-Currency'
