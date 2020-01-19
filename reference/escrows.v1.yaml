@@ -161,9 +161,9 @@ paths:
                                   description: Original name(Name on ID/document)
                             residentialAddress:
                               $ref: '#/components/schemas/Address'
-                            birthday:
+                            dateOfBirth:
                               type: string
-                              description: Date of birth
+                              description: "Legal representative's date of birth"
                             ssn:
                               type: string
                               description: Social security number
@@ -193,11 +193,12 @@ paths:
                                     description: Original name(Name on ID/document)
                               residentialAddress:
                                 $ref: '#/components/schemas/Address'
-                              birthday:
+                              dateOfBirth:
                                 type: string
-                                description: Date of birth
+                                description: "UBO's date of birth"
                               ssn:
                                 type: string
+                                description: Social Security Number
                               idFrontImg:
                                 type: string
                               idBackImg:
@@ -227,7 +228,7 @@ paths:
                               description: Original name(Name on ID/document)
                         residentialAddress:
                           $ref: '#/components/schemas/Address'
-                        birthday:
+                        dateOfBirth:
                           type: string
                           description: Date of birth
                         idFrontImg:
@@ -245,12 +246,13 @@ paths:
                       required:
                         - name
                         - residentialAddress
-                        - birthday
+                        - dateOfBirth
                         - idFrontImg
                         - idBackImg
                         - mobile
                         - ssn
-                    - properties:
+                    - description: '**HK Entity**'
+                      properties:
                         entityName:
                           description: 'Entity name, one of'
                           type: object
@@ -262,8 +264,7 @@ paths:
                               type: string
                               description: Original name(Name on ID/document)
                         entityType:
-                          type: string
-                          description: Entity type
+                          $ref: '#/components/schemas/Event-Type'
                         registryNumber:
                           type: string
                           description: Business registration certificate number
@@ -303,7 +304,6 @@ paths:
                               - name
                               - idNumber
                               - idFrontImg
-                      description: '**HK Entity**'
                       required:
                         - entityName
                         - entityType
@@ -313,7 +313,8 @@ paths:
                         - regCertificateCopy
                         - incorporationCertificateCopy
                         - directors
-                    - properties:
+                    - description: '**HK Individual**'
+                      properties:
                         name:
                           type: object
                           description: Name. One of
@@ -332,7 +333,6 @@ paths:
                           description: ID front document name
                         residentalAddress:
                           $ref: '#/components/schemas/Address'
-                      description: '**HK Individual**'
                       required:
                         - name
                         - idNumber
@@ -1133,9 +1133,9 @@ components:
           pattern: YYYY-MM-DD
         nationality:
           $ref: '#/components/schemas/Region'
-        birthday:
+        dateOfBirth:
           type: string
-          description: "Legal representative's birthday"
+          description: "Legal representative's date of birth"
           format: date
           example: '2010-01-21'
           pattern: YYYY-MM-DD
@@ -1179,9 +1179,9 @@ components:
           format: date
           example: '2010-01-21'
           pattern: YYYY-MM-DD
-        birthday:
+        dateOfBirth:
           type: string
-          description: UBO birthday
+          description: "UBO's date of birth"
           format: date
           example: '2010-01-21'
           pattern: YYYY-MM-DD
@@ -1446,7 +1446,7 @@ components:
           description: Name in English or Pinyin
         originalName:
           type: string
-          description: Original name
+          description: Original name(Name on ID/Document)
     Bill-Region:
       title: '| Bill Region Enumeration'
       type: string
@@ -1545,9 +1545,11 @@ components:
           $ref: '#/components/schemas/Name'
         residentialAddress:
           $ref: '#/components/schemas/Address'
-        birthday:
+        dateOfBirth:
           type: string
-          description: "Legal representative's birthday"
+          description: "UBO's date of birth"
+          format: date
+          example: '2000-10-01'
         ssn:
           type: string
           description: Social Security Number
@@ -1558,7 +1560,7 @@ components:
       required:
         - name
         - residentialAddress
-        - birthday
+        - dateOfBirth
         - ssn
         - idFrontImg
         - idBackImg
@@ -1573,9 +1575,12 @@ components:
           $ref: '#/components/schemas/Name'
         residentialAddress:
           $ref: '#/components/schemas/Address'
-        birthday:
+        dateOfBirth:
           type: string
-          description: "Legal representative's birthday"
+          description: "Legal representative's date of birth"
+          format: date
+          example: '2000-10-01'
+          pattern: YYYY-MM-DD
         ssn:
           type: string
           description: Social Security Number
@@ -1588,7 +1593,7 @@ components:
       required:
         - name
         - residentialAddress
-        - birthday
+        - dateOfBirth
         - ssn
         - idFrontImg
         - idBackImg
@@ -1615,12 +1620,24 @@ components:
           $ref: '#/components/schemas/Document'
         idIssueDate:
           type: string
+          description: ID issue date
+          format: date
+          example: '2010-10-01'
+          pattern: YYYY-MM-DD
         idExpireDate:
           type: string
+          description: ID expire date
+          format: date
+          example: '2020-10-01'
+          pattern: YYYY-MM-DD
         nationality:
           $ref: '#/components/schemas/Region'
-        birthday:
+        dateOfBirth:
           type: string
+          description: Date of birth
+          format: date
+          example: '2000-10-01'
+          pattern: YYYY-MM-DD
         residentialAddress:
           $ref: '#/components/schemas/Address'
         portraitWithIdInHand:
@@ -1642,9 +1659,12 @@ components:
           $ref: '#/components/schemas/Name'
         residentialAddress:
           $ref: '#/components/schemas/Address'
-        birthday:
+        dateOfBirth:
           type: string
           description: Date of birth
+          format: date
+          example: '2000-10-01'
+          pattern: YYYY-MM-DD
         ssn:
           type: string
           description: Social Security Number
@@ -1658,7 +1678,7 @@ components:
       required:
         - name
         - residentialAddress
-        - birthday
+        - dateOfBirth
         - ssn
         - idFrontImg
         - idBackImg
@@ -1676,18 +1696,30 @@ components:
           $ref: '#/components/schemas/ID-Type'
         idNumber:
           type: string
+          description: ID number
         mobile:
           type: string
+          description: Mobile number
         idFrontImg:
           $ref: '#/components/schemas/Document'
         idIssueDate:
           type: string
+          description: ID issue date
+          format: date
+          pattern: YYYY-MM-DD
         idExpireDate:
           type: string
+          description: ID expire date
+          format: date
+          pattern: YYYY-MM-DD
         residentialAddress:
           $ref: '#/components/schemas/Address'
-        birthday:
+        dateOfBirth:
           type: string
+          description: Date of birth
+          format: date
+          example: '2000-10-01'
+          pattern: YYYY-MM-DD
         nationality:
           $ref: '#/components/schemas/Region'
       required:
@@ -1699,29 +1731,36 @@ components:
       title: HK-ENTITY-KYC
       type: object
       description: KYC object for HK companies used in Lianlian Pay system.
+      x-tags:
+        - Profiles
       properties:
         entityName:
-          type: string
+          $ref: '#/components/schemas/Name'
         entityType:
-          type: string
+          $ref: '#/components/schemas/Entity-Type'
         ciNumber:
           type: string
+          description: Certificate incorporation number
         registryNumber:
           type: string
+          description: Registry number
         regCertificateCopy:
           type: string
-          description: Photocopy of business registration certificate
+          description: Copy of business registration certificate
         incorporationCertificateCopy:
           type: string
-          description: Photocopy of certificate of incorporation
+          description: Copy of certificate of incorporation
         nnc:
           $ref: '#/components/schemas/Document'
         directors:
           type: array
+          description: 'List<`HK-Director`>'
+          minItems: 1
           items:
             $ref: '#/components/schemas/HK-Director'
         ubos:
           type: string
+          description: 'List<`HK-UBO`>'
       required:
         - entityName
         - entityType
@@ -1731,40 +1770,57 @@ components:
         - incorporationCertificateCopy
         - nnc
         - directors
-      x-tags:
-        - Profiles
     HK-Director:
       title: HK-Director
       type: object
       x-tags:
         - Profiles
-      properties:
-        name:
-          $ref: '#/components/schemas/Name'
-        idType:
-          $ref: '#/components/schemas/ID-Type'
-        idNumber:
-          type: string
-        mobile:
-          type: string
-        idFrontImg:
-          $ref: '#/components/schemas/Document'
-        idIssueDate:
-          type: string
-        idExpireDate:
-          type: string
-        nationality:
-          $ref: '#/components/schemas/Region'
-        birthday:
-          type: string
-        residentialAddress:
-          $ref: '#/components/schemas/Address'
       description: |-
         **Director Object**
         Date set used to describe HK company's director information in Lianlian Pay system.
+      properties:
+        name:
+          $ref: '#/components/schemas/Name'
+        idType:
+          $ref: '#/components/schemas/ID-Type'
+        idNumber:
+          type: string
+          description: '  '
+        mobile:
+          type: string
+          description: Mobile number
+        idFrontImg:
+          $ref: '#/components/schemas/Document'
+        idIssueDate:
+          type: string
+          description: ID issue date
+          format: date
+          example: '2010-10-01'
+          pattern: YYYY-MM-DD
+        idExpireDate:
+          type: string
+          description: ID expire date
+          format: time
+          example: '2020-10-01'
+          pattern: YYYY-MM-DD
+        nationality:
+          $ref: '#/components/schemas/Region'
+        dateOfBirth:
+          type: string
+          description: Date of birth
+          format: date
+          example: '2000-10-01'
+          pattern: YYYY-MM-DD
+        residentialAddress:
+          $ref: '#/components/schemas/Address'
+      required:
+        - name
+        - idNumber
+        - idFrontImg
     HK-UBO:
       title: HK-UBO
       type: object
+      description: "**HK UBO Object**\nData set in Lianlian Pay system to describe the Ultimate Beneficial Owner information of a HK company. "
       properties:
         name:
           $ref: '#/components/schemas/Name'
@@ -1776,10 +1832,20 @@ components:
           $ref: '#/components/schemas/Document'
         idIssueDate:
           type: string
+          format: date
+          example: '2010-10-01'
+          pattern: YYYY-MM-DD
         idExpireDate:
           type: string
-        birthday:
+          format: date
+          example: '2020-10-01'
+          pattern: YYYY-MM-DD
+        dateOfBirth:
           type: string
+          format: date
+          example: '2000-10-01'
+          pattern: YYYY-MM-DD
+          description: "UBO's date of birth"
         residentialAddress:
           $ref: '#/components/schemas/Address'
         shareholdingRatio:
@@ -1789,5 +1855,4 @@ components:
         - idNumber
         - idFrontImg
         - residentialAddress
-      description: "**HK UBO Object**\nData set in Lianlian Pay system to describe the Ultimate Beneficial Owner information of a HK company. "
   securitySchemes: {}
