@@ -965,7 +965,6 @@ components:
           description: 'bill(obligation) expire date, UTC+0 timestamp'
           format: date-time
           example: '2019-01-01T00:00:00Z'
-          pattern: UTC+0 timestamp
         payee:
           $ref: '#/components/schemas/Bank-Account-Info'
         createTime:
@@ -977,7 +976,7 @@ components:
           type: string
           description: 'Bill funded time, UTC+0 timestamp'
           format: date-time
-          example: '2019-01-01T00:00:000Z'
+          example: '2019-01-01T00:00:00Z'
         paymentTime:
           type: string
           description: 'Bill payment time, UTC+0 timestamp'
@@ -1307,8 +1306,7 @@ components:
           type: string
           description: 'Event created time, UTC+0 timestamp'
           format: date-time
-          example: '2019-01-01T00:00:000Z'
-          pattern: UTC timestamp
+          example: '2019-01-01T00:00:00Z'
         profileId:
           type: string
           description: Profile/merchant id from client system
@@ -1364,14 +1362,12 @@ components:
           type: string
           description: 'Webhook registration time, UTC+0 timestamp'
           format: date-time
-          example: '2019-01-01T00:00:000Z'
-          pattern: UTC timestamp
+          example: '2019-01-01T00:00:00Z'
         modifyTime:
           type: string
           description: 'Webhook last modified time, UTC+0 timestamp'
           format: date-time
-          example: '2019-01-01T00:00:000Z'
-          pattern: UTC timestamp
+          example: '2019-01-01T00:00:00Z'
       required:
         - id
         - url
@@ -1800,7 +1796,6 @@ components:
         directors:
           type: array
           description: 'List<`HK-Director`>'
-          minItems: 1
           items:
             $ref: '#/components/schemas/HK-Director'
         ubos:
@@ -1845,7 +1840,7 @@ components:
         idExpireDate:
           type: string
           description: ID expire date
-          format: time
+          format: date
           example: '2020-10-01'
           pattern: "^((?:19|20)\\d\\d)-(0[1-9]|1[012])-(0[1-9]|[12][0-9]|3[01])"
         nationality:
