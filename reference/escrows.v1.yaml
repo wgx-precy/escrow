@@ -8,10 +8,10 @@ info:
     name: Lianlian Pay
     url: 'https://global.lianlianpay.com'
 servers:
+  - url: 'https://global-api-sandbox.lianlianpay-inc.com/escrow/v1'
+    description: Sandbox
   - url: 'https://global-api.lianlianpay.com/escrow/v1'
     description: Production
-  - url: 'https://global-api-sandbox.lianlianpay.com/escrow/v1'
-    description: Sandbox
 paths:
   /profiles:
     post:
@@ -32,7 +32,7 @@ paths:
               properties:
                 profileId:
                   type: string
-                  description: Merchant id in client system
+                  description: Merchant id from client system
                   maxLength: 32
                 countryOfOrigin:
                   $ref: '#/components/schemas/Region'
@@ -338,7 +338,7 @@ paths:
                         - idNumber
                         - idFrontImg
                         - residentalAddress
-                  description: '**KYC Data Object** Choose one of the following data set'
+                  description: '**KYC Data Object** Choose one from below data set'
                   type: object
               required:
                 - profileId
@@ -348,8 +348,9 @@ paths:
                 - kyc
         description: ''
       description: |-
-        Create an Avalara Fiscal Rep merchant profile in Lianlian Pay system.
-        All required supporting documents of a profile, such as `regCertificateCopy`, `idFrontImg`, `idBackImg`, should be uploaded into Lianlina Pay system before the create profile request.
+        Create an Avalara merchant profile in Lianlian Pay system.
+
+        All required supporting documents of a profile, such as `regCertificateCopy`, `idFrontImg`, `idBackImg`, etc, should be uploaded into Lianlina Pay system via **Upload Document** service before initiate the create profile request.
 
         Return type is `Profile`
       tags:
@@ -485,7 +486,7 @@ paths:
                 $ref: '#/components/schemas/Bill'
       operationId: get-profiles-profileId-bills-billId
       description: |-
-        Get a bill details by id.
+        Get a single bill details by id.
 
         Return type is List<`Bill`>
   '/bills/{billId}/submit':
@@ -506,7 +507,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/Bill'
       description: |-
-        Submit a bill, instruct Lianlian Pay to process its payment.
+        Submit a bill and instruct Lianlian Pay to process its payment to payee.
         After a successful submitting, Lianlian Pay will process payment to the bill payee.
 
         Return type is `Bill`
@@ -570,7 +571,7 @@ paths:
                 - type
         description: ''
       description: |-
-        Create an account for a profile
+        Create a single Lianlian Pay account for a profile
 
         Return type is `Account`
       tags:
@@ -630,7 +631,7 @@ paths:
                 $ref: '#/components/schemas/Account'
       operationId: get-accounts-accountId
       description: |-
-        Get a Lianlian Pay account details by account id.
+        Get a single Lianlian Pay account details by account id.
 
         Return type is `Account`
   /documents:
@@ -644,7 +645,7 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Document'
-      description: "Upload document to Lianlian Pay system. \nImage attachments can be one of the format PDF, JPEG, or PNG. To upload a multi-page image, please use the PDF data type.\nReturn type is `Document`"
+      description: "Upload document to Lianlian Pay system. \nAttachments can be one of the format PDF, JPEG, or PNG. To upload a multi-page image, please use the PDF data type.\n\nReturn type is `Document`"
       requestBody:
         content:
           application/json:
@@ -823,7 +824,7 @@ paths:
                 $ref: '#/components/schemas/Event'
       operationId: get-events-eventId
       description: |-
-        Get Lianlian Pay system generated event by id
+        Get a single Lianlian Pay system generated event by id
 
         Return type is `Event`
   /events:
@@ -854,6 +855,16 @@ paths:
           description: Profile/merchant id from client system
         - schema:
             type: array
+            enum:
+              - profile.failed
+              - profile.active
+              - profile.error
+              - profile.updated
+              - bill.funded
+              - bill.paid
+              - bill.canceled
+              - bill.expired
+              - account.paymentaccount.created
           in: query
           name: type
           description: Event type defined in Lianlian Pay system.
@@ -943,18 +954,18 @@ components:
           type: string
           description: bill(obligation) period
           example: 2020-01
-          pattern: YYYY-MM
+          pattern: "^((?:19|20)\\d\\d)-(0[1-9]|1[012])"
         dueDate:
           type: string
           description: bill(obligation) due date
           format: date-time
-          example: '2019-01-01T00:00:000Z'
+          example: '2019-01-01T00:00:00Z'
           pattern: UTC+0 timestamp
         expireDate:
           type: string
           description: bill(obligation) expire date
           format: date-time
-          example: '2019-01-01T00:00:000Z'
+          example: '2019-01-01T00:00:00Z'
           pattern: UTC+0 timestamp
         payee:
           $ref: '#/components/schemas/Bank-Account-Info'
@@ -962,20 +973,17 @@ components:
           type: string
           description: Bill created time
           format: date-time
-          example: '2019-01-01T00:00:000Z'
-          pattern: UTC+0 timestamp
+          example: '2019-01-01T00:00:00Z'
         fundingTime:
           type: string
           description: Bill funded time
           format: date-time
           example: '2019-01-01T00:00:000Z'
-          pattern: UTC+0 timestamp
         paymentTime:
           type: string
           description: Bill payment time
           format: date-time
-          example: '2019-01-01T00:00:000Z'
-          pattern: UTC timestamp
+          example: '2019-01-01T00:00:00Z'
         status:
           $ref: '#/components/schemas/Bill-Status'
         isFunded:
@@ -986,10 +994,9 @@ components:
           description: 'Default false, true if bill submitted and paid to payee.'
         modifyTime:
           type: string
-          format: date-time
-          example: '2019-01-01T00:00:000Z'
-          pattern: UTC+0 timestamp
           description: Bill last updated time
+          format: date-time
+          example: '2019-01-01T00:00:00Z'
         rfb:
           type: string
           maxLength: 105
@@ -1138,13 +1145,13 @@ components:
           description: "Legal representative's ID issue date"
           format: date
           example: '2010-01-21'
-          pattern: YYYY-MM-DD
+          pattern: "^((?:19|20)\\d\\d)-(0[1-9]|1[012])-(0[1-9]|[12][0-9]|3[01])"
         idExpireDate:
           type: string
           description: "Legal representative's ID expire date"
           format: date
           example: '2010-01-21'
-          pattern: YYYY-MM-DD
+          pattern: "^((?:19|20)\\d\\d)-(0[1-9]|1[012])-(0[1-9]|[12][0-9]|3[01])"
         nationality:
           $ref: '#/components/schemas/Region'
         dateOfBirth:
@@ -1152,7 +1159,7 @@ components:
           description: "Legal representative's date of birth"
           format: date
           example: '2010-01-21'
-          pattern: YYYY-MM-DD
+          pattern: "^((?:19|20)\\d\\d)-(0[1-9]|1[012])-(0[1-9]|[12][0-9]|3[01])"
         mobile:
           type: string
           description: "Legal representative's mobile number"
@@ -1186,19 +1193,19 @@ components:
           description: UBO id issue date
           format: date
           example: '2010-01-21'
-          pattern: YYYY-MM-DD
+          pattern: "^((?:19|20)\\d\\d)-(0[1-9]|1[012])-(0[1-9]|[12][0-9]|3[01])"
         idExpireDate:
           type: string
           description: UBO id expiration date
           format: date
           example: '2010-01-21'
-          pattern: YYYY-MM-DD
+          pattern: "^((?:19|20)\\d\\d)-(0[1-9]|1[012])-(0[1-9]|[12][0-9]|3[01])"
         dateOfBirth:
           type: string
           description: "UBO's date of birth"
           format: date
           example: '2010-01-21'
-          pattern: YYYY-MM-DD
+          pattern: "^((?:19|20)\\d\\d)-(0[1-9]|1[012])-(0[1-9]|[12][0-9]|3[01])"
         residentialAddress:
           $ref: '#/components/schemas/Address'
         shareholdingRatio:
@@ -1258,6 +1265,8 @@ components:
       title: '| Document Object'
       type: object
       description: File object in Lianlian Pay system.
+      x-tags:
+        - Documents
       properties:
         name:
           type: string
@@ -1269,8 +1278,7 @@ components:
           type: string
           description: 'Document create time, UTC timestamp'
           format: date-time
-          example: '2019-01-01T00:00:000Z'
-          pattern: UTC timestamp
+          example: '2019-01-01T00:00:00Z'
         id:
           type: string
           description: Document id in Lianlian Pay system
@@ -1278,8 +1286,6 @@ components:
         - name
         - size
         - createTime
-      x-tags:
-        - Documents
     Event:
       title: '| Event Object'
       type: object
@@ -1484,6 +1490,8 @@ components:
         - IT
         - PO
         - UK
+      x-tags:
+        - Bills
     Bill-Currency:
       type: string
       title: '| Bill Currency Enumeration'
@@ -1497,6 +1505,8 @@ components:
         - EUR
         - PLN
         - GBP
+      x-tags:
+        - Bills
     Bill-Status:
       type: string
       title: '| Bill Status Enumeration'
@@ -1516,6 +1526,8 @@ components:
         - COMPLETE
         - EXPIRED
         - PAYMENT_FAILED
+      x-tags:
+        - Bills
     Bank-Account-Region:
       type: string
       title: '| Bank Account Region Enumeration'
@@ -1528,6 +1540,8 @@ components:
         - IT
         - PO
         - UK
+      x-tags:
+        - Accounts
     US-ENTITY-KYC:
       title: '| US-ENTITY-KYC'
       type: object
@@ -1610,7 +1624,7 @@ components:
           description: "Legal representative's date of birth"
           format: date
           example: '2000-10-01'
-          pattern: YYYY-MM-DD
+          pattern: "^((?:19|20)\\d\\d)-(0[1-9]|1[012])-(0[1-9]|[12][0-9]|3[01])"
         ssn:
           type: string
           description: Social Security Number
@@ -1653,13 +1667,13 @@ components:
           description: ID issue date
           format: date
           example: '2010-10-01'
-          pattern: YYYY-MM-DD
+          pattern: "^((?:19|20)\\d\\d)-(0[1-9]|1[012])-(0[1-9]|[12][0-9]|3[01])"
         idExpireDate:
           type: string
           description: ID expire date
           format: date
           example: '2020-10-01'
-          pattern: YYYY-MM-DD
+          pattern: "^((?:19|20)\\d\\d)-(0[1-9]|1[012])-(0[1-9]|[12][0-9]|3[01])"
         nationality:
           $ref: '#/components/schemas/Region'
         dateOfBirth:
@@ -1667,7 +1681,7 @@ components:
           description: Date of birth
           format: date
           example: '2000-10-01'
-          pattern: YYYY-MM-DD
+          pattern: "^((?:19|20)\\d\\d)-(0[1-9]|1[012])-(0[1-9]|[12][0-9]|3[01])"
         residentialAddress:
           $ref: '#/components/schemas/Address'
         portraitWithIdInHand:
@@ -1694,7 +1708,7 @@ components:
           description: Date of birth
           format: date
           example: '2000-10-01'
-          pattern: YYYY-MM-DD
+          pattern: "^((?:19|20)\\d\\d)-(0[1-9]|1[012])-(0[1-9]|[12][0-9]|3[01])"
         ssn:
           type: string
           description: Social Security Number
@@ -1736,12 +1750,14 @@ components:
           type: string
           description: ID issue date
           format: date
-          pattern: YYYY-MM-DD
+          example: '2010-10-01'
+          pattern: "^((?:19|20)\\d\\d)-(0[1-9]|1[012])-(0[1-9]|[12][0-9]|3[01])"
         idExpireDate:
           type: string
           description: ID expire date
           format: date
-          pattern: YYYY-MM-DD
+          example: '2020-10-01'
+          pattern: "^((?:19|20)\\d\\d)-(0[1-9]|1[012])-(0[1-9]|[12][0-9]|3[01])"
         residentialAddress:
           $ref: '#/components/schemas/Address'
         dateOfBirth:
@@ -1749,7 +1765,7 @@ components:
           description: Date of birth
           format: date
           example: '2000-10-01'
-          pattern: YYYY-MM-DD
+          pattern: "^((?:19|20)\\d\\d)-(0[1-9]|1[012])-(0[1-9]|[12][0-9]|3[01])"
         nationality:
           $ref: '#/components/schemas/Region'
       required:
@@ -1826,13 +1842,13 @@ components:
           description: ID issue date
           format: date
           example: '2010-10-01'
-          pattern: YYYY-MM-DD
+          pattern: "^((?:19|20)\\d\\d)-(0[1-9]|1[012])-(0[1-9]|[12][0-9]|3[01])"
         idExpireDate:
           type: string
           description: ID expire date
           format: time
           example: '2020-10-01'
-          pattern: YYYY-MM-DD
+          pattern: "^((?:19|20)\\d\\d)-(0[1-9]|1[012])-(0[1-9]|[12][0-9]|3[01])"
         nationality:
           $ref: '#/components/schemas/Region'
         dateOfBirth:
@@ -1840,7 +1856,7 @@ components:
           description: Date of birth
           format: date
           example: '2000-10-01'
-          pattern: YYYY-MM-DD
+          pattern: "^((?:19|20)\\d\\d)-(0[1-9]|1[012])-(0[1-9]|[12][0-9]|3[01])"
         residentialAddress:
           $ref: '#/components/schemas/Address'
       required:
@@ -1851,6 +1867,8 @@ components:
       title: '| HK-UBO'
       type: object
       description: "**HK UBO Object**\nData set in Lianlian Pay system to describe the Ultimate Beneficial Owner information of a HK company. "
+      x-tags:
+        - Profiles
       properties:
         name:
           $ref: '#/components/schemas/Name'
@@ -1864,18 +1882,18 @@ components:
           type: string
           format: date
           example: '2010-10-01'
-          pattern: YYYY-MM-DD
+          pattern: "^((?:19|20)\\d\\d)-(0[1-9]|1[012])-(0[1-9]|[12][0-9]|3[01])"
         idExpireDate:
           type: string
           format: date
           example: '2020-10-01'
-          pattern: YYYY-MM-DD
+          pattern: "^((?:19|20)\\d\\d)-(0[1-9]|1[012])-(0[1-9]|[12][0-9]|3[01])"
         dateOfBirth:
           type: string
+          description: "UBO's date of birth"
           format: date
           example: '2000-10-01'
-          pattern: YYYY-MM-DD
-          description: "UBO's date of birth"
+          pattern: "^((?:19|20)\\d\\d)-(0[1-9]|1[012])-(0[1-9]|[12][0-9]|3[01])"
         residentialAddress:
           $ref: '#/components/schemas/Address'
         shareholdingRatio:
