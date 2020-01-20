@@ -957,13 +957,13 @@ components:
           pattern: "^((?:19|20)\\d\\d)-(0[1-9]|1[012])"
         dueDate:
           type: string
-          description: bill(obligation) due date
+          description: 'bill(obligation) due date, UTC+0 timestamp'
           format: date-time
           example: '2019-01-01T00:00:00Z'
           pattern: UTC+0 timestamp
         expireDate:
           type: string
-          description: bill(obligation) expire date
+          description: 'bill(obligation) expire date, UTC+0 timestamp'
           format: date-time
           example: '2019-01-01T00:00:00Z'
           pattern: UTC+0 timestamp
@@ -971,17 +971,17 @@ components:
           $ref: '#/components/schemas/Bank-Account-Info'
         createTime:
           type: string
-          description: Bill created time
+          description: 'Bill created time, UTC+0 timestamp'
           format: date-time
           example: '2019-01-01T00:00:00Z'
         fundingTime:
           type: string
-          description: Bill funded time
+          description: 'Bill funded time, UTC+0 timestamp'
           format: date-time
           example: '2019-01-01T00:00:000Z'
         paymentTime:
           type: string
-          description: Bill payment time
+          description: 'Bill payment time, UTC+0 timestamp'
           format: date-time
           example: '2019-01-01T00:00:00Z'
         status:
@@ -994,7 +994,7 @@ components:
           description: 'Default false, true if bill submitted and paid to payee.'
         modifyTime:
           type: string
-          description: Bill last updated time
+          description: 'Bill last updated time, UTC+0 timestamp'
           format: date-time
           example: '2019-01-01T00:00:00Z'
         rfb:
@@ -1276,7 +1276,7 @@ components:
           description: Document size
         createTime:
           type: string
-          description: 'Document create time, UTC timestamp'
+          description: 'Document create time, UTC+0 timestamp'
           format: date-time
           example: '2019-01-01T00:00:00Z'
         id:
@@ -1290,6 +1290,8 @@ components:
       title: '| Event Object'
       type: object
       description: 'Event object generated during business processing in Lianlian Pay system. '
+      x-tags:
+        - Events
       properties:
         id:
           type: string
@@ -1304,7 +1306,7 @@ components:
             - $ref: '#/components/schemas/Account'
         createTime:
           type: string
-          description: Event created time
+          description: 'Event created time, UTC+0 timestamp'
           format: date-time
           example: '2019-01-01T00:00:000Z'
           pattern: UTC timestamp
@@ -1316,8 +1318,6 @@ components:
         - type
         - data
         - profileId
-      x-tags:
-        - Events
     Event-Type:
       type: string
       title: '| Event Type Enumeration'
@@ -1344,6 +1344,8 @@ components:
         Object used in Lianlian Pay system to describe the client registration of event callbacks.
 
         Lianlian Pay uses this object to identify events which should be pushed back to client's url.
+      x-tags:
+        - Webhooks
       properties:
         id:
           type: string
@@ -1361,13 +1363,13 @@ components:
             $ref: '#/components/schemas/Event-Type'
         createTime:
           type: string
-          description: Webhook registration time
+          description: 'Webhook registration time, UTC+0 timestamp'
           format: date-time
           example: '2019-01-01T00:00:000Z'
           pattern: UTC timestamp
         modifyTime:
           type: string
-          description: Webhook last modified time
+          description: 'Webhook last modified time, UTC+0 timestamp'
           format: date-time
           example: '2019-01-01T00:00:000Z'
           pattern: UTC timestamp
@@ -1377,8 +1379,6 @@ components:
         - isEnabled
         - type
         - createTime
-      x-tags:
-        - Webhooks
     Profile-Status:
       title: '| Profile Status Enumeration'
       type: string
