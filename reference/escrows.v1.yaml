@@ -960,7 +960,6 @@ components:
           description: 'bill(obligation) due date, UTC+0 timestamp'
           format: date-time
           example: '2019-01-01T00:00:00Z'
-          pattern: UTC+0 timestamp
         expireDate:
           type: string
           description: 'bill(obligation) expire date, UTC+0 timestamp'
