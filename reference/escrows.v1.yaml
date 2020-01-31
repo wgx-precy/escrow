@@ -40,8 +40,9 @@ paths:
                   $ref: '#/components/schemas/Profile-Type'
                 email:
                   type: string
-                  format: email
                   description: Merchant email address
+                  format: email
+                  example: abc@xyz.com
                 kyc:
                   oneOf:
                     - description: '**CN Entity**'
@@ -655,6 +656,7 @@ paths:
                 name:
                   type: string
                   description: Document name
+                  maxLength: 128
                 size:
                   type: integer
                   description: Document file size
