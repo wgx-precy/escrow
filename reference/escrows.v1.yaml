@@ -936,7 +936,6 @@ components:
             - $ref: '#/components/schemas/HK-INDIVIDUAL-KYC'
             - $ref: '#/components/schemas/HK-ENTITY-KYC'
           description: '**KYC Object** One of the below:'
-        
         feedback:
           $ref: '#/components/schemas/Error'
       required:
@@ -1123,13 +1122,6 @@ components:
           $ref: '#/components/schemas/Document'
         legalRep:
           $ref: '#/components/schemas/CN-Legal-Representative'
-        ubos:
-          type: array
-          description: 'Profile List<UBO> information. '
-          maxItems: 4
-          minItems: 0
-          items:
-            $ref: '#/components/schemas/CN-UBO'
       required:
         - entityName
         - entityType
@@ -1175,9 +1167,6 @@ components:
           format: date
           example: '2010-01-21'
           pattern: "^((?:19|20)\\d\\d)-(0[1-9]|1[012])-(0[1-9]|[12][0-9]|3[01])"
-        mobile:
-          type: string
-          description: "Legal representative's mobile number"
         residentialAddress:
           $ref: '#/components/schemas/Address'
       required:
@@ -1189,8 +1178,6 @@ components:
       title: '| CN UBO Object'
       type: object
       description: "**CN UBO Object**\nData set in Lianlian Pay system to describe the Ultimate Beneficial Owner information of a CN company. \n"
-      x-tags:
-        - Profiles
       properties:
         name:
           $ref: '#/components/schemas/Name'
@@ -1231,6 +1218,8 @@ components:
         - idNumber
         - idFrontImg
         - idBackImg
+      x-tags:
+        - TBD
     Error:
       title: '| Error Object'
       type: object
@@ -1668,8 +1657,6 @@ components:
         idNumber:
           type: string
           description: Mobile number
-        mobile:
-          type: string
         idFrontImg:
           $ref: '#/components/schemas/Document'
         idBackImg:
@@ -1696,12 +1683,9 @@ components:
           pattern: "^((?:19|20)\\d\\d)-(0[1-9]|1[012])-(0[1-9]|[12][0-9]|3[01])"
         residentialAddress:
           $ref: '#/components/schemas/Address'
-        portraitWithIdInHand:
-          $ref: '#/components/schemas/Document'
       required:
         - name
         - idNumber
-        - mobile
         - idFrontImg
         - idBackImg
     US-INDIVIDUAL-KYC:
