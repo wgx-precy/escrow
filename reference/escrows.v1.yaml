@@ -251,7 +251,6 @@ paths:
                         - idFrontImg
                         - idBackImg
                         - mobile
-                        - ssn
                     - description: '**HK Entity**'
                       properties:
                         entityName:
