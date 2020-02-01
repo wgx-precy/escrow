@@ -341,6 +341,17 @@ paths:
                         - residentalAddress
                   description: '**KYC Data Object** Choose one from below data set'
                   type: object
+                indicator:
+                  type: string
+                  description: |-
+                    Source system defined to indicate differnet profile source. One of:
+
+                    | Value | Description |
+                    |-------|-------------|
+                    |  | Avalara Core – wire transfer |
+                    |  | Amazon Marketplace – book transfer |
+                    |  | Amazon Marketplace – wire transfer |
+                    |  | Other Marketplace – wire transfer |
               required:
                 - profileId
                 - countryOfOrigin
@@ -926,6 +937,8 @@ components:
           description: Merchant email address
           format: email
           pattern: abc@xyz.com
+        indicator:
+          $ref: '#/components/schemas/Source-System'
       required:
         - id
         - regionOfOrigin
@@ -1899,4 +1912,18 @@ components:
         - idNumber
         - idFrontImg
         - residentialAddress
+    Source-System:
+      title: Source System
+      type: string
+      x-tags:
+        - Other
+      description: |-
+        Source system defined to indicate differnet profile source. One of:
+
+        | Value | Description |
+        |-------|-------------|
+        |  | Avalara Core – wire transfer |
+        |  | Amazon Marketplace – book transfer |
+        |  | Amazon Marketplace – wire transfer |
+        |  | Other Marketplace – wire transfer |
   securitySchemes: {}
