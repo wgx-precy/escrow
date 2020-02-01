@@ -1914,7 +1914,7 @@ components:
         - idFrontImg
         - residentialAddress
     Source-System:
-      title: Source System
+      title: '| Source System'
       type: string
       x-tags:
         - Other
