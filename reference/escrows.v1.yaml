@@ -43,6 +43,17 @@ paths:
                   description: Merchant email address
                   format: email
                   example: abc@xyz.com
+                indicator:
+                  type: string
+                  description: |-
+                    Source system defined to indicate differnet profile source. One of:
+
+                    | Value | Description |
+                    |-------|-------------|
+                    |  | Avalara Core – wire transfer |
+                    |  | Amazon Marketplace – book transfer |
+                    |  | Amazon Marketplace – wire transfer |
+                    |  | Other Marketplace – wire transfer |
                 kyc:
                   oneOf:
                     - description: '**CN Entity**'
@@ -340,17 +351,6 @@ paths:
                         - residentalAddress
                   description: '**KYC Data Object** Choose one from below data set'
                   type: object
-                indicator:
-                  type: string
-                  description: |-
-                    Source system defined to indicate differnet profile source. One of:
-
-                    | Value | Description |
-                    |-------|-------------|
-                    |  | Avalara Core – wire transfer |
-                    |  | Amazon Marketplace – book transfer |
-                    |  | Amazon Marketplace – wire transfer |
-                    |  | Other Marketplace – wire transfer |
               required:
                 - profileId
                 - countryOfOrigin
