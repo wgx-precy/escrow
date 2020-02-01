@@ -176,9 +176,6 @@ paths:
                             dateOfBirth:
                               type: string
                               description: "Legal representative's date of birth"
-                            ssn:
-                              type: string
-                              description: Social security number
                             idFrontImg:
                               type: string
                               description: ID front copy document name
@@ -208,9 +205,6 @@ paths:
                               dateOfBirth:
                                 type: string
                                 description: "UBO's date of birth"
-                              ssn:
-                                type: string
-                                description: Social Security Number
                               idFrontImg:
                                 type: string
                               idBackImg:
@@ -252,9 +246,6 @@ paths:
                         mobile:
                           type: string
                           description: Mobile number
-                        ssn:
-                          type: string
-                          description: Social security number
                       required:
                         - name
                         - residentialAddress
@@ -1595,9 +1586,6 @@ components:
           description: "UBO's date of birth"
           format: date
           example: '2000-10-01'
-        ssn:
-          type: string
-          description: Social Security Number
         idFrontImg:
           $ref: '#/components/schemas/Document'
         idBackImg:
@@ -1606,7 +1594,6 @@ components:
         - name
         - residentialAddress
         - dateOfBirth
-        - ssn
         - idFrontImg
         - idBackImg
     US-Legal-Representative:
@@ -1626,9 +1613,6 @@ components:
           format: date
           example: '2000-10-01'
           pattern: "^((?:19|20)\\d\\d)-(0[1-9]|1[012])-(0[1-9]|[12][0-9]|3[01])"
-        ssn:
-          type: string
-          description: Social Security Number
         idFrontImg:
           $ref: '#/components/schemas/Document'
         idBackImg:
@@ -1639,7 +1623,6 @@ components:
         - name
         - residentialAddress
         - dateOfBirth
-        - ssn
         - idFrontImg
         - idBackImg
         - mobile
@@ -1705,9 +1688,6 @@ components:
           format: date
           example: '2000-10-01'
           pattern: "^((?:19|20)\\d\\d)-(0[1-9]|1[012])-(0[1-9]|[12][0-9]|3[01])"
-        ssn:
-          type: string
-          description: Social Security Number
         idFrontImg:
           $ref: '#/components/schemas/Document'
         idBackImg:
@@ -1719,7 +1699,6 @@ components:
         - name
         - residentialAddress
         - dateOfBirth
-        - ssn
         - idFrontImg
         - idBackImg
         - mobile
