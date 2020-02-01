@@ -420,11 +420,11 @@ paths:
                 currency:
                   $ref: '#/components/schemas/Bill-Currency'
                 amount:
-                  type: number
+                  type: string
                   description: Bill amount
                   format: double
                   example: '123.45'
-                  minimum: 0
+                  pattern: "^(([1-9]{1}\\d*)|(0{1}))(\\.\\d{2})"
                 period:
                   type: string
                   description: Bill period
@@ -960,10 +960,11 @@ components:
         currency:
           $ref: '#/components/schemas/Bill-Currency'
         amount:
-          type: number
+          type: string
           description: bill(obligation) amount
-          format: double
+          format: float
           example: '123.45'
+          pattern: "^(([1-9]{1}\\d*)|(0{1}))(\\.\\d{2})"
         period:
           type: string
           description: bill(obligation) period
@@ -1084,10 +1085,11 @@ components:
         - Accounts
       properties:
         balance:
-          type: number
+          type: string
           description: Account balance in account currency
           format: double
           example: '123.45'
+          pattern: "^(([1-9]{1}\\d*)|(0{1}))(\\.\\d{2})"
         currency:
           $ref: '#/components/schemas/Account-Currency'
         virtualAccountInfo:
