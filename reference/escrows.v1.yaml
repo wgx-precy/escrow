@@ -1716,9 +1716,6 @@ components:
         idNumber:
           type: string
           description: ID number
-        mobile:
-          type: string
-          description: Mobile number
         idFrontImg:
           $ref: '#/components/schemas/Document'
         idIssueDate:
