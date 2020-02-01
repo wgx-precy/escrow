@@ -918,6 +918,15 @@ components:
           $ref: '#/components/schemas/Region'
         type:
           $ref: '#/components/schemas/Profile-Type'
+        status:
+          $ref: '#/components/schemas/Profile-Status'
+        indicator:
+          $ref: '#/components/schemas/Source-System'
+        email:
+          type: string
+          description: Merchant email address
+          format: email
+          pattern: abc@xyz.com
         kyc:
           oneOf:
             - $ref: '#/components/schemas/CN-ENTITY-KYC'
@@ -927,17 +936,9 @@ components:
             - $ref: '#/components/schemas/HK-INDIVIDUAL-KYC'
             - $ref: '#/components/schemas/HK-ENTITY-KYC'
           description: '**KYC Object** One of the below:'
-        status:
-          $ref: '#/components/schemas/Profile-Status'
+        
         feedback:
           $ref: '#/components/schemas/Error'
-        email:
-          type: string
-          description: Merchant email address
-          format: email
-          pattern: abc@xyz.com
-        indicator:
-          $ref: '#/components/schemas/Source-System'
       required:
         - id
         - regionOfOrigin
