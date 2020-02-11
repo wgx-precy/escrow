@@ -55,8 +55,121 @@ paths:
                     |  | Amazon Marketplace – wire transfer |
                     |  | Other Marketplace – wire transfer |
                 kyc:
-                  oneOf: []
+                  oneOf:
+                    - properties:
+                        name:
+                          type: string
+                          description: Name in English
+                        idNumber:
+                          type: string
+                          description: Passport/IDCard number
+                        idFrontCopy:
+                          type: string
+                          description: The photocopy document name of the ID front page
+                        idBackCopy:
+                          type: string
+                          description: The photocopy document name of the ID back page
+                        address:
+                          type: object
+                          description: Residential Address
+                          properties:
+                            lineOne:
+                              type: string
+                            lineTwo:
+                              type: string
+                            city:
+                              type: string
+                            province:
+                              type: string
+                            region:
+                              type: string
+                            postalCode:
+                              type: string
+                      description: Individual KYC data set
+                      required:
+                        - name
+                        - idNumber
+                        - idFrontCopy
+                        - idBackCopy
+                        - address
+                    - properties:
+                        name:
+                          type: string
+                          description: Entity name in English
+                        type:
+                          type: string
+                          description: |-
+                            CN/HK Entity types. One of:
+
+                            | Value | Description |
+                            |-------|-------------|
+                            | JOINT_STOCK | Joint Stock Company |
+                            | SELF_EMPLOYED | Sole Proprietorship |
+                            | LISTED_ENTERPRISES | Listed Enterprises |
+                            | LIMTED_COMPANY | Limted Company |
+                            | PARTNERSHIP | Partnership  |
+
+                            US Entity types. One of:
+
+                            | Value | Description |
+                            |-------|-------------|
+                            | SOLE_PROPRIETORSHIP | Sole Proprietorship|
+                            | SELF_EMPLOYED | L-Corporation |
+                            | LISTED_ENTERPRISES | S-Corporation |
+                            | PARTNERSHIP | Partnership |
+                        registrationNumber:
+                          type: string
+                          description: Registry Number/EIN Number
+                        registrationCertificateCopy:
+                          type: string
+                          description: The photocopy document name of business registration certificate
+                        address:
+                          type: object
+                          description: Office/Business Address
+                          properties:
+                            lineOne:
+                              type: string
+                            lineTwo:
+                              type: string
+                            city:
+                              type: string
+                            province:
+                              type: string
+                            region:
+                              type: string
+                            postalCode:
+                              type: string
+                        legalRepresentative:
+                          type: object
+                          required:
+                            - name
+                            - idNumber
+                            - idFrontCopy
+                            - idBackCopy
+                          description: Legal Representative data object
+                          properties:
+                            name:
+                              type: string
+                              description: "Legal representative's name in English"
+                            idNumber:
+                              type: string
+                              description: "Legal representative's Passport/IDCard number"
+                            idFrontCopy:
+                              type: string
+                              description: "The photocopy document name of legal representative's ID front page"
+                            idBackCopy:
+                              type: string
+                              description: "The photocopy document name of legal representative's ID back page"
+                      description: Company KYC data set
+                      required:
+                        - name
+                        - type
+                        - registrationNumber
+                        - registrationCertificateCopy
+                        - address
+                        - legalRepresentative
                   description: '**KYC Data Object** Choose one from below data set'
+                  type: object
               required:
                 - profileId
                 - countryOfOrigin
@@ -734,6 +847,8 @@ components:
       description: |-
         **Address Object**
         Address data set defined in Lianlian Pay system.
+      x-tags:
+        - Other
       properties:
         lineOne:
           type: string
@@ -758,8 +873,6 @@ components:
         - province
         - region
         - postalCode
-      x-tags:
-        - Other
     Account:
       title: '| Account Object'
       type: object
@@ -996,7 +1109,7 @@ components:
     Entity-Type:
       title: '| Entity Type Enumeration'
       type: string
-      description: "Entity type defined in Lianlian Pay system. \n\nCN Entity types. One of:\n\n| Value | Description |\n|-------|-------------|\n| JOINT_STOCK | Joint Stock Company |\n| SELF_EMPLOYED | Sole Proprietorship |\n| LISTED_ENTERPRISES | Listed Enterprises |\n| LIMTED_COMPANY | Limted Company |\n| PARTNERSHIP | Partnership  |\n\nUS Entity types. One of:\n\n| Value | Description |\n|-------|-------------|\n| SOLE_PROPRIETORSHIP | Sole Proprietorship|\n| SELF_EMPLOYED | L-Corporation |\n| LISTED_ENTERPRISES | S-Corporation |\n| PARTNERSHIP | Partnership |"
+      description: "Entity type defined in Lianlian Pay system. \n\nCN/HK Entity types. One of:\n\n| Value | Description |\n|-------|-------------|\n| JOINT_STOCK | Joint Stock Company |\n| SELF_EMPLOYED | Sole Proprietorship |\n| LISTED_ENTERPRISES | Listed Enterprises |\n| LIMTED_COMPANY | Limted Company |\n| PARTNERSHIP | Partnership  |\n\nUS Entity types. One of:\n\n| Value | Description |\n|-------|-------------|\n| SOLE_PROPRIETORSHIP | Sole Proprietorship|\n| SELF_EMPLOYED | L-Corporation |\n| LISTED_ENTERPRISES | S-Corporation |\n| PARTNERSHIP | Partnership |"
       x-tags:
         - Profiles
     ID-Type:
@@ -1132,11 +1245,13 @@ components:
         |  | Amazon Marketplace – wire transfer |
         |  | Other Marketplace – wire transfer |
     KYC-Individual:
-      title: KYC-Individual Object
+      title: '| KYC-Individual Object'
       type: object
       description: |
         **KYC-Individual Object**
         Data set of Individual KYC basic information description in Lianlian Pay system.
+      x-tags:
+        - Profiles
       properties:
         name:
           type: string
@@ -1157,14 +1272,14 @@ components:
         - idNumber
         - idFrontCopy
         - idBackCopy
-      x-tags:
-        - Profiles
     KYC-Company:
-      title: KYC-Company Object
+      title: '| KYC-Company Object'
       type: object
       description: |
         **KYC-Company Object**
         Data set of Company KYC basic information description in Lianlian Pay system.
+      x-tags:
+        - Profiles
       properties:
         name:
           type: string
@@ -1180,8 +1295,7 @@ components:
         address:
           $ref: '#/components/schemas/Address'
         legalRepresentative:
-          type: string
-          description: Information of the legal representative
+          $ref: '#/components/schemas/Legal-Representative'
       required:
         - name
         - type
@@ -1189,10 +1303,8 @@ components:
         - registrationCertificateCopy
         - address
         - legalRepresentative
-      x-tags:
-        - Profiles
     Legal-Representative:
-      title: Legal-Representative Object
+      title: '| Legal-Representative Object'
       type: object
       properties:
         name:
