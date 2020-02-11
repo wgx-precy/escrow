@@ -55,293 +55,8 @@ paths:
                     |  | Amazon Marketplace – wire transfer |
                     |  | Other Marketplace – wire transfer |
                 kyc:
-                  oneOf:
-                    - description: '**CN Entity**'
-                      properties:
-                        entityName:
-                          type: object
-                          description: Entity name. One of
-                          properties:
-                            nameInEnglish:
-                              type: string
-                              description: Name in English or Pinyin
-                            originalName:
-                              type: string
-                              description: Original name(Name on ID/document)
-                        entityType:
-                          $ref: '#/components/schemas/Entity-Type'
-                        registryNumber:
-                          type: string
-                          description: Company number
-                        regCertificateCopy:
-                          type: string
-                          description: Company liscens document name
-                        legalRep:
-                          type: object
-                          required:
-                            - name
-                            - idNumber
-                            - idFrontImg
-                          properties:
-                            name:
-                              type: object
-                              description: Legal Representative’s name. One of
-                              properties:
-                                nameInEnglish:
-                                  type: string
-                                  description: Name in English or Pinyin
-                                originalName:
-                                  type: string
-                                  description: Original name(Name on ID/document)
-                            idNumber:
-                              type: string
-                              description: Legal Representative’s id number
-                            idFrontImg:
-                              type: string
-                              description: Legal Representative’s id front document name
-                            idBackImg:
-                              type: string
-                              description: Legal Representative’s id back document name. Optional if id type is passport
-                      required:
-                        - entityName
-                        - entityType
-                        - registryNumber
-                        - regCertificateCopy
-                        - legalRep
-                    - description: '**CN Individual/Sole Trander**'
-                      properties:
-                        name:
-                          type: object
-                          description: Name. One of
-                          properties:
-                            nameInEnglish:
-                              type: string
-                              description: Name in English or Pinyin
-                            originalName:
-                              type: string
-                              description: Original name(Name on ID/document)
-                        idNumber:
-                          type: string
-                          description: ID or Passport number
-                        idFrontImg:
-                          type: string
-                          description: Id front copy or passport copy
-                        idBackImg:
-                          type: string
-                          description: Id back copy
-                      required:
-                        - name
-                        - idNumber
-                        - idFrontImg
-                        - idBackImg
-                    - description: '**US Entity**'
-                      properties:
-                        entityName:
-                          type: object
-                          description: Entity name. One of
-                          properties:
-                            nameInEnglish:
-                              type: string
-                              description: Name in English or Pinyin
-                            originalName:
-                              type: string
-                              description: Original name(Name on ID/document)
-                        entityType:
-                          $ref: '#/components/schemas/Entity-Type'
-                        EINNumber:
-                          type: string
-                        regCertificateCopy:
-                          type: string
-                        regAddress:
-                          $ref: '#/components/schemas/Address'
-                        operatingAddress:
-                          $ref: '#/components/schemas/Address'
-                        legalRep:
-                          type: object
-                          required:
-                            - name
-                          properties:
-                            name:
-                              type: object
-                              description: Legal Representative’s name. One of
-                              properties:
-                                nameInEnglish:
-                                  type: string
-                                  description: Name in English or Pinyin
-                                originalName:
-                                  type: string
-                                  description: Original name(Name on ID/document)
-                            residentialAddress:
-                              $ref: '#/components/schemas/Address'
-                            dateOfBirth:
-                              type: string
-                              description: "Legal representative's date of birth"
-                            idFrontImg:
-                              type: string
-                              description: ID front copy document name
-                            idBackImg:
-                              type: string
-                              description: ID back copy document name
-                            mobile:
-                              type: string
-                              description: Mobile number
-                        ubo:
-                          type: array
-                          items:
-                            type: object
-                            properties:
-                              name:
-                                type: object
-                                description: "UBO's legal name. One of"
-                                properties:
-                                  nameInEnglish:
-                                    type: string
-                                    description: Name in English or Pinyin
-                                  originalName:
-                                    type: string
-                                    description: Original name(Name on ID/document)
-                              residentialAddress:
-                                $ref: '#/components/schemas/Address'
-                              dateOfBirth:
-                                type: string
-                                description: "UBO's date of birth"
-                              idFrontImg:
-                                type: string
-                              idBackImg:
-                                type: string
-                            required:
-                              - name
-                      required:
-                        - entityName
-                        - entityType
-                        - EINNumber
-                        - regCertificateCopy
-                        - regAddress
-                        - operatingAddress
-                        - legalRep
-                        - ubo
-                    - description: '**US Individual/Sole Trader**'
-                      properties:
-                        name:
-                          type: object
-                          description: Name. One of
-                          properties:
-                            nameInEnglish:
-                              type: string
-                              description: Original name(Name on ID/document)
-                            originalName:
-                              type: string
-                              description: Original name(Name on ID/document)
-                        residentialAddress:
-                          $ref: '#/components/schemas/Address'
-                        dateOfBirth:
-                          type: string
-                          description: Date of birth
-                        idFrontImg:
-                          type: string
-                          description: ID front copy document name
-                        idBackImg:
-                          type: string
-                          description: ID back copy document name
-                        mobile:
-                          type: string
-                          description: Mobile number
-                      required:
-                        - name
-                        - residentialAddress
-                        - dateOfBirth
-                        - idFrontImg
-                        - idBackImg
-                        - mobile
-                    - description: '**HK Entity**'
-                      properties:
-                        entityName:
-                          description: 'Entity name, one of'
-                          type: object
-                          properties:
-                            nameInEnglish:
-                              type: string
-                              description: Name in English or Pinyin
-                            originalName:
-                              type: string
-                              description: Original name(Name on ID/document)
-                        entityType:
-                          $ref: '#/components/schemas/Event-Type'
-                        registryNumber:
-                          type: string
-                          description: Business registration certificate number
-                        ciNumber:
-                          type: string
-                          description: Certificate of incorporation number
-                        nnc1:
-                          type: string
-                          description: NNC1/NAR1
-                        regCertificateCopy:
-                          type: string
-                          description: Copy of business registration certificate
-                        incorporationCertificateCopy:
-                          type: string
-                          description: Copy of certificate of incorporation
-                        directors:
-                          type: array
-                          description: Directors information
-                          items:
-                            type: object
-                            properties:
-                              name:
-                                type: object
-                                description: Director name. One of
-                                properties:
-                                  nameInEnglish:
-                                    type: string
-                                    description: Name in English or Pinyin
-                                  originalName:
-                                    type: string
-                                    description: Original name(Name on ID/document)
-                              idNumber:
-                                type: string
-                              idFrontImg:
-                                type: string
-                            required:
-                              - name
-                              - idNumber
-                              - idFrontImg
-                      required:
-                        - entityName
-                        - entityType
-                        - registryNumber
-                        - ciNumber
-                        - nnc1
-                        - regCertificateCopy
-                        - incorporationCertificateCopy
-                        - directors
-                    - description: '**HK Individual**'
-                      properties:
-                        name:
-                          type: object
-                          description: Name. One of
-                          properties:
-                            nameInEnglish:
-                              type: string
-                              description: Name in English or Pinyin
-                            originalName:
-                              type: string
-                              description: Original name(Name on ID/document)
-                        idNumber:
-                          type: string
-                          description: ID Number
-                        idFrontImg:
-                          type: string
-                          description: ID front document name
-                        residentalAddress:
-                          $ref: '#/components/schemas/Address'
-                      required:
-                        - name
-                        - idNumber
-                        - idFrontImg
-                        - residentalAddress
+                  oneOf: []
                   description: '**KYC Data Object** Choose one from below data set'
-                  type: object
               required:
                 - profileId
                 - countryOfOrigin
@@ -579,7 +294,7 @@ paths:
       tags:
         - Accounts
     get:
-      summary: 2. List All Accounts
+      summary: 2. Get Account List
       operationId: get-profiles-profileId-accounts
       responses:
         '200':
@@ -832,7 +547,7 @@ paths:
         Return type is `Event`
   /events:
     get:
-      summary: 1. List All Events
+      summary: 1. Get Event List
       tags:
         - Events
       responses:
@@ -919,7 +634,9 @@ components:
           format: email
           pattern: abc@xyz.com
         kyc:
-          oneOf: []
+          oneOf:
+            - $ref: '#/components/schemas/KYC-Individual'
+            - $ref: '#/components/schemas/KYC-Company'
           description: '**KYC Object** One of the below:'
         feedback:
           $ref: '#/components/schemas/Error'
@@ -1201,7 +918,8 @@ components:
         | profile.failed | Profile KYC failed, Lianlian Pay cannot provide service to this profile. Return data `Profile` object. |
         | profile.active | Profile KYC passed, profile active in Lianlian Pay system. Return data `Profile` object.  |
         | profile.error | Profile KYC error, need more information to complete Lianlian Pay KYC. Detailed information can be found in `Profile.feedback`. Return type `Profile` object.  |
-        | profile.updated | Profile KYC information updated, such as UBO information added/changed. Return data `Profile` object.  |
+        | profile.updated | Profile KYC information updated. Return data `Profile` object.  |
+        | profile.rar.complete | Profile KYC Risk Assessment Report complete. Return data `Document` object  |
         | bill.funded | Bill fully funded, `Bill.isFullyFunded` equals `true`. Return data `Bill` object.  |
         | bill.paid | Bill paid, after receiving payment request(Submit Bill), Lianlian Pay made payment to bill payee. `Bill.ispaid` equals `false`. Return data `Bill` object. |
         | bill.canceled | After receiving void bill request, Lianlian Pay canceled the bill. Return data `Bill` object. |
@@ -1324,19 +1042,6 @@ components:
         | PAYMENT | Account support direct debit, used for tax authorities of certain region/jurisdiction to pull money from |
       x-tags:
         - Accounts
-    Name:
-      title: '| Name Object'
-      type: object
-      description: Name object used in Lianlian Pay system.
-      x-tags:
-        - Profiles
-      properties:
-        nameInEnglish:
-          type: string
-          description: Name in English or Pinyin
-        originalName:
-          type: string
-          description: Original name(Name on ID/Document)
     Bill-Region:
       type: string
       title: '| Bill Region Enumeration'
@@ -1426,4 +1131,90 @@ components:
         |  | Amazon Marketplace – book transfer |
         |  | Amazon Marketplace – wire transfer |
         |  | Other Marketplace – wire transfer |
+    KYC-Individual:
+      title: KYC-Individual Object
+      type: object
+      description: |
+        **KYC-Individual Object**
+        Data set of Individual KYC basic information description in Lianlian Pay system.
+      properties:
+        name:
+          type: string
+          description: Name(English)
+        idNumber:
+          type: string
+          description: ID Number
+        idFrontCopy:
+          type: string
+          description: The photocopy document name of the ID front page
+        idBackCopy:
+          type: string
+          description: The photocopy document name of the ID back page
+        address:
+          $ref: '#/components/schemas/Address'
+      required:
+        - name
+        - idNumber
+        - idFrontCopy
+        - idBackCopy
+      x-tags:
+        - Profiles
+    KYC-Company:
+      title: KYC-Company Object
+      type: object
+      description: |
+        **KYC-Company Object**
+        Data set of Company KYC basic information description in Lianlian Pay system.
+      properties:
+        name:
+          type: string
+          description: Entity Name(English)
+        type:
+          $ref: '#/components/schemas/Entity-Type'
+        registrationNumber:
+          type: string
+          description: Registry Number/EIN Number
+        registrationCertificateCopy:
+          type: string
+          description: The photocopy document name of business registration certificate
+        address:
+          $ref: '#/components/schemas/Address'
+        legalRepresentative:
+          type: string
+          description: Information of the legal representative
+      required:
+        - name
+        - type
+        - registrationNumber
+        - registrationCertificateCopy
+        - address
+        - legalRepresentative
+      x-tags:
+        - Profiles
+    Legal-Representative:
+      title: Legal-Representative Object
+      type: object
+      properties:
+        name:
+          type: string
+          description: Name(English)
+        idNumber:
+          type: string
+          description: ID Number
+        idFrontCopy:
+          type: string
+          description: The photocopy document name of the ID front page
+        idBackCopy:
+          type: string
+          description: The photocopy document name of the ID back page
+      required:
+        - name
+        - idNumber
+        - idFrontCopy
+        - idBackCopy
+      description: |
+        **Legal-Representative Object**
+        Data set of Legal-Representative in Lianlian Pay system.
+      x-tags:
+        - Profiles
   securitySchemes: {}
