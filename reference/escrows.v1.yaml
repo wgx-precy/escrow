@@ -32,7 +32,7 @@ paths:
               properties:
                 profileId:
                   type: string
-                  description: Merchant id from client system
+                  description: Profile id from Avalara
                   maxLength: 32
                 countryOfOrigin:
                   $ref: '#/components/schemas/Region'
@@ -43,6 +43,9 @@ paths:
                   description: Merchant email address
                   format: email
                   example: abc@xyz.com
+                mobile:
+                  type: string
+                  description: Mobile number
                 indicator:
                   type: string
                   description: |-
@@ -56,43 +59,51 @@ paths:
                     |  | Other Marketplace – wire transfer |
                 kyc:
                   oneOf:
-                    - properties:
+                    - description: Individual/Sole Trader KYC data set
+                      properties:
                         name:
                           type: string
                           description: Name in English
-                        idNumber:
-                          type: string
-                          description: Passport/IDCard number
                         idFrontCopy:
                           type: string
-                          description: The photocopy document name of the ID front page
+                          description: "The photocopy document name of the ID front page.Supported ID types:\n\nCN \n\n| Value | Description |\n|-------|-------------|\n| IDCARD | National ID Card |\n\nHK\n\n| Value | Description |\n|-------|-------------|\n| PASSPORT | Passport |\n| IDCARD | ID Card |\n\nUS, HK\n\n| Value | Description |\n|-------|-------------|\n| PASSPORT | Passport |\n| DRIVERS_LICENSE | Drivers License |"
                         idBackCopy:
                           type: string
-                          description: The photocopy document name of the ID back page
+                          description: "The photocopy document name of the ID back page.Supported ID types:\n\nCN \n\n| Value | Description |\n|-------|-------------|\n| IDCARD | National ID Card |\n\nHK\n\n| Value | Description |\n|-------|-------------|\n| PASSPORT | Passport |\n| IDCARD | ID Card |\n\nUS, HK\n\n| Value | Description |\n|-------|-------------|\n| PASSPORT | Passport |\n| DRIVERS_LICENSE | Drivers License |"
                         address:
                           type: object
                           description: Residential Address
+                          required:
+                            - lineOne
+                            - city
+                            - province
+                            - region
+                            - postalCode
                           properties:
                             lineOne:
                               type: string
+                              description: Address line 1
                             lineTwo:
                               type: string
+                              description: Address line two
                             city:
                               type: string
+                              description: City/Town
                             province:
                               type: string
+                              description: Province/State
                             region:
                               type: string
+                              description: Region/Country
                             postalCode:
                               type: string
-                      description: Individual KYC data set
+                              description: Postalcode/Zipcode
                       required:
                         - name
-                        - idNumber
                         - idFrontCopy
-                        - idBackCopy
                         - address
-                    - properties:
+                    - description: Company KYC data set
+                      properties:
                         name:
                           type: string
                           description: Entity name in English
@@ -126,41 +137,47 @@ paths:
                         address:
                           type: object
                           description: Office/Business Address
+                          required:
+                            - lineOne
+                            - city
+                            - province
+                            - region
+                            - postalCode
                           properties:
                             lineOne:
                               type: string
+                              description: Address line 1
                             lineTwo:
                               type: string
+                              description: Address line 2
                             city:
                               type: string
+                              description: City/Town
                             province:
                               type: string
+                              description: Province/State
                             region:
                               type: string
+                              description: Region/Country
                             postalCode:
                               type: string
+                              description: Postalcode/Zipcode
                         legalRepresentative:
                           type: object
+                          description: Legal representative information
                           required:
                             - name
-                            - idNumber
                             - idFrontCopy
-                            - idBackCopy
-                          description: Legal Representative data object
                           properties:
                             name:
                               type: string
                               description: "Legal representative's name in English"
-                            idNumber:
-                              type: string
-                              description: "Legal representative's Passport/IDCard number"
                             idFrontCopy:
                               type: string
-                              description: "The photocopy document name of legal representative's ID front page"
+                              description: "The photocopy document name of legal representative's ID front page.Supported ID types:\n\nCN \n\n| Value | Description |\n|-------|-------------|\n| IDCARD | National ID Card |\n\nHK\n\n| Value | Description |\n|-------|-------------|\n| PASSPORT | Passport |\n| IDCARD | ID Card |\n\nUS, HK\n\n| Value | Description |\n|-------|-------------|\n| PASSPORT | Passport |\n| DRIVERS_LICENSE | Drivers License |"
                             idBackCopy:
                               type: string
-                              description: "The photocopy document name of legal representative's ID back page"
-                      description: Company KYC data set
+                              description: "The photocopy document name of legal representative's ID back page.Supported ID types:\n\nCN \n\n| Value | Description |\n|-------|-------------|\n| IDCARD | National ID Card |\n\nHK\n\n| Value | Description |\n|-------|-------------|\n| PASSPORT | Passport |\n| IDCARD | ID Card |\n\nUS, HK\n\n| Value | Description |\n|-------|-------------|\n| PASSPORT | Passport |\n| DRIVERS_LICENSE | Drivers License |"
                       required:
                         - name
                         - type
@@ -168,13 +185,14 @@ paths:
                         - registrationCertificateCopy
                         - address
                         - legalRepresentative
-                  description: '**KYC Data Object** Choose one from below data set'
+                  description: "**KYC Data Object** \n\nChoose one of the below:"
                   type: object
               required:
                 - profileId
                 - countryOfOrigin
                 - type
                 - email
+                - mobile
                 - kyc
         description: ''
       description: |-
@@ -733,7 +751,7 @@ components:
           description: Profile/merchant id from client system
           minLength: 0
           maxLength: 32
-        regionOfOrigin:
+        countryOfOrigin:
           $ref: '#/components/schemas/Region'
         type:
           $ref: '#/components/schemas/Profile-Type'
@@ -743,9 +761,12 @@ components:
           $ref: '#/components/schemas/Source-System'
         email:
           type: string
-          description: Merchant email address
+          description: Profile email address
           format: email
           pattern: abc@xyz.com
+        mobile:
+          type: string
+          description: Profile mobile number
         kyc:
           oneOf:
             - $ref: '#/components/schemas/KYC-Individual'
@@ -755,10 +776,11 @@ components:
           $ref: '#/components/schemas/Error'
       required:
         - id
-        - regionOfOrigin
+        - countryOfOrigin
         - type
         - status
         - email
+        - mobile
     Bill:
       title: '| Bill Object'
       type: object
@@ -866,7 +888,7 @@ components:
           $ref: '#/components/schemas/Region'
         postalCode:
           type: string
-          description: Postal Code/Zip Code
+          description: Postalcde/Zipcode
       required:
         - lineOne
         - city
@@ -971,6 +993,9 @@ components:
       x-tags:
         - Documents
       properties:
+        id:
+          type: string
+          description: Document id in Lianlian Pay system
         name:
           type: string
           description: Document name
@@ -982,9 +1007,6 @@ components:
           description: 'Document create time, UTC+0 timestamp'
           format: date-time
           example: '2019-01-01T00:00:00Z'
-        id:
-          type: string
-          description: Document id in Lianlian Pay system
       required:
         - name
         - size
@@ -1109,13 +1131,7 @@ components:
     ID-Type:
       title: '| ID Type Enumeration'
       type: string
-      description: |-
-        Supported ID types in Lianlian Pay system. One of:
-
-        | Value | Description |
-        |-------|-------------|
-        | PASSPORT | Passport |
-        | IDCARD | ID Card |
+      description: "Supported ID types in Lianlian Pay system. One of:\n\nCN \n| Value | Description |\n|-------|-------------|\n| IDCARD | ID Card |\n\nUS, HK\n| Value | Description |\n|-------|-------------|\n| PASSPORT | Passport |\n| IDCARD | ID Card |"
       x-tags:
         - Profiles
     Account-Currency:
@@ -1147,6 +1163,7 @@ components:
 
         | Type | Description |
         |-------|-------------|
+        | COLLECTION ||
         | FUNDING | Merchant account to keep bill obligations fundings |
         | PAYMENT | Account support direct debit, used for tax authorities of certain region/jurisdiction to pull money from |
       x-tags:
@@ -1251,23 +1268,18 @@ components:
       properties:
         name:
           type: string
-          description: Name(English)
-        idNumber:
-          type: string
-          description: ID Number
+          description: Name in English
         idFrontCopy:
           type: string
-          description: The photocopy document name of the ID front page
+          description: "The photocopy document name of the ID front page. Supported ID types:\n\nCN \n\n| Value | Description |\n|-------|-------------|\n| IDCARD | National ID Card |\n\nHK\n\n| Value | Description |\n|-------|-------------|\n| PASSPORT | Passport |\n| IDCARD | ID Card |\n\nUS, HK\n\n| Value | Description |\n|-------|-------------|\n| PASSPORT | Passport |\n| DRIVERS_LICENSE | Drivers License |"
         idBackCopy:
           type: string
-          description: The photocopy document name of the ID back page
+          description: "The photocopy document name of the ID back page.Supported ID types:\n\nCN \n\n| Value | Description |\n|-------|-------------|\n| IDCARD | National ID Card |\n\nHK\n\n| Value | Description |\n|-------|-------------|\n| PASSPORT | Passport |\n| IDCARD | ID Card |\n\nUS, HK\n\n| Value | Description |\n|-------|-------------|\n| PASSPORT | Passport |\n| DRIVERS_LICENSE | Drivers License |"
         address:
           $ref: '#/components/schemas/Address'
       required:
         - name
-        - idNumber
         - idFrontCopy
-        - idBackCopy
     KYC-Company:
       title: '| KYC-Company Object'
       type: object
@@ -1302,29 +1314,24 @@ components:
     Legal-Representative:
       title: '| Legal-Representative Object'
       type: object
-      properties:
-        name:
-          type: string
-          description: Name(English)
-        idNumber:
-          type: string
-          description: ID Number
-        idFrontCopy:
-          type: string
-          description: The photocopy document name of the ID front page
-        idBackCopy:
-          type: string
-          description: The photocopy document name of the ID back page
-      required:
-        - name
-        - idNumber
-        - idFrontCopy
-        - idBackCopy
       description: |
         **Legal-Representative Object**
         Data set of Legal-Representative in Lianlian Pay system.
       x-tags:
         - Profiles
+      properties:
+        name:
+          type: string
+          description: "Legal representative's name in English"
+        idFrontCopy:
+          type: string
+          description: "The photocopy document name of legal representative's ID front page.Supported ID types:\n\nCN \n\n| Value | Description |\n|-------|-------------|\n| IDCARD | National ID Card |\n\nHK\n\n| Value | Description |\n|-------|-------------|\n| PASSPORT | Passport |\n| IDCARD | ID Card |\n\nUS, HK\n\n| Value | Description |\n|-------|-------------|\n| PASSPORT | Passport |\n| DRIVERS_LICENSE | Drivers License |"
+        idBackCopy:
+          type: string
+          description: "The photocopy document name of legal representative's ID back page.Supported ID types:\n\nCN \n\n| Value | Description |\n|-------|-------------|\n| IDCARD | National ID Card |\n\nHK\n\n| Value | Description |\n|-------|-------------|\n| PASSPORT | Passport |\n| IDCARD | ID Card |\n\nUS, HK\n\n| Value | Description |\n|-------|-------------|\n| PASSPORT | Passport |\n| DRIVERS_LICENSE | Drivers License |"
+      required:
+        - name
+        - idFrontCopy
     Certificate-Document-Type:
       type: string
       title: '| Certificate-Document-Type'
@@ -1346,4 +1353,6 @@ components:
         - ARTICLES_OF_ASSOCIATION
         - BUSINESS_LICENSE
         - CERTIFICATE_OF_REGISTRATION
+      x-tags:
+        - Profiles
   securitySchemes: {}
