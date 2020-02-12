@@ -59,7 +59,7 @@ paths:
                     |  | Other Marketplace – wire transfer |
                 kyc:
                   oneOf:
-                    - description: Individual/Sole Trader KYC data set
+                    - description: Individual/Sole Trader KYC data object
                       properties:
                         name:
                           type: string
@@ -102,38 +102,37 @@ paths:
                         - name
                         - idFrontCopy
                         - address
-                    - description: Company KYC data set
+                    - description: Company KYC data object
                       properties:
                         name:
                           type: string
                           description: Entity name in English
-                        type:
-                          type: string
-                          description: |-
-                            CN/HK Entity types. One of:
-
-                            | Value | Description |
-                            |-------|-------------|
-                            | JOINT_STOCK | Joint Stock Company |
-                            | SELF_EMPLOYED | Sole Proprietorship |
-                            | LISTED_ENTERPRISES | Listed Enterprises |
-                            | LIMTED_COMPANY | Limted Company |
-                            | PARTNERSHIP | Partnership  |
-
-                            US Entity types. One of:
-
-                            | Value | Description |
-                            |-------|-------------|
-                            | SOLE_PROPRIETORSHIP | Sole Proprietorship|
-                            | SELF_EMPLOYED | L-Corporation |
-                            | LISTED_ENTERPRISES | S-Corporation |
-                            | PARTNERSHIP | Partnership |
                         registrationNumber:
                           type: string
                           description: Registry Number/EIN Number
                         registrationCertificateCopy:
                           type: string
                           description: The photocopy document name of business registration certificate
+                        registrationCertificateCopyType:
+                          type: string
+                          enum:
+                            - CERTIFICATE_OF_INCORPORATION
+                            - TAX_DOCUMENT
+                            - EIN_LETTER
+                            - ARTICLES_OF_ASSOCIATION
+                            - BUSINESS_LICENSE
+                            - CERTIFICATE_OF_REGISTRATION
+                          description: |-
+                            **Company Certificate** type, one of:
+
+                            | Code | Value |
+                            |------|-------|
+                            |CERTIFICATE_OF_INCORPORATION| Certificate of Incorporation|
+                            |TAX_DOCUMENT| Tax Document|
+                            |EIN_LETTER| EIN Letter|
+                            |ARTICLES_OF_ASSOCIATION| Articles of Association |
+                            |BUSINESS_LICENSE| Business License |
+                            |CERTIFICATE_OF_REGISTRATION| Certificate of Registration |
                         address:
                           type: object
                           description: Office/Business Address
@@ -180,9 +179,9 @@ paths:
                               description: "The photocopy document name of legal representative's ID back page.Supported ID types:\n\nCN \n\n| Value | Description |\n|-------|-------------|\n| IDCARD | National ID Card |\n\nHK\n\n| Value | Description |\n|-------|-------------|\n| PASSPORT | Passport |\n| IDCARD | ID Card |\n\nUS, HK\n\n| Value | Description |\n|-------|-------------|\n| PASSPORT | Passport |\n| DRIVERS_LICENSE | Drivers License |"
                       required:
                         - name
-                        - type
                         - registrationNumber
                         - registrationCertificateCopy
+                        - registrationCertificateCopyType
                         - address
                         - legalRepresentative
                   description: "**KYC Data Object** \n\nChoose one of the below:"
@@ -479,7 +478,7 @@ paths:
                 $ref: '#/components/schemas/Account'
       operationId: get-accounts-accountId
       description: |-
-        Get a single Lianlian Pay account details by account id.
+        Get a single Lianlian Pay account object details by account id.
 
         Return type is `Account`
   /documents:
@@ -1123,8 +1122,8 @@ components:
 
         | Value | Description |
         |-------|-------------|
-        | COMPANY |  A legal entity formed by a group of individuals |
-        | INDIVIDUAL | Individual or Sole Trader |
+        | COMPANY |  Company/Entity |
+        | INDIVIDUAL | Individual/Sole Trader |
       type: string
       x-tags:
         - Profiles
