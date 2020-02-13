@@ -197,7 +197,7 @@ paths:
       description: |-
         Create an Avalara merchant profile in Lianlian Pay system.
 
-        All required supporting documents of a profile, such as `regCertificateCopy`, `idFrontImg`, `idBackImg`, etc, should be uploaded into Lianlina Pay system via **Upload Document** service before initiate the create profile request.
+        All required supporting documents of a profile, such as `regCertificateCopy`, `idFrontImg`, `idBackImg`, etc, should be uploaded into Lianlina Pay system via **Upload Document** service before request the **Create Profile** request.
 
         Return type is `Profile` object
       tags:
@@ -237,17 +237,21 @@ paths:
           description: Not Found
       tags:
         - Profiles
-      description: Cancel service to the profile.
+      description: Cancel service to a profile by `prfileId`.
     put:
       summary: 2. Confirm Onboard Profile
       operationId: put-profiles-profileId
       responses:
         '200':
           description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Profile'
       tags:
         - Profiles
       description: |-
-        Confirm and active service to the profile.
+        Confirm and active services to a profile by `profileId`
 
         Return type is `Profile` object
   '/profiles/{profileId}/bills':
