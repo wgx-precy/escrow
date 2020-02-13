@@ -1163,12 +1163,6 @@ components:
       type: string
       x-tags:
         - Profiles
-    ID-Type:
-      title: '| ID Type Enumeration'
-      type: string
-      description: "Supported ID types in Lianlian Pay system. One of:\n\nCN \n| Value | Description |\n|-------|-------------|\n| IDCARD | ID Card |\n\nUS, HK\n| Value | Description |\n|-------|-------------|\n| PASSPORT | Passport |\n| IDCARD | ID Card |"
-      x-tags:
-        - Profiles
     Account-Currency:
       title: '| Account Currency Enumeration'
       type: string
@@ -1355,7 +1349,7 @@ components:
         - idFrontCopy
     Certificate-Document-Type:
       type: string
-      title: '| Certificate-Document-Type'
+      title: '| Certificate Document Type Enumeration'
       description: |-
         Supported **Company Certificate** type, one of:
 
