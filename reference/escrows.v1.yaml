@@ -220,6 +220,8 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Profile'
+        '404':
+          description: Not Found
       operationId: get-profiles-profileId
       description: |-
         Get a single profile details by id
@@ -331,6 +333,8 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Bill'
+        '404':
+          description: Not Found
       operationId: get-profiles-profileId-bills-billId
       description: |-
         Get a single bill details by id.
@@ -353,6 +357,8 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Bill'
+        '404':
+          description: Not Found
       description: |-
         Submit a bill and instruct Lianlian Pay to process its payment to payee.
         After a successful submitting, Lianlian Pay will process payment to the bill payee.
@@ -377,6 +383,8 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Bill'
+        '404':
+          description: Not Found
       description: |
         Void a unsubmitted bill by id.
 
@@ -435,6 +443,8 @@ paths:
                 type: array
                 items:
                   $ref: '#/components/schemas/Account'
+        '404':
+          description: Not Found
         '':
           content:
             application/json:
@@ -476,6 +486,8 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Account'
+        '404':
+          description: Not Found
       operationId: get-accounts-accountId
       description: |-
         Get a single Lianlian Pay account object details by account id.
@@ -531,6 +543,8 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Document'
+        '404':
+          description: Not Found
       operationId: get-documents-name
       description: |
         Get document file by id
@@ -604,6 +618,8 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Webhook'
+        '404':
+          description: Not Found
       operationId: get-webhook-webhookId
       description: |-
         Get a webhook registration details by id.
@@ -620,6 +636,8 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Webhook'
+        '404':
+          description: Not Found
       description: |-
         Edit a webhook registration, such as turn on/off webhook, update webhook url, update topic registrations.
         Return type is `Webhook` object
@@ -649,6 +667,8 @@ paths:
       responses:
         '200':
           description: OK
+        '404':
+          description: Not Found
       description: Delete a webhook registration by id.
       tags:
         - Webhooks
@@ -670,6 +690,8 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Event'
+        '404':
+          description: Not Found
       operationId: get-events-eventId
       description: |-
         Get a single Lianlian Pay system generated event by id
@@ -745,8 +767,11 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Profile'
+        '404':
+          description: Not Found
       tags:
         - Profiles
+      description: Cancel service to the profile.
   '/profiles/{profileId}/active':
     parameters:
       - schema:
@@ -765,8 +790,11 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Profile'
+        '404':
+          description: Not Found
       tags:
         - Profiles
+      description: Confirm onboard and active service to the profile.
 components:
   schemas:
     Profile:
