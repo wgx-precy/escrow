@@ -793,7 +793,7 @@ paths:
             enum:
               - account.paymentaccount.created
               - bill.funded
-              - bill.paid 
+              - bill.paid
               - bill.canceled
               - bill.expired
               - profile.failed
@@ -1033,16 +1033,18 @@ components:
       title: '| Error Object'
       type: object
       description: Error object defined in Lianlian Pay system.
+      x-tags:
+        - Other
       properties:
         code:
           type: string
+          description: Error code
         message:
           type: string
+          description: 'Error message '
       required:
         - code
         - message
-      x-tags:
-        - Other
     Bank-Account-Info:
       title: '| Bank Account Info Object'
       type: object
