@@ -483,9 +483,9 @@ paths:
                 type: array
                 items:
                   $ref: '#/components/schemas/Account'
-          description: '200'
+          description: OK
       description: |-
-        Get a list of accounts of a profile.
+        Get a list of accounts of a profile. If no account has been created, empty list will be returned.
 
         Return type is List<`Account`>
       parameters:
@@ -774,7 +774,7 @@ paths:
                   $ref: '#/components/schemas/Event'
       operationId: get-events
       description: |-
-        Get a list of Lianlian Pay system generated events
+        Get a list of Lianlian Pay system generated events. If no events, empty list will be returned
 
         Return type is List<`Event`>
       parameters:
