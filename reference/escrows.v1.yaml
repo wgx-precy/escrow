@@ -35,9 +35,24 @@ paths:
                   description: Profile id from Avalara
                   maxLength: 32
                 countryOfOrigin:
-                  $ref: '#/components/schemas/Region'
+                  type: string
+                  description: |-
+                    Country of origin, one of:
+
+                    | Value | Country/Region |
+                    |-------|-------------|
+                    | CN | China |
+                    | HK | Hongkong|
+                    | US | United States |
                 type:
-                  $ref: '#/components/schemas/Profile-Type'
+                  type: string
+                  description: |-
+                    Profile type, one of
+
+                    | Value | Description |
+                    |-------|-------------|
+                    | COMPANY |  Company/Entity |
+                    | INDIVIDUAL | Individual/Sole Trader |
                 email:
                   type: string
                   description: Merchant email address
@@ -48,15 +63,8 @@ paths:
                   description: Mobile number
                 indicator:
                   type: string
-                  description: |-
-                    Source system defined to indicate differnet profile source. One of:
-
-                    | Value | Description |
-                    |-------|-------------|
-                    |  | Avalara Core – wire transfer |
-                    |  | Amazon Marketplace – book transfer |
-                    |  | Amazon Marketplace – wire transfer |
-                    |  | Other Marketplace – wire transfer |
+                  description: Source system indicator
+                  maxLength: 256
                 kyc:
                   oneOf:
                     - description: Individual/Sole Trader KYC data object
@@ -64,12 +72,15 @@ paths:
                         name:
                           type: string
                           description: Name in English
+                          maxLength: 128
                         idFrontCopy:
                           type: string
-                          description: "The photocopy document name of the ID front page.Supported ID types:\n\nCN \n\n| Value | Description |\n|-------|-------------|\n| IDCARD | National ID Card |\n\nHK\n\n| Value | Description |\n|-------|-------------|\n| PASSPORT | Passport |\n| IDCARD | ID Card |\n\nUS, HK\n\n| Value | Description |\n|-------|-------------|\n| PASSPORT | Passport |\n| DRIVERS_LICENSE | Drivers License |"
+                          description: "Document name of the ID front page photocopy.Supported ID types:\n\nCN \n\n| Value | Description |\n|-------|-------------|\n| IDCARD | National ID Card |\n\nHK\n\n| Value | Description |\n|-------|-------------|\n| PASSPORT | Passport |\n| IDCARD | ID Card |\n\nUS, HK\n\n| Value | Description |\n|-------|-------------|\n| PASSPORT | Passport |\n| DRIVERS_LICENSE | Drivers License |"
+                          maxLength: 128
                         idBackCopy:
                           type: string
-                          description: "The photocopy document name of the ID back page.Supported ID types:\n\nCN \n\n| Value | Description |\n|-------|-------------|\n| IDCARD | National ID Card |\n\nHK\n\n| Value | Description |\n|-------|-------------|\n| PASSPORT | Passport |\n| IDCARD | ID Card |\n\nUS, HK\n\n| Value | Description |\n|-------|-------------|\n| PASSPORT | Passport |\n| DRIVERS_LICENSE | Drivers License |"
+                          description: "Document name of the ID back page photocopy.Supported ID types:\n\nCN \n\n| Value | Description |\n|-------|-------------|\n| IDCARD | National ID Card |\n\nHK\n\n| Value | Description |\n|-------|-------------|\n| PASSPORT | Passport |\n| IDCARD | ID Card |\n\nUS, HK\n\n| Value | Description |\n|-------|-------------|\n| PASSPORT | Passport |\n| DRIVERS_LICENSE | Drivers License |"
+                          maxLength: 128
                         address:
                           type: object
                           description: Residential Address
@@ -107,12 +118,14 @@ paths:
                         name:
                           type: string
                           description: Entity name in English
+                          maxLength: 128
                         registrationNumber:
                           type: string
                           description: Registry Number/EIN Number
                         registrationCertificateCopy:
                           type: string
-                          description: The photocopy document name of business registration certificate
+                          description: Document name of business registration certificate photocopy.
+                          maxLength: 128
                         registrationCertificateCopyType:
                           type: string
                           enum:
@@ -125,7 +138,7 @@ paths:
                           description: |-
                             **Company Certificate** type, one of:
 
-                            | Code | Value |
+                            | Value | Type Name |
                             |------|-------|
                             |CERTIFICATE_OF_INCORPORATION| Certificate of Incorporation|
                             |TAX_DOCUMENT| Tax Document|
@@ -171,12 +184,15 @@ paths:
                             name:
                               type: string
                               description: "Legal representative's name in English"
+                              maxLength: 128
                             idFrontCopy:
                               type: string
-                              description: "The photocopy document name of legal representative's ID front page.Supported ID types:\n\nCN \n\n| Value | Description |\n|-------|-------------|\n| IDCARD | National ID Card |\n\nHK\n\n| Value | Description |\n|-------|-------------|\n| PASSPORT | Passport |\n| IDCARD | ID Card |\n\nUS, HK\n\n| Value | Description |\n|-------|-------------|\n| PASSPORT | Passport |\n| DRIVERS_LICENSE | Drivers License |"
+                              description: "Document name of legal representative's ID front page photocopy.Supported ID types:\n\nCN \n\n| Value | Description |\n|-------|-------------|\n| IDCARD | National ID Card |\n\nHK\n\n| Value | Description |\n|-------|-------------|\n| PASSPORT | Passport |\n| IDCARD | ID Card |\n\nUS, HK\n\n| Value | Description |\n|-------|-------------|\n| PASSPORT | Passport |\n| DRIVERS_LICENSE | Drivers License |"
+                              maxLength: 128
                             idBackCopy:
                               type: string
-                              description: "The photocopy document name of legal representative's ID back page.Supported ID types:\n\nCN \n\n| Value | Description |\n|-------|-------------|\n| IDCARD | National ID Card |\n\nHK\n\n| Value | Description |\n|-------|-------------|\n| PASSPORT | Passport |\n| IDCARD | ID Card |\n\nUS, HK\n\n| Value | Description |\n|-------|-------------|\n| PASSPORT | Passport |\n| DRIVERS_LICENSE | Drivers License |"
+                              description: "Document name of legal representative's ID back page photocopy.Supported ID types:\n\nCN \n\n| Value | Description |\n|-------|-------------|\n| IDCARD | National ID Card |\n\nHK\n\n| Value | Description |\n|-------|-------------|\n| PASSPORT | Passport |\n| IDCARD | ID Card |\n\nUS, HK\n\n| Value | Description |\n|-------|-------------|\n| PASSPORT | Passport |\n| DRIVERS_LICENSE | Drivers License |"
+                              maxLength: 128
                       required:
                         - name
                         - registrationNumber
@@ -421,16 +437,18 @@ paths:
             schema:
               type: object
               properties:
-                region:
-                  $ref: '#/components/schemas/Bank-Account-Region'
-                currency:
-                  $ref: '#/components/schemas/Account-Currency'
                 type:
-                  $ref: '#/components/schemas/Account-Type'
+                  type: string
+                  description: Account region
+                currency:
+                  type: string
+                  description: Account currency
+                region:
+                  type: string
+                  description: Account type
               required:
-                - region
                 - currency
-                - type
+                - region
         description: ''
       description: |-
         Create a single Lianlian Pay account for a profile
