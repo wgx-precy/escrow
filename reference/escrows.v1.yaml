@@ -240,7 +240,7 @@ paths:
           description: Not Found
       operationId: get-profiles-profileId
       description: |-
-        Get a profile details by `profileId`
+        Get a single profile by `profileId`
 
         Return type is `Profile` object
     delete:
@@ -253,7 +253,7 @@ paths:
           description: Not Found
       tags:
         - Profiles
-      description: Cancel service to a profile by `prfileId`.
+      description: Cancel service to a single profile by `prfileId`.
     put:
       summary: 2. Confirm Onboard Profile
       operationId: put-profiles-profileId
@@ -264,10 +264,12 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Profile'
+        '404':
+          description: Not Found
       tags:
         - Profiles
       description: |-
-        Confirm and active services to a profile by `profileId`
+        Confirm and active services to a single profile by `profileId`
 
         Return type is `Profile` object
   '/profiles/{profileId}/bills':
@@ -287,6 +289,8 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Bill'
+        '404':
+          description: Not Found
       requestBody:
         content:
           application/json:
@@ -357,7 +361,7 @@ paths:
                 - rfb
         description: ''
       description: |-
-        Create a bill obligation for a profile
+        Create a single bill obligation for a profile
 
         Return type is `Bill` object
       tags:
@@ -479,7 +483,7 @@ paths:
                 type: array
                 items:
                   $ref: '#/components/schemas/Account'
-          description: 'This API returns a list of `Account` object of a profile. If no applicable account exists, empty list will be returned. '
+          description: '200'
       description: |-
         Get a list of accounts of a profile.
 
