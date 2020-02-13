@@ -624,20 +624,18 @@ paths:
                   description: Webhook registration name
                 topic:
                   type: array
-                  description: |-
-                    Webhook topics
-
-                    | Value | Description |
-                    |-------|-------------|
-                    | bill.funded | Bill fully funded, `Bill.isFullyFunded` equals `true`.|
-                    | bill.paid | Bill paid, after receiving payment request(Submit Bill), Lianlian Pay made payment to bill payee. `Bill.ispaid` equals `false`.|
-                    | bill.canceled | After receiving void bill request, Lianlian Pay canceled the bill. |
-                    | bill.expired | No funding or short funding after bill expiration date.|
-                    | paymentaccount.created | Payment account created in Lianlian Pay system. |
-                    | profile.failed | Profile KYC failed, Lianlian Pay cannot provide service to this profile.|
-                    | profile.active | Profile KYC passed, profile active in Lianlian Pay system. |
-                    | profile.error | Profile KYC error, need more information to complete Lianlian Pay KYC. Detailed information can be found in `Profile.feedback`.|
-                    | profile.rar.complete | Profile KYC Risk Assessment Report complete.|
+                  description: Webhook event topics.
+                  enum:
+                    - account.paymentaccount.created
+                    - bill.funded
+                    - bill.paid
+                    - bill.canceled
+                    - bill.expired
+                    - profile.failed
+                    - profile.active
+                    - profile.error
+                    - profile.rar.complete
+                  uniqueItems: true
                   items:
                     type: string
                 url:
@@ -687,7 +685,7 @@ paths:
         '404':
           description: Not Found
       description: |-
-        Edit a webhook registration, such as turn on/off webhook, update webhook url, update topic registrations.
+        Edit a webhook registration by `webhookId`, such as turn on/off webhook, update webhook callback url, update registration topics.
 
         Return type is `Webhook` object
       requestBody:
@@ -704,20 +702,18 @@ paths:
                   description: Webhook callback urk
                 topic:
                   type: array
-                  description: |-
-                    Webhook topics
-
-                    | Value | Description |
-                    |--------|------------|
-                    | bill.funded | Bill fully funded, `Bill.isFullyFunded` equals `true`.|
-                    | bill.paid | Bill paid, after receiving payment request(Submit Bill), Lianlian Pay made payment to bill payee. `Bill.ispaid` equals `false`.|
-                    | bill.canceled | After receiving void bill request, Lianlian Pay canceled the bill. |
-                    | bill.expired | No funding or short funding after bill expiration date.|
-                    | paymentaccount.created | Payment account created in Lianlian Pay system. |
-                    | profile.failed | Profile KYC failed, Lianlian Pay cannot provide service to this profile.|
-                    | profile.active | Profile KYC passed, profile active in Lianlian Pay system. |
-                    | profile.error | Profile KYC error, need more information to complete Lianlian Pay KYC. Detailed information can be found in `Profile.feedback`.|
-                    | profile.rar.complete | Profile KYC Risk Assessment Report complete.|
+                  description: Webhook event topics.
+                  enum:
+                    - account.paymentaccount.created
+                    - bill.funded
+                    - bill.paid
+                    - bill.canceled
+                    - bill.expired
+                    - profile.failed
+                    - profile.active
+                    - profile.error
+                    - profile.rar.complete
+                  uniqueItems: true
                   items:
                     type: string
       tags:
@@ -730,7 +726,7 @@ paths:
           description: OK
         '404':
           description: Not Found
-      description: Delete a webhook registration by id.
+      description: Delete a webhook registration by `webhookId`.
       tags:
         - Webhooks
   '/events/{eventId}':
@@ -1126,19 +1122,19 @@ components:
         - type
         - data
         - profileId
-    Event-Type:
+    Event-Topic:
       type: string
-      title: '| Event Type Enumeration'
+      title: '| Event Topic Enumeration'
       description: |
         Lianlian Pay system event types. One of:
 
-        | Type | Description |
+        | Topic | Description |
         |--------|------------|
+        | account.paymentaccount.created | Payment account created in Lianlian Pay system. Return data `Account` object. |
         | bill.funded | Bill fully funded, `Bill.isFullyFunded` equals `true`. Return data `Bill` object.  |
         | bill.paid | Bill paid, after receiving payment request(Submit Bill), Lianlian Pay made payment to bill payee. `Bill.ispaid` equals `false`. Return data `Bill` object. |
         | bill.canceled | After receiving void bill request, Lianlian Pay canceled the bill. Return data `Bill` object. |
         | bill.expired | No funding or short funding after bill expiration date. Return data `Bill` object. |
-        | paymentaccount.created | Payment account created in Lianlian Pay system. Return data `Account` object. |
         | profile.failed | Profile KYC failed, Lianlian Pay cannot provide service to this profile. Return data `Profile` object. |
         | profile.active | Profile KYC passed, profile active in Lianlian Pay system. Return data `Profile` object.  |
         | profile.error | Profile KYC error, need more information to complete Lianlian Pay KYC. Detailed information can be found in `Profile.feedback`. Return type `Profile` object.  |
