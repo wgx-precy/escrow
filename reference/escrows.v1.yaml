@@ -226,6 +226,28 @@ paths:
       description: |-
         Get a single profile details by id
         Return type is `Profile` object
+    delete:
+      summary: 3. Cancel Profile
+      operationId: delete-profiles-profileId
+      responses:
+        '200':
+          description: OK
+        '404':
+          description: Not Found
+      tags:
+        - Profiles
+      description: Cancel service to the profile
+    put:
+      summary: 2. Confirm Onboard Profile
+      operationId: put-profiles-profileId
+      responses:
+        '200':
+          description: OK
+      tags:
+        - Profiles
+      description: |-
+        Confirm and active service to the profile.
+        Return type is `Profile` object
   '/profiles/{profileId}/bills':
     parameters:
       - schema:
@@ -340,16 +362,9 @@ paths:
         Get a single bill details by id.
 
         Return type is List<`Bill`>
-  '/bills/{billId}/submit':
-    parameters:
-      - schema:
-          type: string
-        name: billId
-        in: path
-        required: true
     put:
       summary: 3. Submit Bill
-      operationId: put-bills-billId-submit
+      operationId: put-bills-billId
       responses:
         '200':
           description: OK
@@ -359,38 +374,27 @@ paths:
                 $ref: '#/components/schemas/Bill'
         '404':
           description: Not Found
+      tags:
+        - Bills
       description: |-
         Submit a bill and instruct Lianlian Pay to process its payment to payee.
         After a successful submitting, Lianlian Pay will process payment to the bill payee.
 
         Return type is `Bill` object
-      tags:
-        - Bills
-  '/bills/{billId}/void':
-    parameters:
-      - schema:
-          type: string
-        name: billId
-        in: path
-        required: true
-    put:
+    delete:
       summary: 4. Void Bill
-      operationId: put-bills-billId-void
+      operationId: delete-bills-billId
       responses:
         '200':
           description: OK
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Bill'
         '404':
           description: Not Found
-      description: |
+      tags:
+        - Bills
+      description: |-
         Void a unsubmitted bill by id.
 
         Return type is `Bill` object
-      tags:
-        - Bills
   '/profiles/{profileId}/accounts':
     parameters:
       - schema:
@@ -750,51 +754,6 @@ paths:
           in: query
           name: limit
           description: 'If nonzero, return no more than this number of results. Used with `offset` to provide pagination for large datasets. Unless otherwise specified, the maximum number of records that can be returned from an API call is 50 records'
-  '/profiles/{profileId}/cancel':
-    parameters:
-      - schema:
-          type: string
-        name: profileId
-        in: path
-        required: true
-    put:
-      summary: 3. Cancel Profile
-      operationId: put-profiles-profileId-cancel
-      responses:
-        '200':
-          description: OK
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Profile'
-        '404':
-          description: Not Found
-      tags:
-        - Profiles
-      description: Cancel service to the profile.
-  '/profiles/{profileId}/active':
-    parameters:
-      - schema:
-          type: string
-        name: profileId
-        in: path
-        required: true
-    put:
-      summary: 2. Confirm Onboard Profile
-      operationId: put-profiles-profileId-active
-      responses:
-        '200':
-          description: OK
-          headers: {}
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Profile'
-        '404':
-          description: Not Found
-      tags:
-        - Profiles
-      description: Confirm onboard and active service to the profile.
 components:
   schemas:
     Profile:
