@@ -67,7 +67,7 @@ paths:
                   maxLength: 256
                 kyc:
                   oneOf:
-                    - description: Individual/Sole Trader KYC data object
+                    - description: Individual/Sole Trader data set
                       properties:
                         name:
                           type: string
@@ -75,11 +75,11 @@ paths:
                           maxLength: 128
                         idFrontCopy:
                           type: string
-                          description: "Document name of the ID front page photocopy.Supported ID types:\n\nCN \n\n| Value | Description |\n|-------|-------------|\n| IDCARD | National ID Card |\n\nHK\n\n| Value | Description |\n|-------|-------------|\n| PASSPORT | Passport |\n| IDCARD | ID Card |\n\nUS, HK\n\n| Value | Description |\n|-------|-------------|\n| PASSPORT | Passport |\n| DRIVERS_LICENSE | Drivers License |"
+                          description: "Document name of the ID front page photocopy.\n\nSupported ID types:\n\nCN \n\n| Value | Description |\n|-------|-------------|\n| IDCARD | National ID Card |\n\nHK\n\n| Value | Description |\n|-------|-------------|\n| PASSPORT | Passport |\n| IDCARD | ID Card |\n\nUS, HK\n\n| Value | Description |\n|-------|-------------|\n| PASSPORT | Passport |\n| DRIVERS_LICENSE | Drivers License |"
                           maxLength: 128
                         idBackCopy:
                           type: string
-                          description: "Document name of the ID back page photocopy.Supported ID types:\n\nCN \n\n| Value | Description |\n|-------|-------------|\n| IDCARD | National ID Card |\n\nHK\n\n| Value | Description |\n|-------|-------------|\n| PASSPORT | Passport |\n| IDCARD | ID Card |\n\nUS, HK\n\n| Value | Description |\n|-------|-------------|\n| PASSPORT | Passport |\n| DRIVERS_LICENSE | Drivers License |"
+                          description: "Document name of the ID back page photocopy.\n\nSupported ID types:\n\nCN \n\n| Value | Description |\n|-------|-------------|\n| IDCARD | National ID Card |\n\nHK\n\n| Value | Description |\n|-------|-------------|\n| PASSPORT | Passport |\n| IDCARD | ID Card |\n\nUS, HK\n\n| Value | Description |\n|-------|-------------|\n| PASSPORT | Passport |\n| DRIVERS_LICENSE | Drivers License |"
                           maxLength: 128
                         address:
                           type: object
@@ -93,7 +93,7 @@ paths:
                           properties:
                             lineOne:
                               type: string
-                              description: Address line 1
+                              description: Address line one
                             lineTwo:
                               type: string
                               description: Address line two
@@ -113,7 +113,7 @@ paths:
                         - name
                         - idFrontCopy
                         - address
-                    - description: Company KYC data object
+                    - description: Company data set
                       properties:
                         name:
                           type: string
@@ -158,10 +158,10 @@ paths:
                           properties:
                             lineOne:
                               type: string
-                              description: Address line 1
+                              description: Address line one
                             lineTwo:
                               type: string
-                              description: Address line 2
+                              description: Address line two
                             city:
                               type: string
                               description: City/Town
@@ -200,7 +200,7 @@ paths:
                         - registrationCertificateCopyType
                         - address
                         - legalRepresentative
-                  description: "**KYC Data Object** \n\nChoose one of the below:"
+                  description: "**KYC Data Object** \n\nChoose one of the below data set:"
                   type: object
               required:
                 - profileId
@@ -211,9 +211,9 @@ paths:
                 - kyc
         description: ''
       description: |-
-        Create an Avalara merchant profile in Lianlian Pay system.
+        Create a merchant profile in Lianlian Pay system.
 
-        All required supporting documents of a profile, such as `regCertificateCopy`, `idFrontImg`, `idBackImg`, etc, should be uploaded into Lianlina Pay system via **Upload Document** service before request the **Create Profile** request.
+        All required supporting documents, such as `regCertificateCopy`, `idFrontImg`, `idBackImg`, etc, should be uploaded into Lianlina Pay system via **Upload Document** API before making the **Create Profile** request.
 
         Return type is `Profile` object
       tags:
@@ -402,8 +402,7 @@ paths:
       tags:
         - Bills
       description: |-
-        Submit a bill and instruct Lianlian Pay to process its payment to payee.
-        After a successful submitting, Lianlian Pay will process payment to the bill payee.
+        Submit a bill and instruct Lianlian Pay to process payment to its tax authority.
 
         Return type is `Bill` object
     delete:
@@ -416,7 +415,7 @@ paths:
           description: Not Found
       tags:
         - Bills
-      description: Void a unsubmitted bill by id.
+      description: Void an unsubmitted bill by `billId`.
   '/profiles/{profileId}/accounts':
     parameters:
       - schema:
@@ -518,7 +517,7 @@ paths:
           description: Not Found
       operationId: get-accounts-accountId
       description: |-
-        Get a single Lianlian Pay account object details by `accountId`.
+        Get a single Lianlian Pay account details by `accountId`.
 
         Return type is `Account` object
   /documents:
@@ -752,7 +751,7 @@ paths:
           description: Not Found
       operationId: get-events-eventId
       description: |-
-        Get a single Lianlian Pay system generated event by `eventId`
+        Get a Lianlian Pay system generated event by `eventId`
 
         Return type is `Event` object
   /events:
