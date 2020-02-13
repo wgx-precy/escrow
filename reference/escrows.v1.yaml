@@ -210,7 +210,7 @@ paths:
         in: path
         required: true
     get:
-      summary: 2. Get Profile
+      summary: 4. Get Profile
       tags:
         - Profiles
       responses:
@@ -728,6 +728,45 @@ paths:
           in: query
           name: limit
           description: 'If nonzero, return no more than this number of results. Used with `offset` to provide pagination for large datasets. Unless otherwise specified, the maximum number of records that can be returned from an API call is 50 records'
+  '/profiles/{profileId}/cancel':
+    parameters:
+      - schema:
+          type: string
+        name: profileId
+        in: path
+        required: true
+    put:
+      summary: 3. Cancel Profile
+      operationId: put-profiles-profileId-cancel
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Profile'
+      tags:
+        - Profiles
+  '/profiles/{profileId}/active':
+    parameters:
+      - schema:
+          type: string
+        name: profileId
+        in: path
+        required: true
+    put:
+      summary: 2. Confirm Onboard Profile
+      operationId: put-profiles-profileId-active
+      responses:
+        '200':
+          description: OK
+          headers: {}
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Profile'
+      tags:
+        - Profiles
 components:
   schemas:
     Profile:
@@ -1111,7 +1150,8 @@ components:
         | Value | Description |
         |-------|-------------|
         | UNDER_REVIEW | Profile is currenlty under KYC review|
-        | ACTIVE | KYC review complete, profile is active |
+        | COMPLETE | KYC review complete|
+        | ACTIVE | Profile is active, ready to use |
         | FAILED | Lianlian Pay cannot provide service to this profile |
         | ERROR | KYC error, need aditional information to complete KYC review |
         | CANCELED | Profile canceled, Lianlian Pay stopped to provide service to this profile |
