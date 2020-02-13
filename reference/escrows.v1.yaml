@@ -580,7 +580,7 @@ paths:
         Return type is `Document` object
   /webhooks:
     get:
-      summary: 2. List All Webhook Registrations
+      summary: 2. Get Webhook Registration List
       responses:
         '200':
           description: OK
@@ -625,16 +625,16 @@ paths:
                     Webhook topics
 
                     | Value | Description |
-                    |--------|------------|
-                    | account.paymentaccount.created | Payment account created in Lianlian Pay system. Return data `Account` object. |
-                    | bill.funded | Bill fully funded, `Bill.isFullyFunded` equals `true`. Return data `Bill` object.  |
-                    | bill.paid | Bill paid, after receiving payment request(Submit Bill), Lianlian Pay made payment to bill payee. `Bill.ispaid` equals `false`. Return data `Bill` object. |
-                    | bill.canceled | After receiving void bill request, Lianlian Pay canceled the bill. Return data `Bill` object. |
-                    | bill.expired | No funding or short funding after bill expiration date. Return data `Bill` object. |
-                    | profile.failed | Profile KYC failed, Lianlian Pay cannot provide service to this profile. Return data `Profile` object. |
-                    | profile.active | Profile KYC passed, profile active in Lianlian Pay system. Return data `Profile` object.  |
-                    | profile.error | Profile KYC error, need more information to complete Lianlian Pay KYC. Detailed information can be found in `Profile.feedback`. Return type `Profile` object.  |
-                    | profile.rar.complete | Profile KYC Risk Assessment Report complete. Return data `Document` object  |
+                    |-------|-------------|
+                    | bill.funded | Bill fully funded, `Bill.isFullyFunded` equals `true`.|
+                    | bill.paid | Bill paid, after receiving payment request(Submit Bill), Lianlian Pay made payment to bill payee. `Bill.ispaid` equals `false`.|
+                    | bill.canceled | After receiving void bill request, Lianlian Pay canceled the bill. |
+                    | bill.expired | No funding or short funding after bill expiration date.|
+                    | paymentaccount.created | Payment account created in Lianlian Pay system. |
+                    | profile.failed | Profile KYC failed, Lianlian Pay cannot provide service to this profile.|
+                    | profile.active | Profile KYC passed, profile active in Lianlian Pay system. |
+                    | profile.error | Profile KYC error, need more information to complete Lianlian Pay KYC. Detailed information can be found in `Profile.feedback`.|
+                    | profile.rar.complete | Profile KYC Risk Assessment Report complete.|
                   items:
                     type: string
                 url:
@@ -706,15 +706,15 @@ paths:
 
                     | Value | Description |
                     |--------|------------|
-                    | account.paymentaccount.created | Payment account created in Lianlian Pay system. Return data `Account` object. |
-                    | bill.funded | Bill fully funded, `Bill.isFullyFunded` equals `true`. Return data `Bill` object.  |
-                    | bill.paid | Bill paid, after receiving payment request(Submit Bill), Lianlian Pay made payment to bill payee. `Bill.ispaid` equals `false`. Return data `Bill` object. |
-                    | bill.canceled | After receiving void bill request, Lianlian Pay canceled the bill. Return data `Bill` object. |
-                    | bill.expired | No funding or short funding after bill expiration date. Return data `Bill` object. |
-                    | profile.failed | Profile KYC failed, Lianlian Pay cannot provide service to this profile. Return data `Profile` object. |
-                    | profile.active | Profile KYC passed, profile active in Lianlian Pay system. Return data `Profile` object.  |
-                    | profile.error | Profile KYC error, need more information to complete Lianlian Pay KYC. Detailed information can be found in `Profile.feedback`. Return type `Profile` object.  |
-                    | profile.rar.complete | Profile KYC Risk Assessment Report complete. Return data `Document` object  |
+                    | bill.funded | Bill fully funded, `Bill.isFullyFunded` equals `true`.|
+                    | bill.paid | Bill paid, after receiving payment request(Submit Bill), Lianlian Pay made payment to bill payee. `Bill.ispaid` equals `false`.|
+                    | bill.canceled | After receiving void bill request, Lianlian Pay canceled the bill. |
+                    | bill.expired | No funding or short funding after bill expiration date.|
+                    | paymentaccount.created | Payment account created in Lianlian Pay system. |
+                    | profile.failed | Profile KYC failed, Lianlian Pay cannot provide service to this profile.|
+                    | profile.active | Profile KYC passed, profile active in Lianlian Pay system. |
+                    | profile.error | Profile KYC error, need more information to complete Lianlian Pay KYC. Detailed information can be found in `Profile.feedback`.|
+                    | profile.rar.complete | Profile KYC Risk Assessment Report complete.|
                   items:
                     type: string
       tags:
@@ -1131,11 +1131,11 @@ components:
 
         | Type | Description |
         |--------|------------|
-        | account.paymentaccount.created | Payment account created in Lianlian Pay system. Return data `Account` object. |
         | bill.funded | Bill fully funded, `Bill.isFullyFunded` equals `true`. Return data `Bill` object.  |
         | bill.paid | Bill paid, after receiving payment request(Submit Bill), Lianlian Pay made payment to bill payee. `Bill.ispaid` equals `false`. Return data `Bill` object. |
         | bill.canceled | After receiving void bill request, Lianlian Pay canceled the bill. Return data `Bill` object. |
         | bill.expired | No funding or short funding after bill expiration date. Return data `Bill` object. |
+        | paymentaccount.created | Payment account created in Lianlian Pay system. Return data `Account` object. |
         | profile.failed | Profile KYC failed, Lianlian Pay cannot provide service to this profile. Return data `Profile` object. |
         | profile.active | Profile KYC passed, profile active in Lianlian Pay system. Return data `Profile` object.  |
         | profile.error | Profile KYC error, need more information to complete Lianlian Pay KYC. Detailed information can be found in `Profile.feedback`. Return type `Profile` object.  |
