@@ -29,6 +29,7 @@ paths:
           application/json:
             schema:
               type: object
+              description: Profile data set
               properties:
                 profileId:
                   type: string
@@ -44,6 +45,10 @@ paths:
                     | CN | China |
                     | HK | Hongkong|
                     | US | United States |
+                  enum:
+                    - CN
+                    - HK
+                    - US
                 type:
                   type: string
                   description: |-
@@ -53,6 +58,9 @@ paths:
                     |-------|-------------|
                     | COMPANY |  Company/Entity |
                     | INDIVIDUAL | Individual/Sole Trader |
+                  enum:
+                    - COMPANY
+                    - INDIVIDUAL
                 email:
                   type: string
                   description: Merchant email address
@@ -75,11 +83,11 @@ paths:
                           maxLength: 128
                         idFrontCopy:
                           type: string
-                          description: "Document name of the ID front page photocopy.\n\nSupported ID types:\n\nCN \n\n| Value | Description |\n|-------|-------------|\n| IDCARD | National ID Card |\n\nHK\n\n| Value | Description |\n|-------|-------------|\n| PASSPORT | Passport |\n| IDCARD | ID Card |\n\nUS, HK\n\n| Value | Description |\n|-------|-------------|\n| PASSPORT | Passport |\n| DRIVERS_LICENSE | Drivers License |"
+                          description: "Document name of the ID front page photocopy.\nSupported ID types:\n\nCN \n\n| Value | Description |\n|-------|-------------|\n| IDCARD | National ID Card |\n\nHK\n\n| Value | Description |\n|-------|-------------|\n| PASSPORT | Passport |\n| IDCARD | ID Card |\n\nUS, HK\n\n| Value | Description |\n|-------|-------------|\n| PASSPORT | Passport |\n| DRIVERS_LICENSE | Drivers License |"
                           maxLength: 128
                         idBackCopy:
                           type: string
-                          description: "Document name of the ID back page photocopy.\n\nSupported ID types:\n\nCN \n\n| Value | Description |\n|-------|-------------|\n| IDCARD | National ID Card |\n\nHK\n\n| Value | Description |\n|-------|-------------|\n| PASSPORT | Passport |\n| IDCARD | ID Card |\n\nUS, HK\n\n| Value | Description |\n|-------|-------------|\n| PASSPORT | Passport |\n| DRIVERS_LICENSE | Drivers License |"
+                          description: "Document name of the ID back page photocopy.\nSupported ID types:\n\nCN \n\n| Value | Description |\n|-------|-------------|\n| IDCARD | National ID Card |\n\nHK\n\n| Value | Description |\n|-------|-------------|\n| PASSPORT | Passport |\n| IDCARD | ID Card |\n\nUS, HK\n\n| Value | Description |\n|-------|-------------|\n| PASSPORT | Passport |\n| DRIVERS_LICENSE | Drivers License |"
                           maxLength: 128
                         address:
                           type: object
@@ -122,6 +130,7 @@ paths:
                         registrationNumber:
                           type: string
                           description: Registry Number/EIN Number
+                          maxLength: 64
                         registrationCertificateCopy:
                           type: string
                           description: Document name of business registration certificate photocopy.
@@ -778,23 +787,22 @@ paths:
             type: string
           in: query
           name: profileId
-          required: true
-          description: Profile/merchant id from client system
+          description: Profile Id from client system
         - schema:
             type: array
             enum:
+              - account.paymentaccount.created
+              - bill.funded
+              - bill.paid 
+              - bill.canceled
+              - bill.expired
               - profile.failed
               - profile.active
               - profile.error
-              - profile.updated
-              - bill.funded
-              - bill.paid
-              - bill.canceled
-              - bill.expired
-              - account.paymentaccount.created
+              - profile.rar.complete
           in: query
           name: type
-          description: Event type defined in Lianlian Pay system.
+          description: Event topic defined in Lianlian Pay system.
         - schema:
             type: string
             default: '0'
@@ -1102,7 +1110,7 @@ components:
           type: string
           description: Event id in Lianlian Pay system
         type:
-          $ref: '#/components/schemas/Event-Type'
+          $ref: '#/components/schemas/Event-Topic'
         data:
           description: Detailed event description.
           oneOf:
@@ -1164,7 +1172,7 @@ components:
           type: array
           description: Event topics in Lianlian Pay system
           items:
-            $ref: '#/components/schemas/Event-Type'
+            $ref: '#/components/schemas/Event-Topic'
         createTime:
           type: string
           description: 'Webhook registration time, UTC+0 timestamp'
@@ -1238,7 +1246,7 @@ components:
 
         | Type | Description |
         |-------|-------------|
-        | COLLECTION ||
+        | COLLECTING ||
         | FUNDING | Merchant account to keep bill obligations fundings |
         | PAYMENT | Account support direct debit, used for tax authorities of certain region/jurisdiction to pull money from |
       x-tags:
