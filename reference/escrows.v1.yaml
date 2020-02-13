@@ -240,7 +240,7 @@ paths:
           description: Not Found
       operationId: get-profiles-profileId
       description: |-
-        Get a single profile details by id
+        Get a profile details by `profileId`
 
         Return type is `Profile` object
     delete:
@@ -384,7 +384,7 @@ paths:
           description: Not Found
       operationId: get-profiles-profileId-bills-billId
       description: |-
-        Get a single bill details by id.
+        Get a single bill details by `billId`.
 
         Return type is List<`Bill`>
     put:
@@ -518,7 +518,7 @@ paths:
           description: Not Found
       operationId: get-accounts-accountId
       description: |-
-        Get a single Lianlian Pay account object details by account id.
+        Get a single Lianlian Pay account object details by `accountId`.
 
         Return type is `Account` object
   /documents:
@@ -575,7 +575,7 @@ paths:
           description: Not Found
       operationId: get-documents-name
       description: |
-        Get document file by id
+        Download document file by `dcoumentId`
 
         Return type is `Document` object
   /webhooks:
@@ -666,7 +666,7 @@ paths:
           description: Not Found
       operationId: get-webhook-webhookId
       description: |-
-        Get a webhook registration details by id.
+        Get a webhook registration details by `webhookId`.
 
         Return type is `Webhook` object
       tags:
@@ -752,7 +752,7 @@ paths:
           description: Not Found
       operationId: get-events-eventId
       description: |-
-        Get a single Lianlian Pay system generated event by id
+        Get a single Lianlian Pay system generated event by `eventId`
 
         Return type is `Event` object
   /events:
