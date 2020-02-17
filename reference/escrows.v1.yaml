@@ -235,7 +235,7 @@ paths:
         in: path
         required: true
     get:
-      summary: 4. Get Profile
+      summary: 2. Get Profile
       tags:
         - Profiles
       responses:
@@ -250,35 +250,6 @@ paths:
       operationId: get-profiles-profileId
       description: |-
         Get a single profile by `profileId`
-
-        Return type is `Profile` object
-    delete:
-      summary: 3. Cancel Profile
-      operationId: delete-profiles-profileId
-      responses:
-        '200':
-          description: OK
-        '404':
-          description: Not Found
-      tags:
-        - Profiles
-      description: Cancel service to a single profile by `prfileId`.
-    put:
-      summary: 2. Confirm Onboard Profile
-      operationId: put-profiles-profileId
-      responses:
-        '200':
-          description: OK
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Profile'
-        '404':
-          description: Not Found
-      tags:
-        - Profiles
-      description: |-
-        Confirm and active services to a single profile by `profileId`
 
         Return type is `Profile` object
   '/profiles/{profileId}/bills':
@@ -400,35 +371,6 @@ paths:
         Get a single bill details by `billId`.
 
         Return type is List<`Bill`>
-    put:
-      summary: 3. Submit Bill
-      operationId: put-bills-billId
-      responses:
-        '200':
-          description: OK
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Bill'
-        '404':
-          description: Not Found
-      tags:
-        - Bills
-      description: |-
-        Submit a bill and instruct Lianlian Pay to process payment to its tax authority.
-
-        Return type is `Bill` object
-    delete:
-      summary: 4. Void Bill
-      operationId: delete-bills-billId
-      responses:
-        '200':
-          description: OK
-        '404':
-          description: Not Found
-      tags:
-        - Bills
-      description: Void an unsubmitted bill by `billId`.
   '/profiles/{profileId}/accounts':
     parameters:
       - schema:
@@ -815,6 +757,125 @@ paths:
           in: query
           name: limit
           description: 'If nonzero, return no more than this number of results. Used with `offset` to provide pagination for large datasets. Unless otherwise specified, the maximum number of records that can be returned from an API call is 50 records'
+  '/profiles/{profileId}/approve':
+    parameters:
+      - schema:
+          type: string
+        name: profileId
+        in: path
+        required: true
+    put:
+      summary: 3. Confirm Onboard
+      operationId: post-profiles-profileId-approve
+      responses:
+        '200':
+          description: OK
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Profile'
+      tags:
+        - Profiles
+      description: |-
+        Onboard a single profile and confirm to provide services by `profileId`. Lianlian Pay registration process begin.
+
+        Return type is `Profile` object
+  '/profiles/{profileId}/cancel':
+    parameters:
+      - schema:
+          type: string
+        name: profileId
+        in: path
+        required: true
+    put:
+      summary: 4. Cancel Profile
+      operationId: post-profiles-profileId-cancel
+      responses:
+        '200':
+          description: OK
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Profile'
+      tags:
+        - Profiles
+      description: "Cancel a `ACTIVE` status profile by `profileId`. After cancellation, profile KYC periodical validation will be stopped and reserved funding will be returned. \n\nReturn type is `Profile` object."
+  '/profiles/{profileId}/fail':
+    parameters:
+      - schema:
+          type: string
+        name: profileId
+        in: path
+        required: true
+    put:
+      summary: 5. Reject Profile
+      operationId: post-profiles-profileId-fail
+      responses:
+        '200':
+          description: OK
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Profile'
+      tags:
+        - Profiles
+      description: |-
+        Reject a single profile by `profileId`. Ongoing KYC process will be stopped and Lianlian Pay registration will not be started.
+
+        Return type is `Profile` object.
+  '/bills/{billId}/submit':
+    parameters:
+      - schema:
+          type: string
+        name: billId
+        in: path
+        required: true
+    put:
+      summary: 3. Submit Bill
+      operationId: put-bills-billId-submit
+      responses:
+        '200':
+          description: OK
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Bill'
+      tags:
+        - Bills
+      description: |-
+        Submit a single bill by `billId`. Lianlian Pay will start process payment to payee account(tax authority account) defined in bill details.
+
+        Return type is `Bill` object
+  '/bills/{billId}/void':
+    parameters:
+      - schema:
+          type: string
+        name: billId
+        in: path
+        required: true
+    put:
+      summary: 4. Cancel Bill
+      operationId: put-bills-billId-void
+      responses:
+        '200':
+          description: OK
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Bill'
+      tags:
+        - Bills
+      description: "Cancel a previously created bill if it has not been submitted by `billId`. Any funded funds will be refunded. \n\nReturn type is `Bill` object"
 components:
   schemas:
     Profile:
@@ -1199,12 +1260,12 @@ components:
 
         | Value | Description |
         |-------|-------------|
-        | UNDER_REVIEW | Profile is currenlty under KYC review|
-        | COMPLETE | KYC review complete|
-        | ACTIVE | Profile is active, ready to use |
-        | FAILED | Lianlian Pay cannot provide service to this profile |
+        | UNDER_REVIEW | Profile KYC is in progress |
         | ERROR | KYC error, need aditional information to complete KYC review |
-        | CANCELED | Profile canceled, Lianlian Pay stopped to provide service to this profile |
+        | FAILED | KYC failed, cannot provide service |
+        | ACTIVE | KYC complete, waiting for profile to be approved |
+        | APPROVED| Profile approved |
+        | CANCELED | Profile canceled, service stopped |
       x-tags:
         - Profiles
     Profile-Type:
