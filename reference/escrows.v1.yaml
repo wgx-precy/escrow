@@ -810,7 +810,7 @@ paths:
       tags:
         - Profiles
       description: "Cancel a `ACTIVE` status profile by `profileId`. After cancellation, profile KYC periodical validation will be stopped and reserved funding will be returned. \n\nReturn type is `Profile` object."
-  '/profiles/{profileId}/fail':
+  '/profiles/{profileId}/reject':
     parameters:
       - schema:
           type: string
