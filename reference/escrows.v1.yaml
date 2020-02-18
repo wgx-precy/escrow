@@ -2,7 +2,14 @@ openapi: 3.0.0
 info:
   title: escrows
   version: '1.0'
-  description: ''
+  description: |-
+    Document Version 20200212
+
+    Change History
+
+    |Changes| Author| Date |
+    |-------|-------|------|
+    |LLP KYC APIs proposal| Precy | 2020-02-12|
   contact:
     email: fx_support@lianlianpay.com
     name: Lianlian Pay
