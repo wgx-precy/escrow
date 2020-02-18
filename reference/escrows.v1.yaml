@@ -265,6 +265,33 @@ paths:
         Get a single profile by `profileId`
 
         Return type is `Profile` object
+    put:
+      summary: 3. Confirm Onboard
+      operationId: put-profiles-profileId
+      responses:
+        '200':
+          description: OK
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Profile'
+      tags:
+        - Profiles
+      description: |-
+        Onboard a single profile and confirm to provide services by `profileId`. Lianlian Pay registration process begin.
+
+        Return type is `Profile` object
+    delete:
+      summary: 4. Cancel Profile
+      operationId: delete-profiles-profileId
+      responses:
+        '200':
+          description: OK
+      description: "Cancel a `ACTIVE` status profile by `profileId`. After cancellation, profile KYC periodical validation will be stopped and reserved funding will be returned. \n\nReturn type is `Profile` object."
+      tags:
+        - Profiles
   /documents:
     post:
       summary: 1. Upload Document
@@ -547,78 +574,6 @@ paths:
           in: query
           name: limit
           description: 'If nonzero, return no more than this number of results. Used with `offset` to provide pagination for large datasets. Unless otherwise specified, the maximum number of records that can be returned from an API call is 50 records'
-  '/profiles/{profileId}/approve':
-    parameters:
-      - schema:
-          type: string
-        name: profileId
-        in: path
-        required: true
-    put:
-      summary: 3. Confirm Onboard
-      operationId: post-profiles-profileId-approve
-      responses:
-        '200':
-          description: OK
-        '404':
-          description: Not Found
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Profile'
-      tags:
-        - Profiles
-      description: |-
-        Onboard a single profile and confirm to provide services by `profileId`. Lianlian Pay registration process begin.
-
-        Return type is `Profile` object
-  '/profiles/{profileId}/cancel':
-    parameters:
-      - schema:
-          type: string
-        name: profileId
-        in: path
-        required: true
-    put:
-      summary: 4. Cancel Profile
-      operationId: post-profiles-profileId-cancel
-      responses:
-        '200':
-          description: OK
-        '404':
-          description: Not Found
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Profile'
-      tags:
-        - Profiles
-      description: "Cancel a `ACTIVE` status profile by `profileId`. After cancellation, profile KYC periodical validation will be stopped and reserved funding will be returned. \n\nReturn type is `Profile` object."
-  '/profiles/{profileId}/reject':
-    parameters:
-      - schema:
-          type: string
-        name: profileId
-        in: path
-        required: true
-    put:
-      summary: 5. Reject Profile - TBD
-      operationId: post-profiles-profileId-fail
-      responses:
-        '200':
-          description: OK
-        '404':
-          description: Not Found
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Profile'
-      tags:
-        - Profiles
-      description: |-
-        Reject a single profile by `profileId`. Ongoing KYC process will be stopped and Lianlian Pay registration will not be started.
-
-        Return type is `Profile` object.
 components:
   schemas:
     Profile:
@@ -673,88 +628,6 @@ components:
         - status
         - email
         - mobile
-    Bill:
-      title: '| Bill Object'
-      type: object
-      description: "**Bill Object**\nData set of a client customer’s tax obligation description in Lianlian Pay system. "
-      x-tags:
-        - Bills
-      properties:
-        id:
-          type: string
-          description: Bill(obligation) id from client system
-          maxLength: 64
-        region:
-          $ref: '#/components/schemas/Bill-Region'
-        currency:
-          $ref: '#/components/schemas/Bill-Currency'
-        amount:
-          type: string
-          description: bill(obligation) amount
-          format: float
-          example: '123.45'
-          pattern: "^(([1-9]{1}\\d*)|(0{1}))(\\.\\d{2})"
-        period:
-          type: string
-          description: bill(obligation) period
-          example: 2020-01
-          pattern: "^((?:19|20)\\d\\d)-(0[1-9]|1[012])"
-        dueDate:
-          type: string
-          description: 'bill(obligation) due date, UTC+0 timestamp'
-          format: date-time
-          example: '2019-01-01T00:00:00Z'
-        expireDate:
-          type: string
-          description: 'bill(obligation) expire date, UTC+0 timestamp'
-          format: date-time
-          example: '2019-01-01T00:00:00Z'
-        payee:
-          $ref: '#/components/schemas/Bank-Account-Info'
-        createTime:
-          type: string
-          description: 'Bill created time, UTC+0 timestamp'
-          format: date-time
-          example: '2019-01-01T00:00:00Z'
-        fundingTime:
-          type: string
-          description: 'Bill funded time, UTC+0 timestamp'
-          format: date-time
-          example: '2019-01-01T00:00:00Z'
-        paymentTime:
-          type: string
-          description: 'Bill payment time, UTC+0 timestamp'
-          format: date-time
-          example: '2019-01-01T00:00:00Z'
-        status:
-          $ref: '#/components/schemas/Bill-Status'
-        isFunded:
-          type: boolean
-          description: 'Default false, true if fully funded. Ready to pay if isFullyFunded equals to true.'
-        isPaid:
-          type: boolean
-          description: 'Default false, true if bill submitted and paid to payee.'
-        modifyTime:
-          type: string
-          description: 'Bill last updated time, UTC+0 timestamp'
-          format: date-time
-          example: '2019-01-01T00:00:00Z'
-        rfb:
-          type: string
-          maxLength: 105
-        memo:
-          type: string
-          maxLength: 512
-      required:
-        - id
-        - region
-        - currency
-        - amount
-        - expireDate
-        - payee
-        - status
-        - isFunded
-        - isPaid
     Address:
       title: '| Address Object'
       type: object
@@ -787,52 +660,6 @@ components:
         - province
         - region
         - postalCode
-    Account:
-      title: '| Account Object'
-      type: object
-      description: "**Account Object**\nData object to describe an account in Lianlian Pay system. \nAccount such as `Funding Account` and `Payment Account`"
-      x-examples:
-        Funding Account:
-          id: '20200115123456781'
-          balance: '0.00'
-          currency: EUR
-          type: FUNDING
-        Payment Account:
-          id: '20200115123456789'
-          balance: '0.00'
-          currency: EUR
-          type: PAYMENT
-          virtualAccountInfo:
-            number: FR1234567890123
-            name: VAT Sample Account
-            bankName: FR Bank Name
-            region: FR
-            sortCode: null
-            swiftCode: FR Bank SWIFT
-            routingNo: null
-      x-tags:
-        - Accounts
-      properties:
-        balance:
-          type: string
-          description: Account balance in account currency
-          format: double
-          example: '123.45'
-          pattern: "^(([1-9]{1}\\d*)|(0{1}))(\\.\\d{2})"
-        currency:
-          $ref: '#/components/schemas/Account-Currency'
-        virtualAccountInfo:
-          $ref: '#/components/schemas/Bank-Account-Info'
-        type:
-          $ref: '#/components/schemas/Account-Type'
-        id:
-          type: string
-          description: Account id in Lianlina Pay system
-      required:
-        - balance
-        - currency
-        - type
-        - id
     Error:
       title: '| Error Object'
       type: object
@@ -849,37 +676,6 @@ components:
       required:
         - code
         - message
-    Bank-Account-Info:
-      title: '| Bank Account Info Object'
-      type: object
-      description: Bank account information details
-      x-tags:
-        - Accounts
-      properties:
-        number:
-          type: string
-          description: Account number
-        name:
-          type: string
-          description: Account name
-          maxLength: 128
-        bankName:
-          type: string
-          description: Bank name
-          maxLength: 128
-        swiftCode:
-          type: string
-          description: Bank SWIFT code
-        region:
-          $ref: '#/components/schemas/Bank-Account-Region'
-        routingNo:
-          type: string
-        sortCode:
-          type: string
-      required:
-        - number
-        - name
-        - region
     Document:
       title: '| Document Object'
       type: object
@@ -1023,12 +819,6 @@ components:
       type: string
       x-tags:
         - Profiles
-    Account-Currency:
-      title: '| Account Currency Enumeration'
-      type: string
-      description: "Supported account currencies in Lianlian Pay system. \n\n**Funding Account Currencies**, one of:\n\n| Currency | Description |\n|----------|-------------|\n| EUR | Euro |\n| USD | United States dollar |\n\n\n**Payment Account Currencies**, one of:\n\n| Currency | Description |\n|----------|-------------|\n| EUR | Euro |"
-      x-tags:
-        - Accounts
     Region:
       title: '| Region Enumeration'
       description: |
@@ -1044,94 +834,6 @@ components:
       type: string
       x-tags:
         - Other
-    Account-Type:
-      title: '| Account Type Enumeration'
-      type: string
-      description: |-
-        Account types provided in Lianlian Pay system. One of:
-
-        | Type | Description |
-        |-------|-------------|
-        | COLLECTING ||
-        | FUNDING | Merchant account to keep bill obligations fundings |
-        | PAYMENT | Account support direct debit, used for tax authorities of certain region/jurisdiction to pull money from |
-      x-tags:
-        - Accounts
-    Bill-Region:
-      type: string
-      title: '| Bill Region Enumeration'
-      description: |-
-        Supported bill region/jurisdiction in Lianlian Pay system. One of:
-
-        | Region | Description |
-        |--------|-------------|
-        | CZ | Czech Republic |
-        | DE | Germany |
-        | ES | Spain |
-        | FR | France |
-        | IT | Italy |
-        | PO | Poland |
-        | UK | United Kindom|
-      enum:
-        - CZ
-        - DE
-        - ES
-        - FR
-        - IT
-        - PO
-        - UK
-      x-tags:
-        - Bills
-    Bill-Currency:
-      type: string
-      title: '| Bill Currency Enumeration'
-      description: |-
-        Supported bill currencies in Lianlian Pay system. One of:
-
-        | Currency | Description |
-        |----------|-------------|
-        | EUR | Euro |
-      enum:
-        - EUR
-        - PLN
-        - GBP
-      x-tags:
-        - Bills
-    Bill-Status:
-      type: string
-      title: '| Bill Status Enumeration'
-      description: |-
-        Bill status defined in Lianlian Pay system. One of:
-
-        | Value | Description |
-        |-------|-------------|
-        | INIT | Bill created, waiting for procesing |
-        | CANCELED | Bill voided |
-        | COMPLETE | Bill complete |
-        | EXPIRED | Bill expired |
-        | PAYMENT_FAILED | Bill payment failed |
-      enum:
-        - INIT
-        - CANCELED
-        - COMPLETE
-        - EXPIRED
-        - PAYMENT_FAILED
-      x-tags:
-        - Bills
-    Bank-Account-Region:
-      type: string
-      title: '| Bank Account Region Enumeration'
-      description: "Supported account regions in Lianlian Pay system. \n\n**Payment Bank Account Regions**, one of:\n\n| Region | Description |\n|--------|-------------|\n| FR | France, supported currency - EUR |\n\n\n**Payee Bank Account Regions**, one of:\n\n| Region | Description |\n|--------|-------------|\n| CZ | Czech Republic |\n| DE | Germany |\n| ES | Spain |\n| FR | France |\n| IT | Italy |\n| PO | Poland |\n| UK | United Kindom|"
-      enum:
-        - CZ
-        - DE
-        - ES
-        - FR
-        - IT
-        - PO
-        - UK
-      x-tags:
-        - Accounts
     KYC-Individual:
       title: '| KYC-Individual Object'
       type: object
