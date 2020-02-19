@@ -279,10 +279,7 @@ paths:
                 $ref: '#/components/schemas/Profile'
       tags:
         - Profiles
-      description: |-
-        Onboard a single profile and confirm to provide services by `profileId`. Lianlian Pay registration process begin.
-
-        Return type is `Profile` object
+      description: "Onboard a single profile by `profileID` and ready to provide VAT services. \n\nReturn type is `Profile` object"
     delete:
       summary: 4. Cancel Profile
       operationId: delete-profiles-profileId
@@ -803,8 +800,8 @@ components:
         | ERROR | KYC error, need aditional information to complete KYC review |
         | FAILED | KYC failed, cannot provide service |
         | ACTIVE | KYC complete, waiting for profile to be approved |
-        | APPROVED| Profile approved |
-        | CANCELED | Profile canceled, service stopped |
+        | APPROVED| Profile approved, ready to provide VAT services |
+        | CANCELED | Profile canceled, VAT service stopped |
       x-tags:
         - Profiles
     Profile-Type:
