@@ -542,7 +542,7 @@ paths:
         - schema:
             type: string
           in: query
-          name: profileId
+          name: objectId
           description: Profile Id from client system
         - schema:
             type: array
