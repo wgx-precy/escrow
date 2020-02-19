@@ -387,7 +387,7 @@ paths:
                   type: string
                   maxLength: 128
                   description: Webhook registration name
-                topic:
+                topics:
                   type: array
                   description: Webhook event topics.
                   enum:
@@ -408,7 +408,7 @@ paths:
                   description: Webhook callback url
               required:
                 - name
-                - topic
+                - topics
                 - url
       tags:
         - Webhooks
@@ -465,7 +465,7 @@ paths:
                 url:
                   type: string
                   description: Webhook callback urk
-                topic:
+                topics:
                   type: array
                   description: Webhook event topics.
                   enum:
