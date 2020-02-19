@@ -751,11 +751,11 @@ components:
           description: Webhook registration id in Lianlian Pay system
         url:
           type: string
-          description: Client webhook url
+          description: Client callback url
         isEnabled:
           type: boolean
           description: Enable/disable callbacks
-        type:
+        topics:
           type: array
           description: Event topics in Lianlian Pay system
           items:
@@ -774,7 +774,7 @@ components:
         - id
         - url
         - isEnabled
-        - type
+        - topics
         - createTime
     Profile-Status:
       title: '| Profile Status Enumeration'
