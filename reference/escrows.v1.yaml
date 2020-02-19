@@ -265,6 +265,15 @@ paths:
         Get a single profile by `profileId`
 
         Return type is `Profile` object
+    delete:
+      summary: 4. Cancel Profile
+      operationId: delete-profiles-profileId
+      responses:
+        '200':
+          description: OK
+      description: "Cancel a `ACTIVE` status profile by `profileId`. After cancellation, profile KYC periodical validation will be stopped and reserved funding will be returned. \n\nReturn type is `Profile` object."
+      tags:
+        - Profiles
     put:
       summary: 3. Confirm Onboard
       operationId: put-profiles-profileId
@@ -280,15 +289,6 @@ paths:
       tags:
         - Profiles
       description: "Onboard a single profile by `profileID` and ready to provide VAT services. \n\nReturn type is `Profile` object"
-    delete:
-      summary: 4. Cancel Profile
-      operationId: delete-profiles-profileId
-      responses:
-        '200':
-          description: OK
-      description: "Cancel a `ACTIVE` status profile by `profileId`. After cancellation, profile KYC periodical validation will be stopped and reserved funding will be returned. \n\nReturn type is `Profile` object."
-      tags:
-        - Profiles
   /documents:
     post:
       summary: 1. Upload Document
@@ -540,11 +540,6 @@ paths:
         Return type is List<`Event`>
       parameters:
         - schema:
-            type: string
-          in: query
-          name: objectId
-          description: Profile Id from client system
-        - schema:
             type: array
             enum:
               - account.paymentaccount.created
@@ -557,7 +552,7 @@ paths:
               - profile.error
               - profile.rar.complete
           in: query
-          name: type
+          name: topic
           description: Event topic defined in Lianlian Pay system.
         - schema:
             type: string
@@ -708,27 +703,20 @@ components:
         id:
           type: string
           description: Event id in Lianlian Pay system
-        type:
+        topic:
           $ref: '#/components/schemas/Event-Topic'
         data:
-          description: Detailed event description.
-          oneOf:
-            - $ref: '#/components/schemas/Bill'
-            - $ref: '#/components/schemas/Profile'
-            - $ref: '#/components/schemas/Account'
+          description: Event details.
+          type: object
         createTime:
           type: string
           description: 'Event created time, UTC+0 timestamp'
           format: date-time
           example: '2019-01-01T00:00:00Z'
-        profileId:
-          type: string
-          description: Profile/merchant id from client system
       required:
         - id
-        - type
+        - topic
         - data
-        - profileId
     Event-Topic:
       type: string
       title: '| Event Topic Enumeration'
