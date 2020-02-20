@@ -10,6 +10,7 @@ info:
     |Changes| Author| Date |
     |-------|-------|------|
     |LLP KYC APIs proposal(payment APIs removed for now)| Precy | 2020-02-18|
+    |LLP KYC APIs, change "INDIVIDUAL" to "SOLE_TRADER"| Precy | 2020-02-20|
   contact:
     email: fx_support@lianlianpay.com
     name: Lianlian Pay
@@ -265,15 +266,6 @@ paths:
         Get a single profile by `profileId`
 
         Return type is `Profile` object
-    delete:
-      summary: 4. Cancel Profile
-      operationId: delete-profiles-profileId
-      responses:
-        '200':
-          description: OK
-      description: "Cancel a `ACTIVE` status profile by `profileId`. After cancellation, profile KYC periodical validation will be stopped and reserved funding will be returned. \n\nReturn type is `Profile` object."
-      tags:
-        - Profiles
     put:
       summary: 3. Confirm Onboard
       operationId: put-profiles-profileId
@@ -289,6 +281,15 @@ paths:
       tags:
         - Profiles
       description: "Onboard a single profile by `profileID` and ready to provide VAT services. \n\nReturn type is `Profile` object"
+    delete:
+      summary: 4. Cancel Profile
+      operationId: delete-profiles-profileId
+      responses:
+        '200':
+          description: OK
+      description: "Cancel a `ACTIVE` status profile by `profileId`. After cancellation, profile KYC periodical validation will be stopped and reserved funding will be returned. \n\nReturn type is `Profile` object."
+      tags:
+        - Profiles
   /documents:
     post:
       summary: 1. Upload Document
@@ -387,6 +388,9 @@ paths:
                   type: string
                   maxLength: 128
                   description: Webhook registration name
+                url:
+                  type: string
+                  description: Webhook callback url
                 topics:
                   type: array
                   description: Webhook event topics.
@@ -403,9 +407,6 @@ paths:
                   uniqueItems: true
                   items:
                     type: string
-                url:
-                  type: string
-                  description: Webhook callback url
               required:
                 - name
                 - topics
@@ -703,8 +704,6 @@ components:
         id:
           type: string
           description: Event id in Lianlian Pay system
-        topic:
-          $ref: '#/components/schemas/Event-Topic'
         data:
           description: Event details.
           type: object
@@ -713,6 +712,8 @@ components:
           description: 'Event created time, UTC+0 timestamp'
           format: date-time
           example: '2019-01-01T00:00:00Z'
+        topic:
+          $ref: '#/components/schemas/Event-Topic'
       required:
         - id
         - topic
@@ -755,11 +756,6 @@ components:
         isEnabled:
           type: boolean
           description: Enable/disable callbacks
-        topics:
-          type: array
-          description: Event topics in Lianlian Pay system
-          items:
-            $ref: '#/components/schemas/Event-Topic'
         createTime:
           type: string
           description: 'Webhook registration time, UTC+0 timestamp'
@@ -770,6 +766,11 @@ components:
           description: 'Webhook last modified time, UTC+0 timestamp'
           format: date-time
           example: '2019-01-01T00:00:00Z'
+        topics:
+          type: array
+          description: Event topics in Lianlian Pay system
+          items:
+            $ref: '#/components/schemas/Event-Topic'
       required:
         - id
         - url
