@@ -582,6 +582,29 @@ components:
         data:
           description: Event details.
           type: object
+          required:
+            - type
+            - id
+          properties:
+            type:
+              type: string
+              description: |-
+                Object type related to this event. One of:
+
+                | type | description |
+                |------|-------------|
+                | profile | Profile object defined in Lianlian Pay's system. Get profile details by requesting `Get Profile` API|
+                | bill | Bill object defined in Lianlina Pay's system. Get bill details by requesting `Get Bill` API|
+                | account | Account object defined in Lianlina Pay's system. Get bill details by requesting `Get Account` API|
+                | document | Document stored in Lianlina Pay's system. Get document file by requesting `Download Document` API|
+              enum:
+                - profile
+                - account
+                - bill
+                - document
+            id:
+              type: string
+              description: Object id
         createTime:
           type: string
           description: 'Event created time, UTC+0 timestamp'
@@ -591,8 +614,9 @@ components:
           $ref: '#/components/schemas/Event-Topic'
       required:
         - id
-        - topic
         - data
+        - createTime
+        - topic
     Event-Topic:
       type: string
       title: '| Event Topic Enumeration'
@@ -630,7 +654,7 @@ components:
           description: Client callback url
         isEnabled:
           type: boolean
-          description: Enable/disable callbacks
+          description: Enable/disable webhook
         createTime:
           type: string
           description: 'Webhook registration time, UTC+0 timestamp'
@@ -650,8 +674,8 @@ components:
         - id
         - url
         - isEnabled
-        - topics
         - createTime
+        - topics
     Certificate-Document-Type:
       type: string
       title: '| Certificate Document Type Enumeration'
