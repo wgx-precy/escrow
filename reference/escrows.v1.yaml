@@ -401,7 +401,7 @@ paths:
                     - SOLE_TRADER
                 email:
                   type: string
-                  description: Merchant email address
+                  description: Profile email address
                   format: email
                   example: abc@xyz.com
                 mobile:
