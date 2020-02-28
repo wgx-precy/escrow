@@ -20,308 +20,6 @@ servers:
   - url: 'https://global-api.lianlianpay.com/escrow/v1'
     description: Production
 paths:
-  /profiles:
-    post:
-      summary: 1. Create Profile
-      operationId: post-profiles
-      responses:
-        '200':
-          description: OK
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Profile'
-      requestBody:
-        content:
-          application/json:
-            schema:
-              type: object
-              description: Profile data set
-              properties:
-                profileId:
-                  type: string
-                  description: Profile id from Avalara
-                  maxLength: 32
-                countryOfOrigin:
-                  type: string
-                  description: |-
-                    Country of origin, one of:
-
-                    | Value | Country/Region |
-                    |-------|-------------|
-                    | CN | China |
-                    | HK | Hongkong|
-                    | US | United States |
-                  enum:
-                    - CN
-                    - HK
-                    - US
-                type:
-                  type: string
-                  description: |-
-                    Profile type, one of
-
-                    | Value | Description |
-                    |-------|-------------|
-                    | COMPANY |  Company/Entity |
-                    | INDIVIDUAL | Individual/Sole Trader |
-                  enum:
-                    - COMPANY
-                    - INDIVIDUAL
-                email:
-                  type: string
-                  description: Merchant email address
-                  format: email
-                  example: abc@xyz.com
-                mobile:
-                  type: string
-                  description: Mobile number
-                indicator:
-                  type: string
-                  description: Source system indicator
-                  maxLength: 256
-                kyc:
-                  oneOf:
-                    - description: Individual/Sole Trader data set
-                      properties:
-                        name:
-                          type: string
-                          description: Name in English
-                          maxLength: 128
-                        idNumber:
-                          type: string
-                          description: ID number
-                        idFrontCopy:
-                          type: string
-                          description: "Document name of the ID front page photocopy.\nSupported ID types:\n\nCN \n\n| Value | Description |\n|-------|-------------|\n| IDCARD | National ID Card |\n\nHK\n\n| Value | Description |\n|-------|-------------|\n| PASSPORT | Passport |\n| IDCARD | ID Card |\n\nUS, HK\n\n| Value | Description |\n|-------|-------------|\n| PASSPORT | Passport |\n| DRIVERS_LICENSE | Drivers License |"
-                          maxLength: 128
-                        idBackCopy:
-                          type: string
-                          description: "Document name of the ID back page photocopy.\nSupported ID types:\n\nCN \n\n| Value | Description |\n|-------|-------------|\n| IDCARD | National ID Card |\n\nHK\n\n| Value | Description |\n|-------|-------------|\n| PASSPORT | Passport |\n| IDCARD | ID Card |\n\nUS, HK\n\n| Value | Description |\n|-------|-------------|\n| PASSPORT | Passport |\n| DRIVERS_LICENSE | Drivers License |"
-                          maxLength: 128
-                        address:
-                          type: object
-                          description: Residential Address
-                          required:
-                            - lineOne
-                            - city
-                            - province
-                            - region
-                            - postalCode
-                          properties:
-                            lineOne:
-                              type: string
-                              description: Address line one
-                            lineTwo:
-                              type: string
-                              description: Address line two
-                            city:
-                              type: string
-                              description: City/Town
-                            province:
-                              type: string
-                              description: Province/State
-                            region:
-                              type: string
-                              description: Region/Country
-                            postalCode:
-                              type: string
-                              description: Postalcode/Zipcode
-                      required:
-                        - name
-                        - idFrontCopy
-                        - address
-                    - description: Company data set
-                      properties:
-                        name:
-                          type: string
-                          description: Entity name in English
-                          maxLength: 128
-                        registrationNumber:
-                          type: string
-                          description: Registry Number/EIN Number
-                          maxLength: 64
-                        registrationCertificateCopy:
-                          type: string
-                          description: Document name of business registration certificate photocopy.
-                          maxLength: 128
-                        registrationCertificateCopyType:
-                          type: string
-                          enum:
-                            - CERTIFICATE_OF_INCORPORATION
-                            - TAX_DOCUMENT
-                            - EIN_LETTER
-                            - ARTICLES_OF_ASSOCIATION
-                            - BUSINESS_LICENSE
-                            - CERTIFICATE_OF_REGISTRATION
-                          description: |-
-                            **Company Certificate** type, one of:
-
-                            | Value | Type Name |
-                            |------|-------|
-                            |CERTIFICATE_OF_INCORPORATION| Certificate of Incorporation|
-                            |TAX_DOCUMENT| Tax Document|
-                            |EIN_LETTER| EIN Letter|
-                            |ARTICLES_OF_ASSOCIATION| Articles of Association |
-                            |BUSINESS_LICENSE| Business License |
-                            |CERTIFICATE_OF_REGISTRATION| Certificate of Registration |
-                        address:
-                          type: object
-                          description: Office/Business Address
-                          required:
-                            - lineOne
-                            - city
-                            - province
-                            - region
-                            - postalCode
-                          properties:
-                            lineOne:
-                              type: string
-                              description: Address line one
-                            lineTwo:
-                              type: string
-                              description: Address line two
-                            city:
-                              type: string
-                              description: City/Town
-                            province:
-                              type: string
-                              description: Province/State
-                            region:
-                              type: string
-                              description: Region/Country
-                            postalCode:
-                              type: string
-                              description: Postalcode/Zipcode
-                        legalRepresentative:
-                          type: object
-                          description: Legal representative information
-                          required:
-                            - name
-                            - idFrontCopy
-                          properties:
-                            name:
-                              type: string
-                              description: "Legal representative's name in English"
-                              maxLength: 128
-                            idNumber:
-                              type: string
-                              description: "Legal representative's ID number"
-                            idFrontCopy:
-                              type: string
-                              description: "Document name of legal representative's ID front page photocopy.Supported ID types:\n\nCN \n\n| Value | Description |\n|-------|-------------|\n| IDCARD | National ID Card |\n\nHK\n\n| Value | Description |\n|-------|-------------|\n| PASSPORT | Passport |\n| IDCARD | ID Card |\n\nUS, HK\n\n| Value | Description |\n|-------|-------------|\n| PASSPORT | Passport |\n| DRIVERS_LICENSE | Drivers License |"
-                              maxLength: 128
-                            idBackCopy:
-                              type: string
-                              description: "Document name of legal representative's ID back page photocopy.Supported ID types:\n\nCN \n\n| Value | Description |\n|-------|-------------|\n| IDCARD | National ID Card |\n\nHK\n\n| Value | Description |\n|-------|-------------|\n| PASSPORT | Passport |\n| IDCARD | ID Card |\n\nUS, HK\n\n| Value | Description |\n|-------|-------------|\n| PASSPORT | Passport |\n| DRIVERS_LICENSE | Drivers License |"
-                              maxLength: 128
-                      required:
-                        - name
-                        - registrationNumber
-                        - registrationCertificateCopy
-                        - registrationCertificateCopyType
-                        - address
-                        - legalRepresentative
-                  description: "**KYC Data Object** \n\nChoose one of the below data set:"
-                  type: object
-              required:
-                - profileId
-                - countryOfOrigin
-                - type
-                - email
-                - mobile
-                - kyc
-        description: ''
-      description: |-
-        Create a merchant profile in Lianlian Pay system.
-
-        All required supporting documents, such as `regCertificateCopy`, `idFrontImg`, `idBackImg`, etc, should be uploaded into Lianlina Pay system via **Upload Document** API before making the **Create Profile** request.
-
-        Return type is `Profile` object
-      tags:
-        - Profiles
-  '/profiles/{profileId}':
-    parameters:
-      - schema:
-          type: string
-        name: profileId
-        in: path
-        required: true
-    get:
-      summary: 2. Get Profile
-      tags:
-        - Profiles
-      responses:
-        '200':
-          description: OK
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Profile'
-        '404':
-          description: Not Found
-      operationId: get-profiles-profileId
-      description: |-
-        Get a single profile by `profileId`
-
-        Return type is `Profile` object
-  /documents:
-    post:
-      summary: 1. Upload Document
-      operationId: post-documents
-      responses:
-        '200':
-          description: OK
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Document'
-      description: "Upload document to Lianlian Pay system. \nAttachments can be one of the format PDF, JPEG, or PNG. To upload a multi-page image, please use the PDF data type.\n\nReturn type is `Document` object"
-      requestBody:
-        content:
-          application/json:
-            schema:
-              type: object
-              properties:
-                name:
-                  type: string
-                  description: Document name
-                  maxLength: 128
-                size:
-                  type: integer
-                  description: Document file size
-              required:
-                - name
-                - size
-            examples: {}
-        description: ''
-      tags:
-        - Documents
-  '/documents/{documentId}':
-    parameters:
-      - schema:
-          type: string
-        name: documentId
-        in: path
-        required: true
-    get:
-      summary: 2. Get Document
-      tags:
-        - Documents
-      responses:
-        '200':
-          description: OK
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Document'
-        '404':
-          description: Not Found
-      operationId: get-documents-name
-      description: |
-        Download document file by `dcoumentId`
-
-        Return type is `Document` object
   /webhooks:
     get:
       summary: 2. Get Webhook Registration List
@@ -547,254 +245,6 @@ paths:
           in: query
           name: limit
           description: 'If nonzero, return no more than this number of results. Used with `offset` to provide pagination for large datasets. Unless otherwise specified, the maximum number of records that can be returned from an API call is 50 records'
-  '/bills/{billId}/void':
-    parameters:
-      - schema:
-          type: string
-        name: billId
-        in: path
-        required: true
-    put:
-      summary: 4. Cancel Bill
-      operationId: put-bills-billId-void
-      responses:
-        '200':
-          description: OK
-        '404':
-          description: Not Found
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Bill'
-      tags:
-        - Bills
-      description: "Cancel a previously created bill if it has not been submitted by `billId`. Any funded funds will be refunded. \n\nReturn type is `Bill` object"
-  '/bills/{billId}/submit':
-    parameters:
-      - schema:
-          type: string
-        name: billId
-        in: path
-        required: true
-    put:
-      summary: 3. Submit Bill
-      operationId: put-bills-billId-submit
-      responses:
-        '200':
-          description: OK
-        '404':
-          description: Not Found
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Bill'
-      tags:
-        - Bills
-      description: |-
-        Submit a single bill by `billId`. Lianlian Pay will start process payment to payee account(tax authority account) defined in bill details.
-
-        Return type is `Bill` object
-  '/profiles/{profileId}/reject':
-    parameters:
-      - schema:
-          type: string
-        name: profileId
-        in: path
-        required: true
-    put:
-      summary: 5. Reject Profile
-      operationId: post-profiles-profileId-fail
-      responses:
-        '200':
-          description: OK
-        '404':
-          description: Not Found
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Profile'
-      tags:
-        - Profiles
-      description: |-
-        Reject a single profile by `profileId`. Ongoing KYC process will be stopped and Lianlian Pay registration will not be started.
-
-        Return type is `Profile` object.
-  '/profiles/{profileId}/cancel':
-    parameters:
-      - schema:
-          type: string
-        name: profileId
-        in: path
-        required: true
-    put:
-      summary: 4. Cancel Profile
-      operationId: post-profiles-profileId-cancel
-      responses:
-        '200':
-          description: OK
-        '404':
-          description: Not Found
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Profile'
-      tags:
-        - Profiles
-      description: "Cancel a `ACTIVE` status profile by `profileId`. After cancellation, profile KYC periodical validation will be stopped and reserved funding will be returned. \n\nReturn type is `Profile` object."
-  '/profiles/{profileId}/approve':
-    parameters:
-      - schema:
-          type: string
-        name: profileId
-        in: path
-        required: true
-    put:
-      summary: 3. Confirm Onboard
-      operationId: post-profiles-profileId-approve
-      responses:
-        '200':
-          description: OK
-        '404':
-          description: Not Found
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Profile'
-      tags:
-        - Profiles
-      description: |-
-        Onboard a single profile and confirm to provide services by `profileId`. Lianlian Pay registration process begin.
-
-        Return type is `Profile` object
-  '/accounts/{accountId}':
-    parameters:
-      - schema:
-          type: string
-        name: accountId
-        in: path
-        required: true
-    get:
-      summary: 3. Get Account
-      tags:
-        - Accounts
-      responses:
-        '200':
-          description: OK
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Account'
-        '404':
-          description: Not Found
-      operationId: get-accounts-accountId
-      description: |-
-        Get a single Lianlian Pay account details by `accountId`.
-
-        Return type is `Account` object
-  '/profiles/{profileId}/accounts':
-    parameters:
-      - schema:
-          type: string
-        name: profileId
-        in: path
-        required: true
-    post:
-      summary: 1. Create Account
-      operationId: post-profiles-profileId-accounts
-      responses:
-        '200':
-          description: OK
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Account'
-      requestBody:
-        content:
-          application/json:
-            schema:
-              type: object
-              properties:
-                type:
-                  type: string
-                  description: Account region
-                currency:
-                  type: string
-                  description: Account currency
-                region:
-                  type: string
-                  description: Account type
-              required:
-                - currency
-                - region
-        description: ''
-      description: |-
-        Create a single Lianlian Pay account for a profile
-
-        Return type is `Account` object
-      tags:
-        - Accounts
-    get:
-      summary: 2. Get Account List
-      operationId: get-profiles-profileId-accounts
-      responses:
-        '200':
-          description: OK
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/Account'
-        '404':
-          description: Not Found
-        '':
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/Account'
-          description: OK
-      description: |-
-        Get a list of accounts of a profile. If no account has been created, empty list will be returned.
-
-        Return type is List<`Account`>
-      parameters:
-        - schema:
-            type: string
-            enum:
-              - FUNDING
-              - PAYMENT
-          in: query
-          name: type
-          description: Account types defined in Lianlina Pay system
-      tags:
-        - Accounts
-  '/bills/{billId}':
-    parameters:
-      - schema:
-          type: string
-        name: billId
-        in: path
-        required: true
-    get:
-      summary: 2. Get Bill
-      tags:
-        - Bills
-      responses:
-        '200':
-          description: OK
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Bill'
-        '404':
-          description: Not Found
-      operationId: get-profiles-profileId-bills-billId
-      description: |-
-        Get a single bill details by `billId`.
-
-        Return type is List<`Bill`>
   '/profiles/{profileId}/bills':
     parameters:
       - schema:
@@ -889,145 +339,184 @@ paths:
         Return type is `Bill` object
       tags:
         - Bills
-  '/profiles/{profileId}/reserve_amount':
+  '/bills/{billId}':
+    parameters:
+      - schema:
+          type: string
+        name: billId
+        in: path
+        required: true
+    get:
+      summary: 2. Get Bill
+      tags:
+        - Bills
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Bill'
+        '404':
+          description: Not Found
+      operationId: get-profiles-profileId-bills-billId
+      description: |-
+        Get a single bill details by `billId`.
+
+        Return type is List<`Bill`>
+  '/profiles/{profileId}/accounts':
     parameters:
       - schema:
           type: string
         name: profileId
         in: path
         required: true
+    post:
+      summary: 1. Create Account
+      operationId: post-profiles-profileId-accounts
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Account'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                type:
+                  type: string
+                  description: Account region
+                currency:
+                  type: string
+                  description: Account currency
+                region:
+                  type: string
+                  description: Account type
+              required:
+                - currency
+                - region
+        description: ''
+      description: |-
+        Create a single Lianlian Pay account for a profile
+
+        Return type is `Account` object
+      tags:
+        - Accounts
     get:
-      summary: Your GET endpoint
-      tags: []
-      responses: {}
-      operationId: get-profiles-profileId-reserve_amount
+      summary: 2. Get Account List
+      operationId: get-profiles-profileId-accounts
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Account'
+        '404':
+          description: Not Found
+        '':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Account'
+          description: OK
+      description: |-
+        Get a list of accounts of a profile. If no account has been created, empty list will be returned.
+
+        Return type is List<`Account`>
+      parameters:
+        - schema:
+            type: string
+            enum:
+              - FUNDING
+              - PAYMENT
+          in: query
+          name: type
+          description: Account types defined in Lianlina Pay system
+      tags:
+        - Accounts
+  '/accounts/{accountId}':
+    parameters:
+      - schema:
+          type: string
+        name: accountId
+        in: path
+        required: true
+    get:
+      summary: 3. Get Account
+      tags:
+        - Accounts
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Account'
+        '404':
+          description: Not Found
+      operationId: get-accounts-accountId
+      description: |-
+        Get a single Lianlian Pay account details by `accountId`.
+
+        Return type is `Account` object
+  '/bills/{billId}/submit':
+    parameters:
+      - schema:
+          type: string
+        name: billId
+        in: path
+        required: true
+    put:
+      summary: 3. Submit Bill
+      operationId: put-bills-billId-submit
+      responses:
+        '200':
+          description: OK
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Bill'
+      tags:
+        - Bills
+      description: |-
+        Submit a single bill by `billId`. Lianlian Pay will start process payment to payee account(tax authority account) defined in bill details.
+
+        Return type is `Bill` object
+  '/bills/{billId}/void':
+    parameters:
+      - schema:
+          type: string
+        name: billId
+        in: path
+        required: true
+    put:
+      summary: 4. Cancel Bill
+      operationId: put-bills-billId-void
+      responses:
+        '200':
+          description: OK
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Bill'
+      tags:
+        - Bills
+      description: "Cancel a previously created bill if it has not been submitted by `billId`. Any funded funds will be refunded. \n\nReturn type is `Bill` object"
 components:
   schemas:
-    Profile:
-      title: '| Profile Object'
-      type: object
-      description: |-
-        **Profile Object**
-        Data set of a client customer description in Lianlian Pay system.
-
-        <!-- theme: warning -->
-        > **`feedback`**
-        >
-        > feedback is used when there are actions revelent to a profile that client may need to take. Such as profile KYC information updated.
-        >
-      x-tags:
-        - Profiles
-      properties:
-        id:
-          type: string
-          description: Profile/merchant id from client system
-          minLength: 0
-          maxLength: 32
-        countryOfOrigin:
-          $ref: '#/components/schemas/Region'
-        type:
-          $ref: '#/components/schemas/Profile-Type'
-        status:
-          $ref: '#/components/schemas/Profile-Status'
-        indicator:
-          type: string
-          description: Source system
-          maxLength: 256
-        email:
-          type: string
-          description: Profile email address
-          format: email
-          pattern: abc@xyz.com
-        mobile:
-          type: string
-          description: Profile mobile number
-        kyc:
-          oneOf:
-            - $ref: '#/components/schemas/KYC-Individual'
-            - $ref: '#/components/schemas/KYC-Company'
-          description: '**KYC Object** One of the below:'
-        feedback:
-          $ref: '#/components/schemas/Error'
-      required:
-        - id
-        - countryOfOrigin
-        - type
-        - status
-        - email
-        - mobile
-    Address:
-      title: '| Address Object'
-      type: object
-      description: |-
-        **Address Object**
-        Address data set defined in Lianlian Pay system.
-      x-tags:
-        - Other
-      properties:
-        lineOne:
-          type: string
-          description: Address Line 1
-        lineTwo:
-          type: string
-          description: Address Line 2
-        city:
-          type: string
-          description: City/Town
-        province:
-          type: string
-          description: Province/State
-        region:
-          $ref: '#/components/schemas/Region'
-        postalCode:
-          type: string
-          description: Postalcde/Zipcode
-      required:
-        - lineOne
-        - city
-        - province
-        - region
-        - postalCode
-    Error:
-      title: '| Error Object'
-      type: object
-      description: Error object defined in Lianlian Pay system.
-      x-tags:
-        - Other
-      properties:
-        code:
-          type: string
-          description: Error code
-        message:
-          type: string
-          description: 'Error message '
-      required:
-        - code
-        - message
-    Document:
-      title: '| Document Object'
-      type: object
-      description: File object in Lianlian Pay system.
-      x-tags:
-        - Documents
-      properties:
-        id:
-          type: string
-          description: Document id in Lianlian Pay system
-        name:
-          type: string
-          description: Document name
-        size:
-          type: integer
-          description: Document size
-        createTime:
-          type: string
-          description: 'Document create time, UTC+0 timestamp'
-          format: date-time
-          example: '2019-01-01T00:00:00Z'
-      required:
-        - name
-        - size
-        - createTime
     Event:
       title: '| Event Object'
       type: object
@@ -1040,24 +529,37 @@ components:
           description: Event id in Lianlian Pay system
         data:
           description: Detailed event description.
-          oneOf:
-            - $ref: '#/components/schemas/Bill'
-            - $ref: '#/components/schemas/Profile'
-            - $ref: '#/components/schemas/Account'
+          required:
+            - id
+          type: object
+          properties:
+            id:
+              type: string
+              description: "Object id in Lianlian Pay's system related to this event."
+            type:
+              type: string
+              description: |-
+                Object type, one of:
+
+                | type | description |
+                |------|-------------|
+                | profile | Profile object defined in Lianlian Pay's system. Use `Get Profile` method to get the object in a event.  |
+                | account | Account object defined in Lianlian Pay's system. Use `Get Account` method to get the object in a event. |
+                | bill | Bill object defined in Lianlian Pay's system. Use `Get Bill` method to get the object in a event. |
         createTime:
           type: string
           description: 'Event created time, UTC+0 timestamp'
           format: date-time
           example: '2019-01-01T00:00:00Z'
+        type:
+          $ref: '#/components/schemas/Event-Topic'
         profileId:
           type: string
           description: Profile/merchant id from client system
-        type:
-          $ref: '#/components/schemas/Event-Topic'
       required:
         - id
-        - type
         - data
+        - type
         - profileId
     Event-Topic:
       type: string
@@ -1118,325 +620,6 @@ components:
         - isEnabled
         - type
         - createTime
-    Profile-Status:
-      title: '| Profile Status Enumeration'
-      type: string
-      description: |-
-        Profile status defined in Lianlian Pay system. One of:
-
-        | Value | Description |
-        |-------|-------------|
-        | UNDER_REVIEW | Profile KYC is in progress |
-        | ERROR | KYC error, need aditional information to complete KYC review |
-        | FAILED | KYC failed, cannot provide service |
-        | ACTIVE | KYC complete, waiting for profile to be approved |
-        | APPROVED| Profile approved |
-        | CANCELED | Profile canceled, service stopped |
-      x-tags:
-        - Profiles
-    Profile-Type:
-      title: '| Profile Type Enumeration'
-      description: |-
-        Profile type defined in Lianlian Pay system. One of:
-
-        | Value | Description |
-        |-------|-------------|
-        | COMPANY |  Company/Entity |
-        | INDIVIDUAL | Individual/Sole Trader |
-      type: string
-      x-tags:
-        - Profiles
-    Region:
-      title: '| Region Enumeration'
-      description: |
-        **Region/Country**
-
-        One of:
-
-        | Region | Description |
-        |-------|-------------|
-        | CN | China |
-        | HK | Hongkong|
-        | US | United States |
-      type: string
-      x-tags:
-        - Other
-    KYC-Individual:
-      title: '| KYC-Individual Object'
-      type: object
-      description: |
-        **KYC-Individual Object**
-        Data set of Individual KYC basic information description in Lianlian Pay system.
-      x-tags:
-        - Profiles
-      properties:
-        name:
-          type: string
-          description: Name in English
-        idNumber:
-          type: string
-          description: ID number
-        idFrontCopy:
-          type: string
-          description: "The photocopy document name of the ID front page. Supported ID types:\n\nCN \n\n| Value | Description |\n|-------|-------------|\n| IDCARD | National ID Card |\n\nHK\n\n| Value | Description |\n|-------|-------------|\n| PASSPORT | Passport |\n| IDCARD | ID Card |\n\nUS, HK\n\n| Value | Description |\n|-------|-------------|\n| PASSPORT | Passport |\n| DRIVERS_LICENSE | Drivers License |"
-        idBackCopy:
-          type: string
-          description: "The photocopy document name of the ID back page.Supported ID types:\n\nCN \n\n| Value | Description |\n|-------|-------------|\n| IDCARD | National ID Card |\n\nHK\n\n| Value | Description |\n|-------|-------------|\n| PASSPORT | Passport |\n| IDCARD | ID Card |\n\nUS, HK\n\n| Value | Description |\n|-------|-------------|\n| PASSPORT | Passport |\n| DRIVERS_LICENSE | Drivers License |"
-        address:
-          $ref: '#/components/schemas/Address'
-      required:
-        - name
-        - idFrontCopy
-        - address
-    KYC-Company:
-      title: '| KYC-Company Object'
-      type: object
-      description: |
-        **KYC-Company Object**
-        Data set of Company KYC basic information description in Lianlian Pay system.
-      x-tags:
-        - Profiles
-      properties:
-        name:
-          type: string
-          description: Entity Name in English
-        registrationNumber:
-          type: string
-          description: Registry Number/EIN Number
-        registrationCertificateCopy:
-          type: string
-          description: The photocopy document name of business registration certificate
-        registrationCertificateCopyType:
-          $ref: '#/components/schemas/Certificate-Document-Type'
-        address:
-          $ref: '#/components/schemas/Address'
-        legalRepresentative:
-          $ref: '#/components/schemas/Legal-Representative'
-      required:
-        - name
-        - registrationNumber
-        - registrationCertificateCopy
-        - registrationCertificateCopyType
-        - address
-        - legalRepresentative
-    Legal-Representative:
-      title: '| Legal-Representative Object'
-      type: object
-      description: |
-        **Legal-Representative Object**
-        Data set of Legal-Representative in Lianlian Pay system.
-      x-tags:
-        - Profiles
-      properties:
-        name:
-          type: string
-          description: "Legal representative's name in English"
-        idNumber:
-          type: string
-          description: "Legal representative's ID number"
-        idFrontCopy:
-          type: string
-          description: "The photocopy document name of legal representative's ID front page.Supported ID types:\n\nCN \n\n| Value | Description |\n|-------|-------------|\n| IDCARD | National ID Card |\n\nHK\n\n| Value | Description |\n|-------|-------------|\n| PASSPORT | Passport |\n| IDCARD | ID Card |\n\nUS, HK\n\n| Value | Description |\n|-------|-------------|\n| PASSPORT | Passport |\n| DRIVERS_LICENSE | Drivers License |"
-        idBackCopy:
-          type: string
-          description: "The photocopy document name of legal representative's ID back page.Supported ID types:\n\nCN \n\n| Value | Description |\n|-------|-------------|\n| IDCARD | National ID Card |\n\nHK\n\n| Value | Description |\n|-------|-------------|\n| PASSPORT | Passport |\n| IDCARD | ID Card |\n\nUS, HK\n\n| Value | Description |\n|-------|-------------|\n| PASSPORT | Passport |\n| DRIVERS_LICENSE | Drivers License |"
-      required:
-        - name
-        - idFrontCopy
-    Certificate-Document-Type:
-      type: string
-      title: '| Certificate Document Type Enumeration'
-      description: |-
-        Supported **Company Certificate** type, one of:
-
-        | Code | Value |
-        |------|-------|
-        |CERTIFICATE_OF_INCORPORATION| Certificate of Incorporation|
-        |TAX_DOCUMENT| Tax Document|
-        |EIN_LETTER| EIN Letter|
-        |ARTICLES_OF_ASSOCIATION| Articles of Association |
-        |BUSINESS_LICENSE| Business License |
-        |CERTIFICATE_OF_REGISTRATION| Certificate of Registration |
-      enum:
-        - CERTIFICATE_OF_INCORPORATION
-        - TAX_DOCUMENT
-        - EIN_LETTER
-        - ARTICLES_OF_ASSOCIATION
-        - BUSINESS_LICENSE
-        - CERTIFICATE_OF_REGISTRATION
-      x-tags:
-        - Profiles
-    Bank-Account-Region:
-      type: string
-      title: '| Bank Account Region Enumeration'
-      description: "Supported account regions in Lianlian Pay system. \n\n**Payment Bank Account Regions**, one of:\n\n| Region | Description |\n|--------|-------------|\n| FR | France, supported currency - EUR |\n\n\n**Payee Bank Account Regions**, one of:\n\n| Region | Description |\n|--------|-------------|\n| CZ | Czech Republic |\n| DE | Germany |\n| ES | Spain |\n| FR | France |\n| IT | Italy |\n| PO | Poland |\n| UK | United Kindom|"
-      enum:
-        - CZ
-        - DE
-        - ES
-        - FR
-        - IT
-        - PO
-        - UK
-      x-tags:
-        - Accounts
-    Bill-Status:
-      type: string
-      title: '| Bill Status Enumeration'
-      description: |-
-        Bill status defined in Lianlian Pay system. One of:
-
-        | Value | Description |
-        |-------|-------------|
-        | INIT | Bill created, waiting for procesing |
-        | CANCELED | Bill voided |
-        | COMPLETE | Bill complete |
-        | EXPIRED | Bill expired |
-        | PAYMENT_FAILED | Bill payment failed |
-      enum:
-        - INIT
-        - CANCELED
-        - COMPLETE
-        - EXPIRED
-        - PAYMENT_FAILED
-      x-tags:
-        - Bills
-    Bill-Currency:
-      type: string
-      title: '| Bill Currency Enumeration'
-      description: |-
-        Supported bill currencies in Lianlian Pay system. One of:
-
-        | Currency | Description |
-        |----------|-------------|
-        | EUR | Euro |
-      enum:
-        - EUR
-        - PLN
-        - GBP
-      x-tags:
-        - Bills
-    Bill-Region:
-      type: string
-      title: '| Bill Region Enumeration'
-      description: |-
-        Supported bill region/jurisdiction in Lianlian Pay system. One of:
-
-        | Region | Description |
-        |--------|-------------|
-        | CZ | Czech Republic |
-        | DE | Germany |
-        | ES | Spain |
-        | FR | France |
-        | IT | Italy |
-        | PO | Poland |
-        | UK | United Kindom|
-      enum:
-        - CZ
-        - DE
-        - ES
-        - FR
-        - IT
-        - PO
-        - UK
-      x-tags:
-        - Bills
-    Account-Type:
-      title: '| Account Type Enumeration'
-      type: string
-      description: |-
-        Account types provided in Lianlian Pay system. One of:
-
-        | Type | Description |
-        |-------|-------------|
-        | COLLECTING ||
-        | FUNDING | Merchant account to keep bill obligations fundings |
-        | PAYMENT | Account support direct debit, used for tax authorities of certain region/jurisdiction to pull money from |
-      x-tags:
-        - Accounts
-    Account-Currency:
-      title: '| Account Currency Enumeration'
-      type: string
-      description: "Supported account currencies in Lianlian Pay system. \n\n**Funding Account Currencies**, one of:\n\n| Currency | Description |\n|----------|-------------|\n| EUR | Euro |\n| USD | United States dollar |\n\n\n**Payment Account Currencies**, one of:\n\n| Currency | Description |\n|----------|-------------|\n| EUR | Euro |"
-      x-tags:
-        - Accounts
-    Bank-Account-Info:
-      title: '| Bank Account Info Object'
-      type: object
-      description: Bank account information details
-      x-tags:
-        - Accounts
-      properties:
-        number:
-          type: string
-          description: Account number
-        name:
-          type: string
-          description: Account name
-          maxLength: 128
-        bankName:
-          type: string
-          description: Bank name
-          maxLength: 128
-        swiftCode:
-          type: string
-          description: Bank SWIFT code
-        region:
-          $ref: '#/components/schemas/Bank-Account-Region'
-        routingNo:
-          type: string
-        sortCode:
-          type: string
-      required:
-        - number
-        - name
-        - region
-    Account:
-      title: '| Account Object'
-      type: object
-      description: "**Account Object**\nData object to describe an account in Lianlian Pay system. \nAccount such as `Funding Account` and `Payment Account`"
-      x-examples:
-        Funding Account:
-          id: '20200115123456781'
-          balance: '0.00'
-          currency: EUR
-          type: FUNDING
-        Payment Account:
-          id: '20200115123456789'
-          balance: '0.00'
-          currency: EUR
-          type: PAYMENT
-          virtualAccountInfo:
-            number: FR1234567890123
-            name: VAT Sample Account
-            bankName: FR Bank Name
-            region: FR
-            sortCode: null
-            swiftCode: FR Bank SWIFT
-            routingNo: null
-      x-tags:
-        - Accounts
-      properties:
-        balance:
-          type: string
-          description: Account balance in account currency
-          format: double
-          example: '123.45'
-          pattern: "^(([1-9]{1}\\d*)|(0{1}))(\\.\\d{2})"
-        currency:
-          $ref: '#/components/schemas/Account-Currency'
-        virtualAccountInfo:
-          $ref: '#/components/schemas/Bank-Account-Info'
-        type:
-          $ref: '#/components/schemas/Account-Type'
-        id:
-          type: string
-          description: Account id in Lianlina Pay system
-      required:
-        - balance
-        - currency
-        - type
-        - id
     Bill:
       title: '| Bill Object'
       type: object
@@ -1519,4 +702,175 @@ components:
         - status
         - isFunded
         - isPaid
+    Account:
+      title: '| Account Object'
+      type: object
+      description: "**Account Object**\nData object to describe an account in Lianlian Pay system. \nAccount such as `Funding Account` and `Payment Account`"
+      x-examples:
+        Funding Account:
+          id: '20200115123456781'
+          balance: '0.00'
+          currency: EUR
+          type: FUNDING
+        Payment Account:
+          id: '20200115123456789'
+          balance: '0.00'
+          currency: EUR
+          type: PAYMENT
+          virtualAccountInfo:
+            number: FR1234567890123
+            name: VAT Sample Account
+            bankName: FR Bank Name
+            region: FR
+            sortCode: null
+            swiftCode: FR Bank SWIFT
+            routingNo: null
+      x-tags:
+        - Accounts
+      properties:
+        balance:
+          type: string
+          description: Account balance in account currency
+          format: double
+          example: '123.45'
+          pattern: "^(([1-9]{1}\\d*)|(0{1}))(\\.\\d{2})"
+        currency:
+          $ref: '#/components/schemas/Account-Currency'
+        virtualAccountInfo:
+          $ref: '#/components/schemas/Bank-Account-Info'
+        type:
+          $ref: '#/components/schemas/Account-Type'
+        id:
+          type: string
+          description: Account id in Lianlina Pay system
+      required:
+        - balance
+        - currency
+        - type
+        - id
+    Bank-Account-Info:
+      title: '| Bank Account Info Object'
+      type: object
+      description: Bank account information details
+      x-tags:
+        - Accounts
+      properties:
+        number:
+          type: string
+          description: Account number
+        name:
+          type: string
+          description: Account name
+          maxLength: 128
+        bankName:
+          type: string
+          description: Bank name
+          maxLength: 128
+        swiftCode:
+          type: string
+          description: Bank SWIFT code
+        region:
+          $ref: '#/components/schemas/Bank-Account-Region'
+        routingNo:
+          type: string
+        sortCode:
+          type: string
+      required:
+        - number
+        - name
+        - region
+    Account-Currency:
+      title: '| Account Currency Enumeration'
+      type: string
+      description: "Supported account currencies in Lianlian Pay system. \n\n**Funding Account Currencies**, one of:\n\n| Currency | Description |\n|----------|-------------|\n| EUR | Euro |\n| USD | United States dollar |\n\n\n**Payment Account Currencies**, one of:\n\n| Currency | Description |\n|----------|-------------|\n| EUR | Euro |"
+      x-tags:
+        - Accounts
+    Account-Type:
+      title: '| Account Type Enumeration'
+      type: string
+      description: |-
+        Account types provided in Lianlian Pay system. One of:
+
+        | Type | Description |
+        |-------|-------------|
+        | COLLECTING ||
+        | FUNDING | Merchant account to keep bill obligations fundings |
+        | PAYMENT | Account support direct debit, used for tax authorities of certain region/jurisdiction to pull money from |
+      x-tags:
+        - Accounts
+    Bill-Region:
+      type: string
+      title: '| Bill Region Enumeration'
+      description: |-
+        Supported bill region/jurisdiction in Lianlian Pay system. One of:
+
+        | Region | Description |
+        |--------|-------------|
+        | CZ | Czech Republic |
+        | DE | Germany |
+        | ES | Spain |
+        | FR | France |
+        | IT | Italy |
+        | PO | Poland |
+        | UK | United Kindom|
+      enum:
+        - CZ
+        - DE
+        - ES
+        - FR
+        - IT
+        - PO
+        - UK
+      x-tags:
+        - Bills
+    Bill-Currency:
+      type: string
+      title: '| Bill Currency Enumeration'
+      description: |-
+        Supported bill currencies in Lianlian Pay system. One of:
+
+        | Currency | Description |
+        |----------|-------------|
+        | EUR | Euro |
+      enum:
+        - EUR
+        - PLN
+        - GBP
+      x-tags:
+        - Bills
+    Bill-Status:
+      type: string
+      title: '| Bill Status Enumeration'
+      description: |-
+        Bill status defined in Lianlian Pay system. One of:
+
+        | Value | Description |
+        |-------|-------------|
+        | INIT | Bill created, waiting for procesing |
+        | CANCELED | Bill voided |
+        | COMPLETE | Bill complete |
+        | EXPIRED | Bill expired |
+        | PAYMENT_FAILED | Bill payment failed |
+      enum:
+        - INIT
+        - CANCELED
+        - COMPLETE
+        - EXPIRED
+        - PAYMENT_FAILED
+      x-tags:
+        - Bills
+    Bank-Account-Region:
+      type: string
+      title: '| Bank Account Region Enumeration'
+      description: "Supported account regions in Lianlian Pay system. \n\n**Payment Bank Account Regions**, one of:\n\n| Region | Description |\n|--------|-------------|\n| FR | France, supported currency - EUR |\n\n\n**Payee Bank Account Regions**, one of:\n\n| Region | Description |\n|--------|-------------|\n| CZ | Czech Republic |\n| DE | Germany |\n| ES | Spain |\n| FR | France |\n| IT | Italy |\n| PO | Poland |\n| UK | United Kindom|"
+      enum:
+        - CZ
+        - DE
+        - ES
+        - FR
+        - IT
+        - PO
+        - UK
+      x-tags:
+        - Accounts
   securitySchemes: {}
