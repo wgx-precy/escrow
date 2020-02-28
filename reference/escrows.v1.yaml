@@ -139,7 +139,7 @@ paths:
                   description: Webhook On/Off flag
                 url:
                   type: string
-                  description: Webhook callback urk
+                  description: Webhook callback url
                 topics:
                   type: array
                   description: Webhook event topics.
