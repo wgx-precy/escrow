@@ -401,7 +401,7 @@ paths:
 
         Return type is List<`Bill`>
     put:
-      summary: 3. Submit Bill
+      summary: 3. Approve Bill
       operationId: put-bills-billId
       responses:
         '200':
@@ -441,7 +441,7 @@ paths:
       description: 'Cancel a previously created bill if it has not been submitted by `billId`. Any funded funds will be refunded. '
       tags:
         - Bills
-  '/profiles/{profileId}/accounts':
+  '/profiles/{profileId}/payments':
     parameters:
       - schema:
           type: string
@@ -449,7 +449,7 @@ paths:
         in: path
         required: true
     post:
-      summary: 1. Create Account
+      summary: 1. Create Payment Account
       operationId: post-profiles-profileId-accounts
       responses:
         '200':
@@ -464,18 +464,6 @@ paths:
             schema:
               type: object
               properties:
-                type:
-                  type: string
-                  description: |-
-                    Account types provided in Lianlian Pay's system. One of:
-
-                    | Type | Description |
-                    |-------|-------------|
-                    | COLLECTION | Accounts issued by Lianlian Pay to receive tax returns from tax authorities |
-                    | PAYMENT | Account support direct debit, used for tax authorities of certain region/jurisdiction to pull money from |
-                  enum:
-                    - PAYMENT
-                    - COLLECTION
                 currency:
                   type: string
                   description: "Supported account currencies in Lianlian Pay's system. \n\n**Payment Account Currencies**, one of:\n\n| Currency | Description |\n|----------|-------------|\n| EUR | Euro |"
@@ -487,7 +475,6 @@ paths:
                   enum:
                     - FR
               required:
-                - type
                 - currency
                 - region
         description: ''
@@ -495,43 +482,6 @@ paths:
         Create a single Lianlian Pay account for a profile
 
         Return type is `Account` object
-      tags:
-        - Accounts
-    get:
-      summary: 2. Get Account List
-      operationId: get-profiles-profileId-accounts
-      responses:
-        '200':
-          description: OK
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/Account'
-        '404':
-          description: Not Found
-        '':
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/Account'
-          description: OK
-      description: |-
-        Get a list of accounts of a profile. If no account has been created, empty list will be returned.
-
-        Return type is List<`Account`>
-      parameters:
-        - schema:
-            type: string
-            enum:
-              - FUNDING
-              - PAYMENT
-          in: query
-          name: type
-          description: Account types defined in Lianlina Pay system
       tags:
         - Accounts
   '/accounts/{accountId}':
@@ -542,7 +492,7 @@ paths:
         in: path
         required: true
     get:
-      summary: 3. Get Account
+      summary: 2. Get Account
       tags:
         - Accounts
       responses:
@@ -567,7 +517,7 @@ paths:
         in: path
         required: true
     get:
-      summary: 1. Get Profile Funding Balance
+      summary: 3. Get Profile Funding Account Balance
       responses:
         '200':
           description: OK
@@ -581,7 +531,7 @@ paths:
 
         Return type is `Funding` object
       tags:
-        - Fundings
+        - Accounts
 components:
   schemas:
     Event:
@@ -829,11 +779,9 @@ components:
 
             | Type | Description |
             |-------|-------------|
-            | COLLECTION | Accounts issued by Lianlian Pay to receive tax returns from tax authorities |
             | PAYMENT | Accounts support direct debit, used for tax authorities of certain region/jurisdiction to pull money from |
           enum:
             - PAYMENT
-            - COLLECTION
         id:
           type: string
           description: Account id in Lianlina Pay system
@@ -927,29 +875,6 @@ components:
         - UK
       x-tags:
         - Accounts
-    Funding:
-      title: Funding
-      type: object
-      x-tags:
-        - Fundings
-      description: "Object defined in Lianlian Pay's system to describe a single profile's internal bill funding account.  "
-      properties:
-        currency:
-          type: string
-          description: |-
-            Funding account currency, one of:
-
-            | currency | description |
-            |----------|-------------|
-            | EUR | Euro |
-          enum:
-            - EUR
-        balance:
-          type: string
-          description: Funding acocunt balance
-      required:
-        - currency
-        - balance
     Error:
       title: Error Object
       type: object
