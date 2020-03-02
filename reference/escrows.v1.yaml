@@ -559,6 +559,29 @@ paths:
         Get a single Lianlian Pay account details by `accountId`.
 
         Return type is `Account` object
+  '/profiles/{profileId}/funding':
+    parameters:
+      - schema:
+          type: string
+        name: profileId
+        in: path
+        required: true
+    get:
+      summary: 4. Get Profile Funding Balance
+      tags:
+        - Accounts
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Funding'
+      operationId: get-profiles-profileId-funding
+      description: |-
+        Get the funding account balance of a single profile by `profileId`.
+
+        Return type is `Funding` object
 components:
   schemas:
     Event:
@@ -801,11 +824,12 @@ components:
 
             | Type | Description |
             |-------|-------------|
-            | COLLECTION | |
-            | PAYMENT | Account support direct debit, used for tax authorities of certain region/jurisdiction to pull money from |
+            | COLLECTION | Accounts issued by Lianlian Pay to receive tax returns from tax authorities |
+            | PAYMENT | Accounts support direct debit, used for tax authorities of certain region/jurisdiction to pull money from |
           enum:
             - PAYMENT
             - COLLECTION
+            - FUNDING
         id:
           type: string
           description: Account id in Lianlina Pay system
@@ -899,4 +923,27 @@ components:
         - UK
       x-tags:
         - Accounts
+    Funding:
+      title: Funding
+      type: object
+      x-tags:
+        - Fundings
+      description: "Object defined in Lianlian Pay's system to describe a single profile's internal bill funding account.  "
+      properties:
+        currency:
+          type: string
+          description: |-
+            Funding account currency, one of:
+
+            | currency | description |
+            |----------|-------------|
+            | EUR | Euro |
+          enum:
+            - EUR
+        balance:
+          type: string
+          description: Funding acocunt balance
+      required:
+        - currency
+        - balance
   securitySchemes: {}
