@@ -68,15 +68,14 @@ paths:
                   type: array
                   description: Webhook event topics.
                   enum:
-                    - account.paymentaccount.created
+                    - paymentaccount.created
                     - bill.funded
                     - bill.paid
                     - bill.canceled
                     - bill.expired
-                    - profile.failed
-                    - profile.active
-                    - profile.error
-                    - profile.rar.complete
+                    - bill.expired
+                    - reconciliation.billReport
+                    - reconciliation.fundingAccountBalance
                   uniqueItems: true
                   items:
                     type: string
@@ -143,15 +142,14 @@ paths:
                   type: array
                   description: Webhook event topics.
                   enum:
-                    - account.paymentaccount.created
+                    - paymentaccount.created
                     - bill.funded
                     - bill.paid
                     - bill.canceled
                     - bill.expired
-                    - profile.failed
-                    - profile.active
-                    - profile.error
-                    - profile.rar.complete
+                    - bill.expired
+                    - reconciliation.billReport
+                    - reconciliation.fundingAccountBalance
                   uniqueItems: true
                   items:
                     type: string
@@ -599,11 +597,14 @@ components:
 
         | Topic | Description |
         |--------|------------|
-        | account.paymentaccount.created | Payment account created in Lianlian Pay system. Return data `Account` object. |
+        | paymentaccount.created | Payment account created in Lianlian Pay system. Return data `Account` object. |
         | bill.funded | Bill fully funded, `Bill.isFullyFunded` equals `true`. Return data `Bill` object.  |
         | bill.paid | Bill paid, after receiving payment request(Submit Bill), Lianlian Pay made payment to bill payee. `Bill.ispaid` equals `false`. Return data `Bill` object. |
         | bill.canceled | After receiving void bill request, Lianlian Pay canceled the bill. Return data `Bill` object. |
         | bill.expired | No funding or short funding after bill expiration date. Return data `Bill` object. |
+        | bill.expired | No funding or short funding after bill expiration date. Return data `Bill` object. |
+        | reconciliation.billReport | Avalara bill report generated |
+        | reconciliation.fundingAccountBalance | Customer funding account balance report generated |
       x-tags:
         - Events
     Webhook:
@@ -860,17 +861,17 @@ components:
         |-------|-------------|
         | INIT | Bill created, waiting for processing |
         | EXPIRED | Bill expired |
+        | FUNDED | Bill funded |
         | CANCELED | Bill canceled|
-        | COMPLETE | Bill complete |
+        | PAID | Bill paid to its payee |
         | PAYMENT_FAILED | Bill payment failed |
       enum:
         - INIT
         - CANCELED
-        - COMPLETE
         - EXPIRED
         - PAYMENT_FAILED
-      x-tags:
-        - Bills
+        - PAID
+        - FUNDED
     Bank-Account-Region:
       type: string
       title: '| Bank Account Region Enumeration'
