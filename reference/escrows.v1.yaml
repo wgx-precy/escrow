@@ -471,7 +471,7 @@ paths:
 
                     | Type | Description |
                     |-------|-------------|
-                    | COLLECTION | |
+                    | COLLECTION | Accounts issued by Lianlian Pay to receive tax returns from tax authorities |
                     | PAYMENT | Account support direct debit, used for tax authorities of certain region/jurisdiction to pull money from |
                   enum:
                     - PAYMENT
@@ -567,9 +567,7 @@ paths:
         in: path
         required: true
     get:
-      summary: 4. Get Profile Funding Balance
-      tags:
-        - Accounts
+      summary: 1. Get Profile Funding Balance
       responses:
         '200':
           description: OK
@@ -582,6 +580,8 @@ paths:
         Get the funding account balance of a single profile by `profileId`.
 
         Return type is `Funding` object
+      tags:
+        - Fundings
 components:
   schemas:
     Event:
@@ -731,7 +731,7 @@ components:
           format: date-time
           example: '2019-01-01T00:00:00Z'
         payee:
-          $ref: '#/components/schemas/Bank-Account-Info'
+          $ref: '#/components/schemas/Bank-Account-Details'
         createTime:
           type: string
           description: 'Bill created time, UTC+0 timestamp'
@@ -816,7 +816,7 @@ components:
             - EUR
             - USD
         virtualAccountInfo:
-          $ref: '#/components/schemas/Bank-Account-Info'
+          $ref: '#/components/schemas/Bank-Account-Details'
         type:
           type: string
           description: |-
@@ -829,7 +829,6 @@ components:
           enum:
             - PAYMENT
             - COLLECTION
-            - FUNDING
         id:
           type: string
           description: Account id in Lianlina Pay system
@@ -838,8 +837,8 @@ components:
         - currency
         - type
         - id
-    Bank-Account-Info:
-      title: '| Bank Account Info Object'
+    Bank-Account-Details:
+      title: '| Bank Account Details Object'
       type: object
       description: Bank account information details
       x-tags:
