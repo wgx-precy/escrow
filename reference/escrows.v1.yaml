@@ -766,6 +766,11 @@ components:
         memo:
           type: string
           maxLength: 512
+        feedback:
+          type: array
+          description: Error information details if applicable
+          items:
+            $ref: '#/components/schemas/Error'
       required:
         - id
         - jurisdiction
@@ -896,9 +901,9 @@ components:
         | Value | Description |
         |-------|-------------|
         | INIT | Bill created, waiting for procesing |
-        | CANCELED | Bill voided |
-        | COMPLETE | Bill complete |
         | EXPIRED | Bill expired |
+        | CANCELED | Bill canceled|
+        | COMPLETE | Bill complete |
         | PAYMENT_FAILED | Bill payment failed |
       enum:
         - INIT
@@ -945,4 +950,20 @@ components:
       required:
         - currency
         - balance
+    Error:
+      title: Error Object
+      type: object
+      x-tags:
+        - Error
+      description: "Error object defined in Lianlian Pay's system."
+      properties:
+        code:
+          type: string
+          description: Error code
+        message:
+          type: string
+          description: Error message
+      required:
+        - code
+        - message
   securitySchemes: {}
