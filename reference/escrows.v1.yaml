@@ -332,13 +332,21 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Profile'
+                type: object
+                properties:
+                  id:
+                    type: string
+                    description: "Profile id from Avalara's system"
+                  status:
+                    type: string
+                    description: Profile status
+                    enum:
+                      - APPROVED
+                required:
+                  - id
+                  - status
         '404':
           description: Not Found
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Profile'
       tags:
         - Profiles
       description: "Onboard a single profile by `profileID` and ready to provide VAT services. \n\nReturn type is `Profile` object"
@@ -348,6 +356,22 @@ paths:
       responses:
         '200':
           description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: string
+                    description: "Profile id from Avalara's system"
+                  status:
+                    type: string
+                    description: Profile status
+                    enum:
+                      - CANCELED
+                required:
+                  - id
+                  - status
       description: "Cancel a `ACTIVE` status profile by `profileId`. After cancellation, profile KYC periodical validation will be stopped and reserved funding will be returned. \n\nReturn type is `Profile` object."
       tags:
         - Profiles
@@ -918,7 +942,7 @@ components:
       properties:
         id:
           type: string
-          description: Profile/merchant id from client system
+          description: "Profile id from Avalara's system"
           minLength: 0
           maxLength: 32
         countryOfOrigin:
