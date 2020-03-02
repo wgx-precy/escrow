@@ -261,182 +261,6 @@ paths:
           in: query
           name: limit
           description: 'If nonzero, return no more than this number of results. Used with `offset` to provide pagination for large datasets. Unless otherwise specified, the maximum number of records that can be returned from an API call is 50 records'
-  '/bills/{billId}/void':
-    parameters:
-      - schema:
-          type: string
-        name: billId
-        in: path
-        required: true
-    put:
-      summary: 4. Cancel Bill
-      operationId: put-bills-billId-void
-      responses:
-        '200':
-          description: OK
-        '404':
-          description: Not Found
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Bill'
-      tags:
-        - Bills
-      description: "Cancel a previously created bill if it has not been submitted by `billId`. Any funded funds will be refunded. \n\nReturn type is `Bill` object"
-  '/bills/{billId}/submit':
-    parameters:
-      - schema:
-          type: string
-        name: billId
-        in: path
-        required: true
-    put:
-      summary: 3. Submit Bill
-      operationId: put-bills-billId-submit
-      responses:
-        '200':
-          description: OK
-        '404':
-          description: Not Found
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Bill'
-      tags:
-        - Bills
-      description: |-
-        Submit a single bill by `billId`. Lianlian Pay will start process payment to payee account(tax authority account) defined in bill details.
-
-        Return type is `Bill` object
-  '/accounts/{accountId}':
-    parameters:
-      - schema:
-          type: string
-        name: accountId
-        in: path
-        required: true
-    get:
-      summary: 3. Get Account
-      tags:
-        - Accounts
-      responses:
-        '200':
-          description: OK
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Account'
-        '404':
-          description: Not Found
-      operationId: get-accounts-accountId
-      description: |-
-        Get a single Lianlian Pay account details by `accountId`.
-
-        Return type is `Account` object
-  '/profiles/{profileId}/accounts':
-    parameters:
-      - schema:
-          type: string
-        name: profileId
-        in: path
-        required: true
-    post:
-      summary: 1. Create Account
-      operationId: post-profiles-profileId-accounts
-      responses:
-        '200':
-          description: OK
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Account'
-      requestBody:
-        content:
-          application/json:
-            schema:
-              type: object
-              properties:
-                type:
-                  type: string
-                  description: Account region
-                currency:
-                  type: string
-                  description: Account currency
-                region:
-                  type: string
-                  description: Account type
-              required:
-                - currency
-                - region
-        description: ''
-      description: |-
-        Create a single Lianlian Pay account for a profile
-
-        Return type is `Account` object
-      tags:
-        - Accounts
-    get:
-      summary: 2. Get Account List
-      operationId: get-profiles-profileId-accounts
-      responses:
-        '200':
-          description: OK
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/Account'
-        '404':
-          description: Not Found
-        '':
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/Account'
-          description: OK
-      description: |-
-        Get a list of accounts of a profile. If no account has been created, empty list will be returned.
-
-        Return type is List<`Account`>
-      parameters:
-        - schema:
-            type: string
-            enum:
-              - FUNDING
-              - PAYMENT
-          in: query
-          name: type
-          description: Account types defined in Lianlina Pay system
-      tags:
-        - Accounts
-  '/bills/{billId}':
-    parameters:
-      - schema:
-          type: string
-        name: billId
-        in: path
-        required: true
-    get:
-      summary: 2. Get Bill
-      tags:
-        - Bills
-      responses:
-        '200':
-          description: OK
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Bill'
-        '404':
-          description: Not Found
-      operationId: get-profiles-profileId-bills-billId
-      description: |-
-        Get a single bill details by `billId`.
-
-        Return type is List<`Bill`>
   '/profiles/{profileId}/bills':
     parameters:
       - schema:
@@ -531,6 +355,176 @@ paths:
         Return type is `Bill` object
       tags:
         - Bills
+  '/bills/{billId}':
+    parameters:
+      - schema:
+          type: string
+        name: billId
+        in: path
+        required: true
+    get:
+      summary: 4. Get Bill
+      tags:
+        - Bills
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Bill'
+        '404':
+          description: Not Found
+      operationId: get-profiles-profileId-bills-billId
+      description: |-
+        Get a single bill details by `billId`.
+
+        Return type is List<`Bill`>
+    put:
+      summary: 3. Submit Bill
+      operationId: put-bills-billId
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Bill'
+      tags:
+        - Bills
+      description: |-
+        Submit a single bill by `billId`. Lianlian Pay will start process payment to payee account(tax authority account) defined in bill details.
+
+        Return type is `Bill` object
+    delete:
+      summary: 4. Cancel Bill
+      operationId: delete-bills-billId
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: string
+                    description: "Bill id from Avalara's system"
+                  status:
+                    type: string
+                    description: "Bill status in Lianlian Pay's system."
+                    enum:
+                      - CANCELED
+                required:
+                  - id
+                  - status
+      description: 'Cancel a previously created bill if it has not been submitted by `billId`. Any funded funds will be refunded. '
+      tags:
+        - Bills
+  '/profiles/{profileId}/accounts':
+    parameters:
+      - schema:
+          type: string
+        name: profileId
+        in: path
+        required: true
+    post:
+      summary: 1. Create Account
+      operationId: post-profiles-profileId-accounts
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Account'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                type:
+                  type: string
+                  description: Account region
+                currency:
+                  type: string
+                  description: Account currency
+                region:
+                  type: string
+                  description: Account type
+              required:
+                - currency
+                - region
+        description: ''
+      description: |-
+        Create a single Lianlian Pay account for a profile
+
+        Return type is `Account` object
+      tags:
+        - Accounts
+    get:
+      summary: 2. Get Account List
+      operationId: get-profiles-profileId-accounts
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Account'
+        '404':
+          description: Not Found
+        '':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Account'
+          description: OK
+      description: |-
+        Get a list of accounts of a profile. If no account has been created, empty list will be returned.
+
+        Return type is List<`Account`>
+      parameters:
+        - schema:
+            type: string
+            enum:
+              - FUNDING
+              - PAYMENT
+          in: query
+          name: type
+          description: Account types defined in Lianlina Pay system
+      tags:
+        - Accounts
+  '/accounts/{accountId}':
+    parameters:
+      - schema:
+          type: string
+        name: accountId
+        in: path
+        required: true
+    get:
+      summary: 3. Get Account
+      tags:
+        - Accounts
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Account'
+        '404':
+          description: Not Found
+      operationId: get-accounts-accountId
+      description: |-
+        Get a single Lianlian Pay account details by `accountId`.
+
+        Return type is `Account` object
 components:
   schemas:
     Event:
@@ -567,11 +561,11 @@ components:
           description: 'Event created time, UTC+0 timestamp'
           format: date-time
           example: '2019-01-01T00:00:00Z'
+        type:
+          $ref: '#/components/schemas/Event-Topic'
         profileId:
           type: string
           description: Profile/merchant id from client system
-        type:
-          $ref: '#/components/schemas/Event-Topic'
       required:
         - id
         - data
@@ -636,177 +630,6 @@ components:
         - isEnabled
         - type
         - createTime
-    Bank-Account-Region:
-      type: string
-      title: '| Bank Account Region Enumeration'
-      description: "Supported account regions in Lianlian Pay system. \n\n**Payment Bank Account Regions**, one of:\n\n| Region | Description |\n|--------|-------------|\n| FR | France, supported currency - EUR |\n\n\n**Payee Bank Account Regions**, one of:\n\n| Region | Description |\n|--------|-------------|\n| CZ | Czech Republic |\n| DE | Germany |\n| ES | Spain |\n| FR | France |\n| IT | Italy |\n| PO | Poland |\n| UK | United Kindom|"
-      enum:
-        - CZ
-        - DE
-        - ES
-        - FR
-        - IT
-        - PO
-        - UK
-      x-tags:
-        - Accounts
-    Bill-Status:
-      type: string
-      title: '| Bill Status Enumeration'
-      description: |-
-        Bill status defined in Lianlian Pay system. One of:
-
-        | Value | Description |
-        |-------|-------------|
-        | INIT | Bill created, waiting for procesing |
-        | CANCELED | Bill voided |
-        | COMPLETE | Bill complete |
-        | EXPIRED | Bill expired |
-        | PAYMENT_FAILED | Bill payment failed |
-      enum:
-        - INIT
-        - CANCELED
-        - COMPLETE
-        - EXPIRED
-        - PAYMENT_FAILED
-      x-tags:
-        - Bills
-    Bill-Currency:
-      type: string
-      title: '| Bill Currency Enumeration'
-      description: |-
-        Supported bill currencies in Lianlian Pay system. One of:
-
-        | Currency | Description |
-        |----------|-------------|
-        | EUR | Euro |
-      enum:
-        - EUR
-        - PLN
-        - GBP
-      x-tags:
-        - Bills
-    Bill-Region:
-      type: string
-      title: '| Bill Region Enumeration'
-      description: |-
-        Supported bill region/jurisdiction in Lianlian Pay system. One of:
-
-        | Region | Description |
-        |--------|-------------|
-        | CZ | Czech Republic |
-        | DE | Germany |
-        | ES | Spain |
-        | FR | France |
-        | IT | Italy |
-        | PO | Poland |
-        | UK | United Kindom|
-      enum:
-        - CZ
-        - DE
-        - ES
-        - FR
-        - IT
-        - PO
-        - UK
-      x-tags:
-        - Bills
-    Account-Type:
-      title: '| Account Type Enumeration'
-      type: string
-      description: |-
-        Account types provided in Lianlian Pay system. One of:
-
-        | Type | Description |
-        |-------|-------------|
-        | COLLECTING ||
-        | FUNDING | Merchant account to keep bill obligations fundings |
-        | PAYMENT | Account support direct debit, used for tax authorities of certain region/jurisdiction to pull money from |
-      x-tags:
-        - Accounts
-    Account-Currency:
-      title: '| Account Currency Enumeration'
-      type: string
-      description: "Supported account currencies in Lianlian Pay system. \n\n**Funding Account Currencies**, one of:\n\n| Currency | Description |\n|----------|-------------|\n| EUR | Euro |\n| USD | United States dollar |\n\n\n**Payment Account Currencies**, one of:\n\n| Currency | Description |\n|----------|-------------|\n| EUR | Euro |"
-      x-tags:
-        - Accounts
-    Bank-Account-Info:
-      title: '| Bank Account Info Object'
-      type: object
-      description: Bank account information details
-      x-tags:
-        - Accounts
-      properties:
-        number:
-          type: string
-          description: Account number
-        name:
-          type: string
-          description: Account name
-          maxLength: 128
-        bankName:
-          type: string
-          description: Bank name
-          maxLength: 128
-        swiftCode:
-          type: string
-          description: Bank SWIFT code
-        region:
-          $ref: '#/components/schemas/Bank-Account-Region'
-        routingNo:
-          type: string
-        sortCode:
-          type: string
-      required:
-        - number
-        - name
-        - region
-    Account:
-      title: '| Account Object'
-      type: object
-      description: "**Account Object**\nData object to describe an account in Lianlian Pay system. \nAccount such as `Funding Account` and `Payment Account`"
-      x-examples:
-        Funding Account:
-          id: '20200115123456781'
-          balance: '0.00'
-          currency: EUR
-          type: FUNDING
-        Payment Account:
-          id: '20200115123456789'
-          balance: '0.00'
-          currency: EUR
-          type: PAYMENT
-          virtualAccountInfo:
-            number: FR1234567890123
-            name: VAT Sample Account
-            bankName: FR Bank Name
-            region: FR
-            sortCode: null
-            swiftCode: FR Bank SWIFT
-            routingNo: null
-      x-tags:
-        - Accounts
-      properties:
-        balance:
-          type: string
-          description: Account balance in account currency
-          format: double
-          example: '123.45'
-          pattern: "^(([1-9]{1}\\d*)|(0{1}))(\\.\\d{2})"
-        currency:
-          $ref: '#/components/schemas/Account-Currency'
-        virtualAccountInfo:
-          $ref: '#/components/schemas/Bank-Account-Info'
-        type:
-          $ref: '#/components/schemas/Account-Type'
-        id:
-          type: string
-          description: Account id in Lianlina Pay system
-      required:
-        - balance
-        - currency
-        - type
-        - id
     Bill:
       title: '| Bill Object'
       type: object
@@ -889,4 +712,175 @@ components:
         - status
         - isFunded
         - isPaid
+    Account:
+      title: '| Account Object'
+      type: object
+      description: "**Account Object**\nData object to describe an account in Lianlian Pay system. \nAccount such as `Funding Account` and `Payment Account`"
+      x-examples:
+        Funding Account:
+          id: '20200115123456781'
+          balance: '0.00'
+          currency: EUR
+          type: FUNDING
+        Payment Account:
+          id: '20200115123456789'
+          balance: '0.00'
+          currency: EUR
+          type: PAYMENT
+          virtualAccountInfo:
+            number: FR1234567890123
+            name: VAT Sample Account
+            bankName: FR Bank Name
+            region: FR
+            sortCode: null
+            swiftCode: FR Bank SWIFT
+            routingNo: null
+      x-tags:
+        - Accounts
+      properties:
+        balance:
+          type: string
+          description: Account balance in account currency
+          format: double
+          example: '123.45'
+          pattern: "^(([1-9]{1}\\d*)|(0{1}))(\\.\\d{2})"
+        currency:
+          $ref: '#/components/schemas/Account-Currency'
+        virtualAccountInfo:
+          $ref: '#/components/schemas/Bank-Account-Info'
+        type:
+          $ref: '#/components/schemas/Account-Type'
+        id:
+          type: string
+          description: Account id in Lianlina Pay system
+      required:
+        - balance
+        - currency
+        - type
+        - id
+    Bank-Account-Info:
+      title: '| Bank Account Info Object'
+      type: object
+      description: Bank account information details
+      x-tags:
+        - Accounts
+      properties:
+        number:
+          type: string
+          description: Account number
+        name:
+          type: string
+          description: Account name
+          maxLength: 128
+        bankName:
+          type: string
+          description: Bank name
+          maxLength: 128
+        swiftCode:
+          type: string
+          description: Bank SWIFT code
+        region:
+          $ref: '#/components/schemas/Bank-Account-Region'
+        routingNo:
+          type: string
+        sortCode:
+          type: string
+      required:
+        - number
+        - name
+        - region
+    Account-Currency:
+      title: '| Account Currency Enumeration'
+      type: string
+      description: "Supported account currencies in Lianlian Pay system. \n\n**Funding Account Currencies**, one of:\n\n| Currency | Description |\n|----------|-------------|\n| EUR | Euro |\n| USD | United States dollar |\n\n\n**Payment Account Currencies**, one of:\n\n| Currency | Description |\n|----------|-------------|\n| EUR | Euro |"
+      x-tags:
+        - Accounts
+    Account-Type:
+      title: '| Account Type Enumeration'
+      type: string
+      description: |-
+        Account types provided in Lianlian Pay system. One of:
+
+        | Type | Description |
+        |-------|-------------|
+        | COLLECTING ||
+        | FUNDING | Merchant account to keep bill obligations fundings |
+        | PAYMENT | Account support direct debit, used for tax authorities of certain region/jurisdiction to pull money from |
+      x-tags:
+        - Accounts
+    Bill-Region:
+      type: string
+      title: '| Bill Region Enumeration'
+      description: |-
+        Supported bill region/jurisdiction in Lianlian Pay system. One of:
+
+        | Region | Description |
+        |--------|-------------|
+        | CZ | Czech Republic |
+        | DE | Germany |
+        | ES | Spain |
+        | FR | France |
+        | IT | Italy |
+        | PO | Poland |
+        | UK | United Kindom|
+      enum:
+        - CZ
+        - DE
+        - ES
+        - FR
+        - IT
+        - PO
+        - UK
+      x-tags:
+        - Bills
+    Bill-Currency:
+      type: string
+      title: '| Bill Currency Enumeration'
+      description: |-
+        Supported bill currencies in Lianlian Pay system. One of:
+
+        | Currency | Description |
+        |----------|-------------|
+        | EUR | Euro |
+      enum:
+        - EUR
+        - PLN
+        - GBP
+      x-tags:
+        - Bills
+    Bill-Status:
+      type: string
+      title: '| Bill Status Enumeration'
+      description: |-
+        Bill status defined in Lianlian Pay system. One of:
+
+        | Value | Description |
+        |-------|-------------|
+        | INIT | Bill created, waiting for procesing |
+        | CANCELED | Bill voided |
+        | COMPLETE | Bill complete |
+        | EXPIRED | Bill expired |
+        | PAYMENT_FAILED | Bill payment failed |
+      enum:
+        - INIT
+        - CANCELED
+        - COMPLETE
+        - EXPIRED
+        - PAYMENT_FAILED
+      x-tags:
+        - Bills
+    Bank-Account-Region:
+      type: string
+      title: '| Bank Account Region Enumeration'
+      description: "Supported account regions in Lianlian Pay system. \n\n**Payment Bank Account Regions**, one of:\n\n| Region | Description |\n|--------|-------------|\n| FR | France, supported currency - EUR |\n\n\n**Payee Bank Account Regions**, one of:\n\n| Region | Description |\n|--------|-------------|\n| CZ | Czech Republic |\n| DE | Germany |\n| ES | Spain |\n| FR | France |\n| IT | Italy |\n| PO | Poland |\n| UK | United Kindom|"
+      enum:
+        - CZ
+        - DE
+        - ES
+        - FR
+        - IT
+        - PO
+        - UK
+      x-tags:
+        - Accounts
   securitySchemes: {}
