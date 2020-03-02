@@ -541,6 +541,7 @@ components:
           description: Detailed event description.
           type: object
           required:
+            - type
             - id
           properties:
             type:
@@ -550,9 +551,11 @@ components:
 
                 | type | description |
                 |------|-------------|
-                | profile | Profile object defined in Lianlian Pay's system. Use `Get Profile` method to get the object in a event.  |
                 | account | Account object defined in Lianlian Pay's system. Use `Get Account` method to get the object in a event. |
                 | bill | Bill object defined in Lianlian Pay's system. Use `Get Bill` method to get the object in a event. |
+              enum:
+                - bill
+                - account
             id:
               type: string
               description: "Object id in Lianlian Pay's system related to this event."
@@ -561,7 +564,7 @@ components:
           description: 'Event created time, UTC+0 timestamp'
           format: date-time
           example: '2019-01-01T00:00:00Z'
-        type:
+        topic:
           $ref: '#/components/schemas/Event-Topic'
         profileId:
           type: string
@@ -569,7 +572,7 @@ components:
       required:
         - id
         - data
-        - type
+        - topic
         - profileId
     Event-Topic:
       type: string
@@ -584,10 +587,6 @@ components:
         | bill.paid | Bill paid, after receiving payment request(Submit Bill), Lianlian Pay made payment to bill payee. `Bill.ispaid` equals `false`. Return data `Bill` object. |
         | bill.canceled | After receiving void bill request, Lianlian Pay canceled the bill. Return data `Bill` object. |
         | bill.expired | No funding or short funding after bill expiration date. Return data `Bill` object. |
-        | profile.failed | Profile KYC failed, Lianlian Pay cannot provide service to this profile. Return data `Profile` object. |
-        | profile.active | Profile KYC passed, profile active in Lianlian Pay system. Return data `Profile` object.  |
-        | profile.error | Profile KYC error, need more information to complete Lianlian Pay KYC. Detailed information can be found in `Profile.feedback`. Return type `Profile` object.  |
-        | profile.rar.complete | Profile KYC Risk Assessment Report complete. Return data `Document` object  |
       x-tags:
         - Events
     Webhook:
@@ -644,7 +643,15 @@ components:
         region:
           $ref: '#/components/schemas/Bill-Region'
         currency:
-          $ref: '#/components/schemas/Bill-Currency'
+          type: string
+          description: |-
+            Supported bill currencies in Lianlian Pay's system. One of:
+
+            | Currency | Description |
+            |----------|-------------|
+            | EUR | Euro |
+          enum:
+            - EUR
         amount:
           type: string
           description: bill(obligation) amount
@@ -749,7 +756,19 @@ components:
         virtualAccountInfo:
           $ref: '#/components/schemas/Bank-Account-Info'
         type:
-          $ref: '#/components/schemas/Account-Type'
+          type: string
+          description: |-
+            Account types provided in Lianlian Pay system. One of:
+
+            | Type | Description |
+            |-------|-------------|
+            | COLLECTING ||
+            | FUNDING | Merchant account to keep bill obligations fundings |
+            | PAYMENT | Account support direct debit, used for tax authorities of certain region/jurisdiction to pull money from |
+          enum:
+            - COLLECTING
+            - PAYMENT
+            - FUNDING
         id:
           type: string
           description: Account id in Lianlina Pay system
@@ -795,19 +814,6 @@ components:
       description: "Supported account currencies in Lianlian Pay system. \n\n**Funding Account Currencies**, one of:\n\n| Currency | Description |\n|----------|-------------|\n| EUR | Euro |\n| USD | United States dollar |\n\n\n**Payment Account Currencies**, one of:\n\n| Currency | Description |\n|----------|-------------|\n| EUR | Euro |"
       x-tags:
         - Accounts
-    Account-Type:
-      title: '| Account Type Enumeration'
-      type: string
-      description: |-
-        Account types provided in Lianlian Pay system. One of:
-
-        | Type | Description |
-        |-------|-------------|
-        | COLLECTING ||
-        | FUNDING | Merchant account to keep bill obligations fundings |
-        | PAYMENT | Account support direct debit, used for tax authorities of certain region/jurisdiction to pull money from |
-      x-tags:
-        - Accounts
     Bill-Region:
       type: string
       title: '| Bill Region Enumeration'
@@ -831,21 +837,6 @@ components:
         - IT
         - PO
         - UK
-      x-tags:
-        - Bills
-    Bill-Currency:
-      type: string
-      title: '| Bill Currency Enumeration'
-      description: |-
-        Supported bill currencies in Lianlian Pay system. One of:
-
-        | Currency | Description |
-        |----------|-------------|
-        | EUR | Euro |
-      enum:
-        - EUR
-        - PLN
-        - GBP
       x-tags:
         - Bills
     Bill-Status:
