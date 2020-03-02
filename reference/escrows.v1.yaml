@@ -171,10 +171,10 @@ paths:
                 properties:
                   id:
                     type: string
-                    description: "Webhook id in Lianlian Pay's system"
+                    description: "Webhook registration id in Lianlian Pay's system"
                   status:
                     type: string
-                    description: Webhook status
+                    description: Webhook registration status
                     enum:
                       - DELETED
                 required:
@@ -257,141 +257,6 @@ paths:
           in: query
           name: limit
           description: 'If nonzero, return no more than this number of results. Used with `offset` to provide pagination for large datasets. Unless otherwise specified, the maximum number of records that can be returned from an API call is 50 records'
-  '/documents/{documentId}':
-    parameters:
-      - schema:
-          type: string
-        name: documentId
-        in: path
-        required: true
-    get:
-      summary: 2. Get Document
-      tags:
-        - Documents
-      responses:
-        '200':
-          description: OK
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Document'
-        '404':
-          description: Not Found
-      operationId: get-documents-name
-      description: |
-        Download document file by `dcoumentId`
-
-        Return type is `Document` object
-  /documents:
-    post:
-      summary: 1. Upload Document
-      operationId: post-documents
-      responses:
-        '200':
-          description: OK
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Document'
-      description: "Upload document to Lianlian Pay system. \nAttachments can be one of the format PDF, JPEG, or PNG. To upload a multi-page image, please use the PDF data type.\n\nReturn type is `Document` object"
-      requestBody:
-        content:
-          application/json:
-            schema:
-              type: object
-              properties:
-                name:
-                  type: string
-                  description: Document name
-                  maxLength: 128
-                size:
-                  type: integer
-                  description: Document file size
-              required:
-                - name
-                - size
-            examples: {}
-        description: ''
-      tags:
-        - Documents
-  '/profiles/{profileId}':
-    parameters:
-      - schema:
-          type: string
-        name: profileId
-        in: path
-        required: true
-    get:
-      summary: 2. Get Profile
-      tags:
-        - Profiles
-      responses:
-        '200':
-          description: OK
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Profile'
-        '404':
-          description: Not Found
-      operationId: get-profiles-profileId
-      description: |-
-        Get a single profile by `profileId`
-
-        Return type is `Profile` object
-    put:
-      summary: 3. Confirm Onboard
-      operationId: put-profiles-profileId
-      responses:
-        '200':
-          description: OK
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  id:
-                    type: string
-                    description: "Profile id from Avalara's system"
-                  status:
-                    type: string
-                    description: "Profile status in Lianlian Pay's system"
-                    enum:
-                      - APPROVED
-                required:
-                  - id
-                  - status
-        '404':
-          description: Not Found
-      tags:
-        - Profiles
-      description: "Onboard a single profile by `profileID` and ready to provide VAT services. \n\nReturn type is `Profile` object"
-    delete:
-      summary: 4. Cancel Profile
-      operationId: delete-profiles-profileId
-      responses:
-        '200':
-          description: OK
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  id:
-                    type: string
-                    description: "Profile id from Avalara's system"
-                  status:
-                    type: string
-                    description: "Profile status in Lianlian Pay's system"
-                    enum:
-                      - CANCELED
-                      - FAILED
-                required:
-                  - id
-                  - status
-      description: "Cancel a `ACTIVE` status profile by `profileId`. After cancellation, profile KYC periodical validation will be stopped and reserved funding will be returned. \n\nReturn type is `Profile` object."
-      tags:
-        - Profiles
   /profiles:
     post:
       summary: 1. Create Profile
@@ -612,6 +477,141 @@ paths:
         Return type is `Profile` object
       tags:
         - Profiles
+  '/profiles/{profileId}':
+    parameters:
+      - schema:
+          type: string
+        name: profileId
+        in: path
+        required: true
+    get:
+      summary: 2. Get Profile
+      tags:
+        - Profiles
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Profile'
+        '404':
+          description: Not Found
+      operationId: get-profiles-profileId
+      description: |-
+        Get a single profile by `profileId`
+
+        Return type is `Profile` object
+    put:
+      summary: 3. Confirm Onboard
+      operationId: put-profiles-profileId
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: string
+                    description: "Profile id from Avalara's system"
+                  status:
+                    type: string
+                    description: "Profile status in Lianlian Pay's system"
+                    enum:
+                      - APPROVED
+                required:
+                  - id
+                  - status
+        '404':
+          description: Not Found
+      tags:
+        - Profiles
+      description: "Onboard a single profile by `profileID` and ready to provide VAT services. \n\nReturn type is `Profile` object"
+    delete:
+      summary: 4. Cancel Profile
+      operationId: delete-profiles-profileId
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: string
+                    description: "Profile id from Avalara's system"
+                  status:
+                    type: string
+                    description: "Profile status in Lianlian Pay's system"
+                    enum:
+                      - CANCELED
+                      - FAILED
+                required:
+                  - id
+                  - status
+      description: "Cancel a `ACTIVE` status profile by `profileId`. After cancellation, profile KYC periodical validation will be stopped and reserved funding will be returned. \n\nReturn type is `Profile` object."
+      tags:
+        - Profiles
+  /documents:
+    post:
+      summary: 1. Upload Document
+      operationId: post-documents
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Document'
+      description: "Upload document to Lianlian Pay system. \nAttachments can be one of the format PDF, JPEG, or PNG. To upload a multi-page image, please use the PDF data type.\n\nReturn type is `Document` object"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                  description: Document name
+                  maxLength: 128
+                size:
+                  type: integer
+                  description: Document file size
+              required:
+                - name
+                - size
+            examples: {}
+        description: ''
+      tags:
+        - Documents
+  '/documents/{documentId}':
+    parameters:
+      - schema:
+          type: string
+        name: documentId
+        in: path
+        required: true
+    get:
+      summary: 2. Get Document
+      tags:
+        - Documents
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Document'
+        '404':
+          description: Not Found
+      operationId: get-documents-name
+      description: |
+        Download document file by `dcoumentId`
+
+        Return type is `Document` object
 components:
   schemas:
     Event:
@@ -721,227 +721,6 @@ components:
         - isEnabled
         - createTime
         - topics
-    Certificate-Document-Type:
-      type: string
-      title: '| Certificate Document Type Enumeration'
-      description: |-
-        Supported **Company Certificate** type, one of:
-
-        | Code | Value |
-        |------|-------|
-        |CERTIFICATE_OF_INCORPORATION| Certificate of Incorporation|
-        |TAX_DOCUMENT| Tax Document|
-        |EIN_LETTER| EIN Letter|
-        |ARTICLES_OF_ASSOCIATION| Articles of Association |
-        |BUSINESS_LICENSE| Business License |
-        |CERTIFICATE_OF_REGISTRATION| Certificate of Registration |
-      enum:
-        - CERTIFICATE_OF_INCORPORATION
-        - TAX_DOCUMENT
-        - EIN_LETTER
-        - ARTICLES_OF_ASSOCIATION
-        - BUSINESS_LICENSE
-        - CERTIFICATE_OF_REGISTRATION
-      x-tags:
-        - Profiles
-    Legal-Representative:
-      title: '| Legal-Representative Object'
-      type: object
-      description: |
-        **Legal-Representative Object**
-        Data set of Legal-Representative in Lianlian Pay system.
-      x-tags:
-        - Profiles
-      properties:
-        name:
-          type: string
-          description: "Legal representative's name in English"
-        idNumber:
-          type: string
-          description: "Legal representative's ID number"
-        idFrontCopy:
-          type: string
-          description: "The photocopy document name of legal representative's ID front page.Supported ID types:\n\nCN \n\n| Value | Description |\n|-------|-------------|\n| IDCARD | National ID Card |\n\nHK\n\n| Value | Description |\n|-------|-------------|\n| PASSPORT | Passport |\n| IDCARD | ID Card |\n\nUS, HK\n\n| Value | Description |\n|-------|-------------|\n| PASSPORT | Passport |\n| DRIVERS_LICENSE | Drivers License |"
-        idBackCopy:
-          type: string
-          description: "The photocopy document name of legal representative's ID back page.Supported ID types:\n\nCN \n\n| Value | Description |\n|-------|-------------|\n| IDCARD | National ID Card |\n\nHK\n\n| Value | Description |\n|-------|-------------|\n| PASSPORT | Passport |\n| IDCARD | ID Card |\n\nUS, HK\n\n| Value | Description |\n|-------|-------------|\n| PASSPORT | Passport |\n| DRIVERS_LICENSE | Drivers License |"
-      required:
-        - name
-        - idFrontCopy
-    KYC-Company:
-      title: '| KYC-Company Object'
-      type: object
-      description: |
-        **KYC-Company Object**
-        Data set of Company KYC basic information description in Lianlian Pay system.
-      x-tags:
-        - Profiles
-      properties:
-        name:
-          type: string
-          description: Entity Name in English
-        registrationNumber:
-          type: string
-          description: Registry Number/EIN Number
-        registrationCertificateCopy:
-          type: string
-          description: The photocopy document name of business registration certificate
-        registrationCertificateCopyType:
-          $ref: '#/components/schemas/Certificate-Document-Type'
-        address:
-          $ref: '#/components/schemas/Address'
-        legalRepresentative:
-          $ref: '#/components/schemas/Legal-Representative'
-      required:
-        - name
-        - registrationNumber
-        - registrationCertificateCopy
-        - registrationCertificateCopyType
-        - address
-        - legalRepresentative
-    KYC-Individual:
-      title: '| KYC-Individual Object'
-      type: object
-      description: |
-        **KYC-Individual Object**
-        Data set of Individual KYC basic information description in Lianlian Pay system.
-      x-tags:
-        - Profiles
-      properties:
-        name:
-          type: string
-          description: Name in English
-        idNumber:
-          type: string
-          description: ID number
-        idFrontCopy:
-          type: string
-          description: "The photocopy document name of the ID front page. Supported ID types:\n\nCN \n\n| Value | Description |\n|-------|-------------|\n| IDCARD | National ID Card |\n\nHK\n\n| Value | Description |\n|-------|-------------|\n| PASSPORT | Passport |\n| IDCARD | ID Card |\n\nUS, HK\n\n| Value | Description |\n|-------|-------------|\n| PASSPORT | Passport |\n| DRIVERS_LICENSE | Drivers License |"
-        idBackCopy:
-          type: string
-          description: "The photocopy document name of the ID back page.Supported ID types:\n\nCN \n\n| Value | Description |\n|-------|-------------|\n| IDCARD | National ID Card |\n\nHK\n\n| Value | Description |\n|-------|-------------|\n| PASSPORT | Passport |\n| IDCARD | ID Card |\n\nUS, HK\n\n| Value | Description |\n|-------|-------------|\n| PASSPORT | Passport |\n| DRIVERS_LICENSE | Drivers License |"
-        address:
-          $ref: '#/components/schemas/Address'
-      required:
-        - name
-        - idFrontCopy
-        - address
-    Region:
-      title: '| Region Enumeration'
-      description: |
-        **Region/Country**
-
-        One of:
-
-        | Region | Description |
-        |-------|-------------|
-        | CN | China |
-        | HK | Hongkong|
-        | US | United States |
-      type: string
-      x-tags:
-        - Other
-    Profile-Type:
-      title: '| Profile Type Enumeration'
-      description: |-
-        Profile type defined in Lianlian Pay system. One of:
-
-        | Value | Description |
-        |-------|-------------|
-        | COMPANY |  Company/Entity |
-        | SOLE_TRADER | Individual/Sole Trader |
-      type: string
-      x-tags:
-        - Profiles
-    Profile-Status:
-      title: '| Profile Status Enumeration'
-      type: string
-      description: |-
-        Profile status defined in Lianlian Pay system. One of:
-
-        | Value | Description |
-        |-------|-------------|
-        | UNDER_REVIEW | Profile KYC is in progress |
-        | ERROR | KYC error, need aditional information to complete KYC review |
-        | FAILED | KYC failed, cannot provide service |
-        | ACTIVE | KYC complete, waiting for profile to be approved |
-        | APPROVED| Profile approved, ready to provide VAT services |
-        | CANCELED | Profile canceled, VAT service stopped |
-      x-tags:
-        - Profiles
-    Document:
-      title: '| Document Object'
-      type: object
-      description: File object in Lianlian Pay system.
-      x-tags:
-        - Documents
-      properties:
-        id:
-          type: string
-          description: Document id in Lianlian Pay system
-        name:
-          type: string
-          description: Document name
-        size:
-          type: integer
-          description: Document size
-        createTime:
-          type: string
-          description: 'Document create time, UTC+0 timestamp'
-          format: date-time
-          example: '2019-01-01T00:00:00Z'
-      required:
-        - name
-        - size
-        - createTime
-    Error:
-      title: '| Error Object'
-      type: object
-      description: Error object defined in Lianlian Pay system.
-      x-tags:
-        - Other
-      properties:
-        code:
-          type: string
-          description: Error code
-        message:
-          type: string
-          description: 'Error message '
-      required:
-        - code
-        - message
-    Address:
-      title: '| Address Object'
-      type: object
-      description: |-
-        **Address Object**
-        Address data set defined in Lianlian Pay system.
-      x-tags:
-        - Other
-      properties:
-        lineOne:
-          type: string
-          description: Address Line 1
-        lineTwo:
-          type: string
-          description: Address Line 2
-        city:
-          type: string
-          description: City/Town
-        province:
-          type: string
-          description: Province/State
-        region:
-          $ref: '#/components/schemas/Region'
-        postalCode:
-          type: string
-          description: Postalcde/Zipcode
-      required:
-        - lineOne
-        - city
-        - province
-        - region
-        - postalCode
     Profile:
       title: '| Profile Object'
       type: object
@@ -994,4 +773,225 @@ components:
         - status
         - email
         - mobile
+    Address:
+      title: '| Address Object'
+      type: object
+      description: |-
+        **Address Object**
+        Address data set defined in Lianlian Pay system.
+      x-tags:
+        - Other
+      properties:
+        lineOne:
+          type: string
+          description: Address Line 1
+        lineTwo:
+          type: string
+          description: Address Line 2
+        city:
+          type: string
+          description: City/Town
+        province:
+          type: string
+          description: Province/State
+        region:
+          $ref: '#/components/schemas/Region'
+        postalCode:
+          type: string
+          description: Postalcde/Zipcode
+      required:
+        - lineOne
+        - city
+        - province
+        - region
+        - postalCode
+    Error:
+      title: '| Error Object'
+      type: object
+      description: Error object defined in Lianlian Pay system.
+      x-tags:
+        - Other
+      properties:
+        code:
+          type: string
+          description: Error code
+        message:
+          type: string
+          description: 'Error message '
+      required:
+        - code
+        - message
+    Document:
+      title: '| Document Object'
+      type: object
+      description: File object in Lianlian Pay system.
+      x-tags:
+        - Documents
+      properties:
+        id:
+          type: string
+          description: Document id in Lianlian Pay system
+        name:
+          type: string
+          description: Document name
+        size:
+          type: integer
+          description: Document size
+        createTime:
+          type: string
+          description: 'Document create time, UTC+0 timestamp'
+          format: date-time
+          example: '2019-01-01T00:00:00Z'
+      required:
+        - name
+        - size
+        - createTime
+    Profile-Status:
+      title: '| Profile Status Enumeration'
+      type: string
+      description: |-
+        Profile status defined in Lianlian Pay system. One of:
+
+        | Value | Description |
+        |-------|-------------|
+        | UNDER_REVIEW | Profile KYC is in progress |
+        | ERROR | KYC error, need aditional information to complete KYC review |
+        | FAILED | KYC failed, cannot provide service |
+        | ACTIVE | KYC complete, waiting for profile to be approved |
+        | APPROVED| Profile approved, ready to provide VAT services |
+        | CANCELED | Profile canceled, VAT service stopped |
+      x-tags:
+        - Profiles
+    Profile-Type:
+      title: '| Profile Type Enumeration'
+      description: |-
+        Profile type defined in Lianlian Pay system. One of:
+
+        | Value | Description |
+        |-------|-------------|
+        | COMPANY |  Company/Entity |
+        | SOLE_TRADER | Individual/Sole Trader |
+      type: string
+      x-tags:
+        - Profiles
+    Region:
+      title: '| Region Enumeration'
+      description: |
+        **Region/Country**
+
+        One of:
+
+        | Region | Description |
+        |-------|-------------|
+        | CN | China |
+        | HK | Hongkong|
+        | US | United States |
+      type: string
+      x-tags:
+        - Other
+    KYC-Individual:
+      title: '| KYC-Individual Object'
+      type: object
+      description: |
+        **KYC-Individual Object**
+        Data set of Individual KYC basic information description in Lianlian Pay system.
+      x-tags:
+        - Profiles
+      properties:
+        name:
+          type: string
+          description: Name in English
+        idNumber:
+          type: string
+          description: ID number
+        idFrontCopy:
+          type: string
+          description: "The photocopy document name of the ID front page. Supported ID types:\n\nCN \n\n| Value | Description |\n|-------|-------------|\n| IDCARD | National ID Card |\n\nHK\n\n| Value | Description |\n|-------|-------------|\n| PASSPORT | Passport |\n| IDCARD | ID Card |\n\nUS, HK\n\n| Value | Description |\n|-------|-------------|\n| PASSPORT | Passport |\n| DRIVERS_LICENSE | Drivers License |"
+        idBackCopy:
+          type: string
+          description: "The photocopy document name of the ID back page.Supported ID types:\n\nCN \n\n| Value | Description |\n|-------|-------------|\n| IDCARD | National ID Card |\n\nHK\n\n| Value | Description |\n|-------|-------------|\n| PASSPORT | Passport |\n| IDCARD | ID Card |\n\nUS, HK\n\n| Value | Description |\n|-------|-------------|\n| PASSPORT | Passport |\n| DRIVERS_LICENSE | Drivers License |"
+        address:
+          $ref: '#/components/schemas/Address'
+      required:
+        - name
+        - idFrontCopy
+        - address
+    KYC-Company:
+      title: '| KYC-Company Object'
+      type: object
+      description: |
+        **KYC-Company Object**
+        Data set of Company KYC basic information description in Lianlian Pay system.
+      x-tags:
+        - Profiles
+      properties:
+        name:
+          type: string
+          description: Entity Name in English
+        registrationNumber:
+          type: string
+          description: Registry Number/EIN Number
+        registrationCertificateCopy:
+          type: string
+          description: The photocopy document name of business registration certificate
+        registrationCertificateCopyType:
+          $ref: '#/components/schemas/Certificate-Document-Type'
+        address:
+          $ref: '#/components/schemas/Address'
+        legalRepresentative:
+          $ref: '#/components/schemas/Legal-Representative'
+      required:
+        - name
+        - registrationNumber
+        - registrationCertificateCopy
+        - registrationCertificateCopyType
+        - address
+        - legalRepresentative
+    Legal-Representative:
+      title: '| Legal-Representative Object'
+      type: object
+      description: |
+        **Legal-Representative Object**
+        Data set of Legal-Representative in Lianlian Pay system.
+      x-tags:
+        - Profiles
+      properties:
+        name:
+          type: string
+          description: "Legal representative's name in English"
+        idNumber:
+          type: string
+          description: "Legal representative's ID number"
+        idFrontCopy:
+          type: string
+          description: "The photocopy document name of legal representative's ID front page.Supported ID types:\n\nCN \n\n| Value | Description |\n|-------|-------------|\n| IDCARD | National ID Card |\n\nHK\n\n| Value | Description |\n|-------|-------------|\n| PASSPORT | Passport |\n| IDCARD | ID Card |\n\nUS, HK\n\n| Value | Description |\n|-------|-------------|\n| PASSPORT | Passport |\n| DRIVERS_LICENSE | Drivers License |"
+        idBackCopy:
+          type: string
+          description: "The photocopy document name of legal representative's ID back page.Supported ID types:\n\nCN \n\n| Value | Description |\n|-------|-------------|\n| IDCARD | National ID Card |\n\nHK\n\n| Value | Description |\n|-------|-------------|\n| PASSPORT | Passport |\n| IDCARD | ID Card |\n\nUS, HK\n\n| Value | Description |\n|-------|-------------|\n| PASSPORT | Passport |\n| DRIVERS_LICENSE | Drivers License |"
+      required:
+        - name
+        - idFrontCopy
+    Certificate-Document-Type:
+      type: string
+      title: '| Certificate Document Type Enumeration'
+      description: |-
+        Supported **Company Certificate** type, one of:
+
+        | Code | Value |
+        |------|-------|
+        |CERTIFICATE_OF_INCORPORATION| Certificate of Incorporation|
+        |TAX_DOCUMENT| Tax Document|
+        |EIN_LETTER| EIN Letter|
+        |ARTICLES_OF_ASSOCIATION| Articles of Association |
+        |BUSINESS_LICENSE| Business License |
+        |CERTIFICATE_OF_REGISTRATION| Certificate of Registration |
+      enum:
+        - CERTIFICATE_OF_INCORPORATION
+        - TAX_DOCUMENT
+        - EIN_LETTER
+        - ARTICLES_OF_ASSOCIATION
+        - BUSINESS_LICENSE
+        - CERTIFICATE_OF_REGISTRATION
+      x-tags:
+        - Profiles
   securitySchemes: {}
