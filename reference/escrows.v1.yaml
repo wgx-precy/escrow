@@ -339,7 +339,7 @@ paths:
                     description: "Profile id from Avalara's system"
                   status:
                     type: string
-                    description: Profile status
+                    description: "Profile status in Lianlian Pay's system"
                     enum:
                       - APPROVED
                 required:
@@ -366,7 +366,7 @@ paths:
                     description: "Profile id from Avalara's system"
                   status:
                     type: string
-                    description: Profile status
+                    description: "Profile status in Lianlian Pay's system"
                     enum:
                       - CANCELED
                       - FAILED
