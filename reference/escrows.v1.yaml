@@ -752,7 +752,11 @@ components:
           example: '123.45'
           pattern: "^(([1-9]{1}\\d*)|(0{1}))(\\.\\d{2})"
         currency:
-          $ref: '#/components/schemas/Account-Currency'
+          type: string
+          description: "Supported account currencies in Lianlian Pay system. \n\n**Funding Account Currencies**, one of:\n\n| Currency | Description |\n|----------|-------------|\n| EUR | Euro |\n| USD | United States dollar |\n\n\n**Payment Account Currencies**, one of:\n\n| Currency | Description |\n|----------|-------------|\n| EUR | Euro |"
+          enum:
+            - EUR
+            - USD
         virtualAccountInfo:
           $ref: '#/components/schemas/Bank-Account-Info'
         type:
@@ -762,11 +766,9 @@ components:
 
             | Type | Description |
             |-------|-------------|
-            | COLLECTING ||
             | FUNDING | Merchant account to keep bill obligations fundings |
             | PAYMENT | Account support direct debit, used for tax authorities of certain region/jurisdiction to pull money from |
           enum:
-            - COLLECTING
             - PAYMENT
             - FUNDING
         id:
@@ -808,12 +810,6 @@ components:
         - number
         - name
         - region
-    Account-Currency:
-      title: '| Account Currency Enumeration'
-      type: string
-      description: "Supported account currencies in Lianlian Pay system. \n\n**Funding Account Currencies**, one of:\n\n| Currency | Description |\n|----------|-------------|\n| EUR | Euro |\n| USD | United States dollar |\n\n\n**Payment Account Currencies**, one of:\n\n| Currency | Description |\n|----------|-------------|\n| EUR | Euro |"
-      x-tags:
-        - Accounts
     Bill-Region:
       type: string
       title: '| Bill Region Enumeration'
