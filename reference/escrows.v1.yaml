@@ -230,11 +230,6 @@ paths:
         Return type is List<`Event`>
       parameters:
         - schema:
-            type: string
-          in: query
-          name: profileId
-          description: Profile Id from client system
-        - schema:
             type: array
             enum:
               - account.paymentaccount.created
@@ -517,14 +512,29 @@ paths:
         in: path
         required: true
     get:
-      summary: 3. Get Profile Funding Account Balance
+      summary: 3. Get Profile Funding Balance
       responses:
         '200':
           description: OK
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Funding'
+                type: object
+                properties:
+                  balance:
+                    type: string
+                    description: "Profile's funding account balance"
+                  currency:
+                    type: string
+                    description: |-
+                      **Funding Account Currencies**, one of:
+
+                      | Currency | Description |
+                      |----------|-------------|
+                      | EUR | Euro |
+                required:
+                  - balance
+                  - currency
       operationId: get-profiles-profileId-funding
       description: |-
         Get the funding account balance of a single profile by `profileId`.
@@ -848,7 +858,7 @@ components:
 
         | Value | Description |
         |-------|-------------|
-        | INIT | Bill created, waiting for procesing |
+        | INIT | Bill created, waiting for processing |
         | EXPIRED | Bill expired |
         | CANCELED | Bill canceled|
         | COMPLETE | Bill complete |
@@ -880,7 +890,7 @@ components:
       type: object
       x-tags:
         - Error
-      description: "Error object defined in Lianlian Pay's system."
+      description: "Error object defined in Lianlian Pay's system. This object will be returned either in API response body or inside feedback block of `Bill` object."
       properties:
         code:
           type: string
