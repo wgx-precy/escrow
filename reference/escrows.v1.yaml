@@ -369,6 +369,7 @@ paths:
                     description: Profile status
                     enum:
                       - CANCELED
+                      - FAILED
                 required:
                   - id
                   - status
