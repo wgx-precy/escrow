@@ -164,6 +164,22 @@ paths:
       responses:
         '200':
           description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: string
+                    description: "Webhook id in Lianlian Pay's system"
+                  status:
+                    type: string
+                    description: Webhook status
+                    enum:
+                      - DELETED
+                required:
+                  - id
+                  - status
         '404':
           description: Not Found
       description: Delete a webhook registration by `webhookId`.
