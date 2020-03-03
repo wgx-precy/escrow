@@ -733,7 +733,7 @@ components:
     Errors:
       title: Error Object
       type: object
-      description: "Error object defined in Lianlian Pay's system. This object will be returned either in API response body or inside feedback block of `Bill` object."
+      description: "Error object defined in Lianlian Pay's system. This object will be returned either in API response body or inside feedback block of a `Bill` object if applicable."
       properties:
         code:
           type: string
