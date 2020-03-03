@@ -244,14 +244,14 @@ paths:
             type: string
             default: '0'
           in: query
-          name: offset
-          description: 'If nonzero, skip this number of results before returning data. Used with `limit` to provide pagination for large datasets.'
+          name: pageNum
+          description: 'If nonzero, skip this number of results before returning data. Used with `pageSize` to provide pagination for large datasets.'
         - schema:
             type: string
             default: '50'
           in: query
-          name: limit
-          description: 'If nonzero, return no more than this number of results. Used with `offset` to provide pagination for large datasets. Unless otherwise specified, the maximum number of records that can be returned from an API call is 50 records'
+          name: pageSize
+          description: 'If nonzero, return no more than this number of results. Used with `pageNumber` to provide pagination for large datasets. Unless otherwise specified, the maximum number of records that can be returned from an API call is 50 records'
   '/profiles/{profileId}/bills':
     parameters:
       - schema:
@@ -728,7 +728,7 @@ components:
           type: array
           description: Error information details if applicable
           items:
-            $ref: '#/components/schemas/Error'
+            $ref: '#/components/schemas/Errors'
       required:
         - id
         - jurisdiction
@@ -869,6 +869,8 @@ components:
         - PAYMENT_FAILED
         - PAID
         - FUNDED
+      x-tags:
+        - Bills
     Bank-Account-Region:
       type: string
       title: '| Bank Account Region Enumeration'
@@ -883,11 +885,9 @@ components:
         - UK
       x-tags:
         - Accounts
-    Error:
+    Errors:
       title: Error Object
       type: object
-      x-tags:
-        - Error
       description: "Error object defined in Lianlian Pay's system. This object will be returned either in API response body or inside feedback block of `Bill` object."
       properties:
         code:
@@ -899,4 +899,6 @@ components:
       required:
         - code
         - message
+      x-tags:
+        - Errors
   securitySchemes: {}
