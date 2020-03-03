@@ -625,9 +625,11 @@ components:
                 |------|-------------|
                 | account | Account object defined in Lianlian Pay's system. Use `Get Account` method to get the object in a event. |
                 | bill | Bill object defined in Lianlian Pay's system. Use `Get Bill` method to get the object in a event. |
+                | document | Document object defined in Lianlian Pay's system. Use `Download Document` method to get actual file from Lianlian Pay's system. |
               enum:
                 - bill
                 - account
+                - document
             id:
               type: string
               description: "Object id in Lianlian Pay's system related to this event."
