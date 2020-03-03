@@ -885,6 +885,31 @@ components:
         - UK
       x-tags:
         - Accounts
+    Document:
+      title: '| Document Object'
+      type: object
+      description: File object in Lianlian Pay system.
+      x-tags:
+        - Documents
+      properties:
+        id:
+          type: string
+          description: Document id in Lianlian Pay system
+        name:
+          type: string
+          description: Document name
+        size:
+          type: integer
+          description: Document size
+        createTime:
+          type: string
+          description: 'Document create time, UTC+0 timestamp'
+          format: date-time
+          example: '2019-01-01T00:00:00Z'
+      required:
+        - name
+        - size
+        - createTime
     Errors:
       title: Error Object
       type: object
