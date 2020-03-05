@@ -226,14 +226,14 @@ paths:
                   total:
                     type: integer
                     description: Total events count
-                  data:
+                  list:
                     type: array
                     description: Event data list
                     items:
                       $ref: '#/components/schemas/Event'
                 required:
                   - total
-                  - data
+                  - list
       operationId: get-events
       description: |-
         Get a list of Lianlian Pay system generated events. If no events, empty list will be returned
