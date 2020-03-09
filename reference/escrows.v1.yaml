@@ -15,14 +15,14 @@ info:
     name: Lianlian Pay
     url: 'https://global.lianlianpay.com'
 servers:
-  - url: 'https://us-openapi-sandbox.lianlianglobal.com'
-    description: US Sandbox
-  - url: 'https://cn-openapi-sandbox.lianlianglobal.com'
+  - url: 'https://global-api-sandbox.lianlianpay-inc.com/escrow/v1'
     description: CN/HK Sandbox
-  - url: 'https://us-openapi.lianlianglobal.com'
-    description: US Production
-  - url: 'https://cn-openapi.lianlianglobal.com'
+  - url: 'https://global-api-us-sandbox.lianlianpay-inc.com/escrow/v1'
+    description: US Sandbox
+  - url: 'https://global-api.lianlianpay.com/escrow/v1'
     description: CN/HK Production
+  - url: 'https://global-api-us.lianlianpay.com/escrow/v1'
+    description: US Production
 paths:
   /webhooks:
     get:
