@@ -13,7 +13,9 @@ info:
     |LLP KYC APIs, change "INDIVIDUAL" to "SOLE_TRADER"| Precy | 2020-02-20|
 
     Due to data security policy and requirements of China and United States, PII related Lianlian Pay API(s) are hosted both in China and United States, corresponding PII data will be store and processed within data receiving country, no PII data will be shared between two environments. None PII related API(s) are hosted in China only. Detailed APIs and its hosting environments are:
+
     ![Ref a model](assets/images/apis_host_environment.png)
+
 
 
 
