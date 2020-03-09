@@ -2,7 +2,7 @@ openapi: 3.0.0
 info:
   title: escrows
   version: '1.0'
-  description: |+
+  description: |
     Document Version 20200302
 
     Change History
@@ -13,7 +13,7 @@ info:
 
     Due to data security policy and requirements of China and United States, PII related Lianlian Pay API(s) are hosted both in China and United States, corresponding PII data will be store and processed within data receiving country, no PII data will be shared between two environments. None PII related API(s) are hosted in China only. Detailed APIs and its hosting environments are:
 
-
+    ![](https://github.com/wgx-precy/escrow/blob/avalara-payment/assets/images/payment_apis_host.png?raw=true)
   contact:
     email: fx_support@lianlianpay.com
     name: Lianlian Pay
