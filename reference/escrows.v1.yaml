@@ -290,12 +290,7 @@ paths:
         '404':
           description: Not Found
       operationId: get-documents-name
-      description: |+
-        Download document file by `dcoumentId`. This method is hosted in both US and CN, US profiles related RAR report should be downloaded via US endpoint and CN/HK profiles related RAR report should be downloaded via CN endpoint.
-
-        Report related event, such as `profile.rar.complete` contains the proper endpoint to download a report.
-
-
+      description: "Download document file by `dcoumentId`. \n\n**This method is hosted in both US and CN**, US profiles related RAR report should be downloaded via US endpoint and CN/HK profiles related RAR report should be downloaded via CN endpoint.\n\nReport related event, such as `profile.rar.complete` contains the proper endpoint to download a report.\n\n"
   /documents:
     post:
       summary: 1. Upload Document
@@ -307,12 +302,7 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Document'
-      description: |-
-        Upload document to Lianlian Pay system. This method is hosted in both US and CN, support document(s) for US profiles should be uploaded via US endpoint and supported document(s) for US/HK profiles should be uploaded via CN endpoint.
-
-        Attachments can be one of the format PDF, JPEG, or PNG. To upload a multi-page image, please use the PDF data type.
-
-        Return type is `Document` object
+      description: "Upload document to Lianlian Pay system. \n\n**This method is hosted in both US and CN**, support document(s) for US profiles should be uploaded via US endpoint and supported document(s) for US/HK profiles should be uploaded via CN endpoint.\n\nAttachments can be one of the format PDF, JPEG, or PNG. To upload a multi-page image, please use the PDF data type.\n\nReturn type is `Document` object"
       requestBody:
         content:
           application/json:
@@ -354,10 +344,7 @@ paths:
         '404':
           description: Not Found
       operationId: get-profiles-profileId
-      description: |-
-        Get a single profile by `profileId`. This method is hosted in both US and CN, US profiles can be retrieved via US endpoint and CN/HK endpoint can be retrieved via CN endpoint. Otherwise `404 resoucre not found` will be returned.
-
-        Return type is `Profile` object
+      description: "Get a single profile by `profileId`. \n\n**This method is hosted in both US and CN**, US profiles can be retrieved via US endpoint and CN/HK endpoint can be retrieved via CN endpoint. Otherwise `404 resoucre not found` will be returned.\n\nReturn type is `Profile` object"
     put:
       summary: 3. Confirm Onboard
       operationId: put-profiles-profileId
@@ -623,12 +610,7 @@ paths:
                 - mobile
                 - kyc
         description: ''
-      description: |-
-        Create a merchant profile in Lianlian Pay system. This method is hosted in both US and CN, US profiles should be created via US endpoint, and CN/HK profiles should be created via CN endpoint.
-
-        All required supporting documents, such as `regCertificateCopy`, `idFrontImg`, `idBackImg`, etc, should be uploaded into Lianlina Pay system via **Upload Document** API before making the **Create Profile** request.
-
-        Return type is `Profile` object
+      description: "Create a merchant profile in Lianlian Pay system. \n\n**This method is hosted in both US and CN**, US profiles should be created via US endpoint, and CN/HK profiles should be created via CN endpoint.\n\nAll required supporting documents, such as `regCertificateCopy`, `idFrontImg`, `idBackImg`, etc, should be uploaded into Lianlina Pay system via **Upload Document** API before making the **Create Profile** request.\n\nReturn type is `Profile` object"
       tags:
         - Profiles
 components:
