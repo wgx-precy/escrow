@@ -17,9 +17,13 @@ info:
     url: 'https://global.lianlianpay.com'
 servers:
   - url: 'https://global-api-sandbox.lianlianpay-inc.com/escrow/v1'
-    description: Sandbox
+    description: CN/HK Sandbox
   - url: 'https://global-api.lianlianpay.com/escrow/v1'
-    description: Production
+    description: CN/HK Production
+  - description: US Production
+    url: 'https://global-api-us.lianlianpay.com/escrow/v1'
+  - url: 'https://global-api-us-sandbox.lianlianpay-inc.com/escrow/v1'
+    description: US Sandbox
 paths:
   /webhooks:
     get:
@@ -290,7 +294,10 @@ paths:
         '404':
           description: Not Found
       operationId: get-documents-name
-      description: "Download document file by `dcoumentId`. \n\n**This method is hosted in both US and CN**, US profiles related RAR report should be downloaded via US endpoint and CN/HK profiles related RAR report should be downloaded via CN endpoint.\n\nReport related event, such as `profile.rar.complete` contains the proper endpoint to download a report.\n\n"
+      description: |
+        Download document file by `dcoumentId`
+
+        Return type is `Document` object
   /documents:
     post:
       summary: 1. Upload Document
@@ -302,7 +309,7 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Document'
-      description: "Upload document to Lianlian Pay system. \n\n**This method is hosted in both US and CN**, support document(s) for US profiles should be uploaded via US endpoint and supported document(s) for US/HK profiles should be uploaded via CN endpoint.\n\nAttachments can be one of the format PDF, JPEG, or PNG. To upload a multi-page image, please use the PDF data type.\n\nReturn type is `Document` object"
+      description: "Upload document to Lianlian Pay system. \nAttachments can be one of the format PDF, JPEG, or PNG. To upload a multi-page image, please use the PDF data type.\n\nReturn type is `Document` object"
       requestBody:
         content:
           application/json:
@@ -344,7 +351,10 @@ paths:
         '404':
           description: Not Found
       operationId: get-profiles-profileId
-      description: "Get a single profile by `profileId`. \n\n**This method is hosted in both US and CN**, US profiles can be retrieved via US endpoint and CN/HK endpoint can be retrieved via CN endpoint. Otherwise `404 resoucre not found` will be returned.\n\nReturn type is `Profile` object"
+      description: |-
+        Get a single profile by `profileId`
+
+        Return type is `Profile` object
     put:
       summary: 3. Confirm Onboard
       operationId: put-profiles-profileId
@@ -610,7 +620,12 @@ paths:
                 - mobile
                 - kyc
         description: ''
-      description: "Create a merchant profile in Lianlian Pay system. \n\n**This method is hosted in both US and CN**, US profiles should be created via US endpoint, and CN/HK profiles should be created via CN endpoint.\n\nAll required supporting documents, such as `regCertificateCopy`, `idFrontImg`, `idBackImg`, etc, should be uploaded into Lianlina Pay system via **Upload Document** API before making the **Create Profile** request.\n\nReturn type is `Profile` object"
+      description: |-
+        Create a merchant profile in Lianlian Pay system.
+
+        All required supporting documents, such as `regCertificateCopy`, `idFrontImg`, `idBackImg`, etc, should be uploaded into Lianlina Pay system via **Upload Document** API before making the **Create Profile** request.
+
+        Return type is `Profile` object
       tags:
         - Profiles
 components:
@@ -629,12 +644,10 @@ components:
           description: Event details.
           type: object
           required:
-            - objectType
-            - objectId
-            - title
-            - url
+            - type
+            - id
           properties:
-            objectType:
+            type:
               type: string
               description: |-
                 Object type related to this event. One of:
@@ -650,28 +663,9 @@ components:
                 - account
                 - bill
                 - document
-            objectId:
+            id:
               type: string
-              description: Id of the object that related in this event
-            title:
-              type: string
-              description: |-
-                API that can be used to process this event. One of:
-
-                | title | description|
-                |---|----|
-                |Download Document(US)| Download files, such as reconciliation report(s), RAR report from Lianlian Pay US system |
-                |Download Document(CN)| Download files, such as reconciliation report(s), RAR report from Lianlian Pay CN system |
-                |Get Profile(US)| Get profile details from Lianlian Pay US system |
-                |Get Profile(CN)| Get profile details from Lianlian Pay CN system |
-              enum:
-                - Download Document(US)
-                - Download Document(CN)
-                - Get Profile(US)
-                - Get Profile(CN)
-            url:
-              type: string
-              description: "Event related API endpoint. Can be used to retrive the data object related to this event from Lianlian Pay's system. \n\nHttp method accepted is `GET`, type is `application/json`"
+              description: Object id
         createTime:
           type: string
           description: 'Event created time, UTC+0 timestamp'
