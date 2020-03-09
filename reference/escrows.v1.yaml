@@ -296,6 +296,8 @@ paths:
       description: |+
         Download document file by `dcoumentId`
 
+        **This method is hosted in both US and CN**, US profiles related RAR report should be downloaded via US endpoint and CN/HK profiles related RAR report should be downloaded via CN endpoint.
+
 
   /documents:
     post:
@@ -308,7 +310,7 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Document'
-      description: "Upload document to Lianlian Pay system. \nAttachments can be one of the format PDF, JPEG, or PNG. To upload a multi-page image, please use the PDF data type.\n\nReturn type is `Document` object"
+      description: "Upload document to Lianlian Pay system. \n\n**This method is hosted in both US and CN**, support document(s) for US profiles should be uploaded via US endpoint and supported document(s) for US/HK profiles should be uploaded via CN endpoint.\n\nAttachments can be one of the format PDF, JPEG, or PNG. To upload a multi-page image, please use the PDF data type.\n\nReturn type is `Document` object"
       requestBody:
         content:
           application/json:
