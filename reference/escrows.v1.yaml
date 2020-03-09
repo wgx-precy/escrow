@@ -290,10 +290,10 @@ paths:
         '404':
           description: Not Found
       operationId: get-documents-name
-      description: |
+      description: |+
         Download document file by `dcoumentId`
 
-        Return type is `Document` object
+
   /documents:
     post:
       summary: 1. Upload Document
@@ -640,10 +640,14 @@ components:
           description: Event details.
           type: object
           required:
+            - objectType
+            - objectId
+            - title
+            - url
             - type
-            - id
+            - method
           properties:
-            type:
+            objectType:
               type: string
               description: |-
                 Object type related to this event. One of:
@@ -659,9 +663,41 @@ components:
                 - account
                 - bill
                 - document
-            id:
+            objectId:
               type: string
-              description: Object id
+              description: Id of the object that related in this event
+            title:
+              type: string
+              description: |-
+                API that can be used to process this event. One of:
+
+                | title | description|
+                |---|----|
+                |Download Document(US)||
+                |Download Document(CN)||
+                |Get Profile(US)||
+                |Get Profile(CN)||
+              enum:
+                - Download Document(US)
+                - Download Document(CN)
+                - Get Profile(US)
+                - Get Profile(CN)
+            url:
+              type: string
+              description: 'Event related API endpoint '
+            type:
+              type: string
+              description: 'Event related API type, `application/json`'
+            method:
+              type: string
+              description: |-
+                Event related API HTTP methods, one of :
+
+                |Method|Description|
+                |---|---|
+                |GET|Retrieve resource|
+              enum:
+                - GET
         createTime:
           type: string
           description: 'Event created time, UTC+0 timestamp'
