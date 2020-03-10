@@ -322,12 +322,8 @@ paths:
                   type: string
                   description: Document name
                   maxLength: 128
-                size:
-                  type: integer
-                  description: Document file size
               required:
                 - name
-                - size
             examples: {}
         description: ''
       tags:
@@ -768,6 +764,7 @@ components:
           format: date-time
           example: '2019-01-01T00:00:00Z'
       required:
+        - id
         - name
         - size
         - createTime
