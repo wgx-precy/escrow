@@ -482,7 +482,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/Profile'
         '400':
-          description: "Bad Request\n\nPossible error codes:\n\n| Code | Description |\n|------|-------------|\n| 108002 | `profileId` already exists |\n| 999995 | Parameter error. Invalid \\[PARAMETER\\] \\[type/length/value\\]  |"
+          description: "Bad Request\n\nPossible error codes:\n\n| Code | Description |\n|------|-------------|\n| 108002 | `profileId` already exists |\n| 999995 | Parameter error. Invalid \\[PARAMETER\\]  |"
         '500':
           description: Internal Server Error
       requestBody:
