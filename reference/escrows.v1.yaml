@@ -262,7 +262,7 @@ paths:
               - profile.rar.complete
           in: query
           name: topic
-          description: Event topic defined in Lianlian Pay system.
+          description: "Event topic defined in Lianlian Pay's system."
         - schema:
             type: integer
             default: 1
@@ -279,8 +279,18 @@ paths:
             type: string
             enum:
               - PROCESSING
+              - SUCCESS
+              - MAXIMUM_RETRIES_REACHED
           in: query
           name: status
+          description: |-
+            Event status defined in Lianlian Pay's system. One of:
+
+            | status | description |
+            |--------|-------------|
+            | PROCESSING | Event is under processing |
+            | SUCCESS | Successfully notified client via webhook. Received `200` HTTP status code return from registered webhook URL. |
+            | MAXIMUM_RETRIES_REACHED | Callback notification stopped as maximum retrying number reached. |
   '/documents/{documentId}':
     parameters:
       - schema:
