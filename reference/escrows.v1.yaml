@@ -797,7 +797,7 @@ components:
       type: object
       description: |
         **Legal-Representative Object**
-        Data set of Legal-Representative in Lianlian Pay system.
+        Data set of Legal-Representative in Lianlian Pay's system.
       x-tags:
         - Profiles
       properties:
@@ -809,13 +809,14 @@ components:
           description: "Legal representative's ID number"
         idFrontCopy:
           type: string
-          description: "The photocopy document name of legal representative's ID front page.Supported ID types:\n\nCN \n\n| Value | Description |\n|-------|-------------|\n| IDCARD | National ID Card |\n\nHK\n\n| Value | Description |\n|-------|-------------|\n| PASSPORT | Passport |\n| IDCARD | ID Card |\n\nUS, HK\n\n| Value | Description |\n|-------|-------------|\n| PASSPORT | Passport |\n| DRIVERS_LICENSE | Drivers License |"
+          description: "The legal representative's ID front page photocopy document id in LianlianPay's system returned by `Upload Document`API. Supported ID types:\n\nCN \n\n| Value | Description |\n|-------|-------------|\n| IDCARD | National ID Card |\n\nHK\n\n| Value | Description |\n|-------|-------------|\n| PASSPORT | Passport |\n| IDCARD | ID Card |\n\nUS, HK\n\n| Value | Description |\n|-------|-------------|\n| PASSPORT | Passport |\n| DRIVERS_LICENSE | Drivers License |"
         idBackCopy:
           type: string
-          description: "The photocopy document name of legal representative's ID back page.Supported ID types:\n\nCN \n\n| Value | Description |\n|-------|-------------|\n| IDCARD | National ID Card |\n\nHK\n\n| Value | Description |\n|-------|-------------|\n| PASSPORT | Passport |\n| IDCARD | ID Card |\n\nUS, HK\n\n| Value | Description |\n|-------|-------------|\n| PASSPORT | Passport |\n| DRIVERS_LICENSE | Drivers License |"
+          description: "The legal representative's ID back page photocopy document id in LianlianPay's system returned by `Upload Document`API. Supported ID types:\n\nCN \n\n| Value | Description |\n|-------|-------------|\n| IDCARD | National ID Card |\n\nHK\n\n| Value | Description |\n|-------|-------------|\n| PASSPORT | Passport |\n| IDCARD | ID Card |\n\nUS, HK\n\n| Value | Description |\n|-------|-------------|\n| PASSPORT | Passport |\n| DRIVERS_LICENSE | Drivers License |"
       required:
         - name
         - idFrontCopy
+        - idBackCopy
     KYC-Company:
       title: '| KYC-Company Object'
       type: object
@@ -833,7 +834,7 @@ components:
           description: Registry Number/EIN Number
         registrationCertificateCopy:
           type: string
-          description: The photocopy document name of business registration certificate
+          description: "The business registration certificate photocopy document id in LianlianPay's system returned by `Upload Document`API."
         registrationCertificateCopyType:
           $ref: '#/components/schemas/Certificate-Document-Type'
         address:
@@ -864,10 +865,10 @@ components:
           description: ID number
         idFrontCopy:
           type: string
-          description: "The photocopy document id returned by LianlianPay's system of the ID front page. Supported ID types:\n\nCN \n\n| Value | Description |\n|-------|-------------|\n| IDCARD | National ID Card |\n\nHK\n\n| Value | Description |\n|-------|-------------|\n| PASSPORT | Passport |\n| IDCARD | ID Card |\n\nUS, HK\n\n| Value | Description |\n|-------|-------------|\n| PASSPORT | Passport |\n| DRIVERS_LICENSE | Drivers License |"
+          description: "The ID front page photocopy document id in LianlianPay's system returned by `Upload Document`API. Supported ID types:\n\nCN \n\n| Value | Description |\n|-------|-------------|\n| IDCARD | National ID Card |\n\nHK\n\n| Value | Description |\n|-------|-------------|\n| PASSPORT | Passport |\n| IDCARD | ID Card |\n\nUS, HK\n\n| Value | Description |\n|-------|-------------|\n| PASSPORT | Passport |\n| DRIVERS_LICENSE | Drivers License |"
         idBackCopy:
           type: string
-          description: "The photocopy document name of the ID back page.Supported ID types:\n\nCN \n\n| Value | Description |\n|-------|-------------|\n| IDCARD | National ID Card |\n\nHK\n\n| Value | Description |\n|-------|-------------|\n| PASSPORT | Passport |\n| IDCARD | ID Card |\n\nUS, HK\n\n| Value | Description |\n|-------|-------------|\n| PASSPORT | Passport |\n| DRIVERS_LICENSE | Drivers License |"
+          description: "The ID back page photocopy document id in LianlianPay's system returned by `Upload Document`API. Supported ID types:\n\nCN \n\n| Value | Description |\n|-------|-------------|\n| IDCARD | National ID Card |\n\nHK\n\n| Value | Description |\n|-------|-------------|\n| PASSPORT | Passport |\n| IDCARD | ID Card |\n\nUS, HK\n\n| Value | Description |\n|-------|-------------|\n| PASSPORT | Passport |\n| DRIVERS_LICENSE | Drivers License |"
         address:
           $ref: '#/components/schemas/Address'
       required:
