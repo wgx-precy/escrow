@@ -275,6 +275,12 @@ paths:
           in: query
           name: pageSize
           description: 'If nonzero, return no more than this number of results. Used with `pageNum` to provide pagination for large datasets. Unless otherwise specified, the maximum number of records that can be returned from an API call is 20 records'
+        - schema:
+            type: string
+            enum:
+              - PROCESSING
+          in: query
+          name: status
   '/documents/{documentId}':
     parameters:
       - schema:
@@ -636,7 +642,6 @@ components:
           required:
             - objectType
             - objectId
-            - title
             - url
           properties:
             objectType:
@@ -658,22 +663,6 @@ components:
             objectId:
               type: string
               description: Id of the object that related in this event
-            title:
-              type: string
-              description: |-
-                API that can be used to process this event. One of:
-
-                | title | description|
-                |---|----|
-                |Download Document(US)| Download files, such as reconciliation report(s), RAR report from Lianlian Pay US system |
-                |Download Document(CN)| Download files, such as reconciliation report(s), RAR report from Lianlian Pay CN system |
-                |Get Profile(US)| Get profile details from Lianlian Pay US system |
-                |Get Profile(CN)| Get profile details from Lianlian Pay CN system |
-              enum:
-                - Download Document(US)
-                - Download Document(CN)
-                - Get Profile(US)
-                - Get Profile(CN)
             url:
               type: string
               description: "Event related API endpoint. Can be used to retrive the data object related to this event from Lianlian Pay's system. \n\nHttp method accepted is `GET`, type is `application/json`"
@@ -684,11 +673,14 @@ components:
           example: '2019-01-01T00:00:00Z'
         topic:
           $ref: '#/components/schemas/Event-Topic'
+        status:
+          type: string
       required:
         - id
         - data
         - createTime
         - topic
+        - status
     Event-Topic:
       type: string
       title: '| Event Topic Enumeration'
