@@ -475,11 +475,11 @@ paths:
                           description: ID number
                         idFrontCopy:
                           type: string
-                          description: "Document name of the ID front page photocopy.\nSupported ID types:\n\nCN \n\n| Value | Description |\n|-------|-------------|\n| IDCARD | National ID Card |\n\nHK\n\n| Value | Description |\n|-------|-------------|\n| PASSPORT | Passport |\n| IDCARD | ID Card |\n\nUS, HK\n\n| Value | Description |\n|-------|-------------|\n| PASSPORT | Passport |\n| DRIVERS_LICENSE | Drivers License |"
+                          description: "The ID front page photocopy document id in LianlianPay's system returned by `Upload Document`API. Supported ID types:\n\nCN \n\n| Value | Description |\n|-------|-------------|\n| IDCARD | National ID Card |\n\nHK\n\n| Value | Description |\n|-------|-------------|\n| PASSPORT | Passport |\n| IDCARD | ID Card |\n\nUS, HK\n\n| Value | Description |\n|-------|-------------|\n| PASSPORT | Passport |\n| DRIVERS_LICENSE | Drivers License |"
                           maxLength: 128
                         idBackCopy:
                           type: string
-                          description: "Document name of the ID back page photocopy.\nSupported ID types:\n\nCN \n\n| Value | Description |\n|-------|-------------|\n| IDCARD | National ID Card |\n\nHK\n\n| Value | Description |\n|-------|-------------|\n| PASSPORT | Passport |\n| IDCARD | ID Card |\n\nUS, HK\n\n| Value | Description |\n|-------|-------------|\n| PASSPORT | Passport |\n| DRIVERS_LICENSE | Drivers License |"
+                          description: "The ID back page photocopy document id in LianlianPay's system returned by `Upload Document`API. Supported ID types:\n\nCN \n\n| Value | Description |\n|-------|-------------|\n| IDCARD | National ID Card |\n\nHK\n\n| Value | Description |\n|-------|-------------|\n| PASSPORT | Passport |\n| IDCARD | ID Card |\n\nUS, HK\n\n| Value | Description |\n|-------|-------------|\n| PASSPORT | Passport |\n| DRIVERS_LICENSE | Drivers License |"
                           maxLength: 128
                         address:
                           type: object
@@ -525,7 +525,7 @@ paths:
                           maxLength: 64
                         registrationCertificateCopy:
                           type: string
-                          description: Document name of business registration certificate photocopy.
+                          description: "The business registration certificate photocopy document id in LianlianPay's system returned by `Upload Document` API."
                           maxLength: 128
                         registrationCertificateCopyType:
                           type: string
@@ -834,7 +834,7 @@ components:
           description: Registry Number/EIN Number
         registrationCertificateCopy:
           type: string
-          description: "The business registration certificate photocopy document id in LianlianPay's system returned by `Upload Document`API."
+          description: "The business registration certificate photocopy document id in LianlianPay's system returned by `Upload Document` API."
         registrationCertificateCopyType:
           $ref: '#/components/schemas/Certificate-Document-Type'
         address:
