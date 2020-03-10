@@ -415,6 +415,8 @@ paths:
                 required:
                   - id
                   - status
+        '404':
+          description: Not Found
       description: "Cancel a `ACTIVE` status profile by `profileId`. After cancellation, profile KYC periodical validation will be stopped and reserved funding will be returned. \n\nReturn type is `Profile` object."
       tags:
         - Profiles
