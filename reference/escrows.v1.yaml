@@ -668,13 +668,21 @@ components:
               description: "Event related API endpoint. Can be used to retrive the data object related to this event from Lianlian Pay's system. \n\nHttp method accepted is `GET`, type is `application/json`"
         createTime:
           type: string
-          description: 'Event created time, UTC+0 timestamp'
+          description: 'Event  created time, UTC+0 timestamp'
           format: date-time
           example: '2019-01-01T00:00:00Z'
         topic:
           $ref: '#/components/schemas/Event-Topic'
         status:
           type: string
+          description: |-
+            Event status defined in Lianlian Pay's system. One of:
+
+            | status | description |
+            |--------|-------------|
+            | PROCESSING | Event is under processing |
+            | SUCCESS | Successfully notified client via webhook. Received `200` HTTP status code return from registered webhook URL. |
+            | MAXIMUM_RETRIES_REACHED | Callback notification stopped as maximum retrying number reached. |
       required:
         - id
         - data
