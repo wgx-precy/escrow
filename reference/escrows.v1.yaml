@@ -760,9 +760,6 @@ components:
         name:
           type: string
           description: Document name
-        size:
-          type: integer
-          description: Document size
         createTime:
           type: string
           description: 'Document create time, UTC+0 timestamp'
@@ -771,7 +768,6 @@ components:
       required:
         - id
         - name
-        - size
         - createTime
     Certificate-Document-Type:
       type: string
