@@ -681,14 +681,20 @@ components:
             | PROCESSING | Event is under processing |
             | SUCCESS | Successfully notified client via webhook. Received `200` HTTP status code return from registered webhook URL. |
             | MAXIMUM_RETRIES_REACHED | Callback notification stopped as maximum retrying number reached. |
+          enum:
+            - PROCESSING
+            - SUCCESS
+            - MAXIMUM_RETRIES_REACHED
         webhookURL:
           type: string
+          description: Registered webhook url for this event
       required:
         - id
         - data
         - createTime
         - topic
         - status
+        - webhookURL
     Event-Topic:
       type: string
       title: '| Event Topic Enumeration'
@@ -724,14 +730,14 @@ components:
         url:
           type: string
           description: Client callback url
+          maxLength: 128
         createTime:
           type: string
           description: 'Webhook registration time, UTC+0 timestamp'
           format: date-time
           example: '2019-01-01T00:00:00Z'
         topic:
-          type: string
-          description: Event topics in Lianlian Pay system
+          $ref: '#/components/schemas/Event-Topic'
       required:
         - id
         - url
