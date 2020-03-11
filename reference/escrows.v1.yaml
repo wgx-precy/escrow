@@ -13,7 +13,7 @@ info:
     |Change "INDIVIDUAL" to "SOLE_TRADER"| Precy | 2020-02-20|
     |Add API token rotation, Event failure strategy and Document ID return | Precy | 2020-03-11|
 
-    Due to data security policy and requirements of China and United States, PII related Lianlian Pay API(s) are hosted both in China and United States, corresponding PII data will be store and processed within data receiving country, no PII data will be shared between two environments. None PII related API(s) are hosted in China only. Detailed APIs and its hosting environments are:
+    Due to data security policy and requirements of China and United States, PII related Lianlian Pay API(s) are hosted both in China and United States, corresponding PII data will be store and processed within data receiving country, PII data will not be shared between two environments. None PII related API(s) will be hosted in China only. Detailed APIs and its hosting environments are:
 
     ![](https://raw.githubusercontent.com/wgx-precy/escrow/master/assets/images/apis_host.png)
   contact:
