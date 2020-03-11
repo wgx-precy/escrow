@@ -63,7 +63,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/Webhook'
         '400':
-          description: "Bad Request\n\nPossible error codes:\n\n| Code | Description |\n|------|-------------|\n| 999995 | Parameter error. Invalid \\[PARAMETER\\] \\[type/length/value\\]  |"
+          description: "Bad Request\n\nPossible error codes:\n\n| Code | Description |\n|------|-------------|\n| 999995 | \\[PARAMETER\\] ERROR_MESSAGE |\n| 108012 | Duplicate Webhook Registration |"
         '500':
           description: Internal Server Error
       description: |-
@@ -98,7 +98,7 @@ paths:
         description: ''
       tags:
         - Webhooks
-  '/webhook/{webhookId}':
+  '/webhooks/{webhookId}':
     parameters:
       - schema:
           type: string
@@ -190,7 +190,7 @@ paths:
                   - total
                   - list
         '400':
-          description: "Bad Request\n\nPossible error codes:\n\n| Code | Description |\n|------|-------------|\n| 999995 | Parameter error. Invalid \\[PARAMETER\\] \\[type/length/value\\]  |"
+          description: "Bad Request\n\nPossible error codes:\n\n| Code | Description |\n|------|-------------|\n| 999995 | \\[PARAMETER\\] ERROR_MESSAGE |"
         '500':
           description: Internal Server Error
       operationId: get-events
@@ -281,7 +281,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/Document'
         '400':
-          description: "Bad Request\n\nPossible error codes:\n\n| Code | Description |\n|------|-------------|\n| 510002 | Unsupported document type. |\n| 999995 | Parameter error. Invalid \\[PARAMETER\\] \\[type/length/value\\]  |\n"
+          description: "Bad Request\n\nPossible error codes:\n\n| Code | Description |\n|------|-------------|\n| 510002 | Unsupported document type. |\n| 999995 | \\[PARAMETER\\] ERROR_MESSAGE |\n"
         '500':
           description: Internal Server Error
       description: "Upload document to Lianlian Pay system. \n\n**This method is hosted in both US and CN**, support document(s) for US profiles should be uploaded via US endpoint and supported document(s) for US/HK profiles should be uploaded via CN endpoint.\n\nAttachments can be one of the format PDF, JPG, JPEG, or PNG. To upload a multi-page image, please use the PDF data type.\n\nReturn type is `Document` object"
