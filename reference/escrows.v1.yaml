@@ -657,7 +657,7 @@ paths:
                   - masterToken
                   - createTime
         '400':
-          description: "Bad Request\n\nPossible error codes:\n\n| Code | Description |\n|------|-------------|\n| 999995 | \\[PARAMETER\\] ERROR_MESSAGE |"
+          description: "Bad Request\n\nPossible error codes:\n\n| Code | Description |\n|------|-------------|\n| 999995 | \\[PARAMETER\\] ERROR_MESSAGE |\n"
         '404':
           description: Not Found
         '500':
