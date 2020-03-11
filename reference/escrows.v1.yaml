@@ -927,9 +927,7 @@ components:
     Region:
       title: '| Region Enumeration'
       description: |
-        **Region/Country**
-
-        One of:
+        **Region/Country** Two and three character ISO 3166 region codes. One of:
 
         | Region | Description |
         |-------|-------------|
@@ -994,21 +992,26 @@ components:
       properties:
         lineOne:
           type: string
-          description: Address Line 1
+          description: 'Address line 1 (e.g., street, PO Box, or company name)'
+          maxLength: 50
         lineTwo:
           type: string
-          description: Address Line 2
+          description: 'Address line 2 (e.g., apartment, suite, unit, or building)'
+          maxLength: 100
         city:
           type: string
           description: City/Town
+          maxLength: 50
         province:
           type: string
-          description: Province/State
+          description: 'State, county, province, or region'
+          maxLength: 50
         region:
           $ref: '#/components/schemas/Region'
         postalCode:
           type: string
-          description: Postalcde/Zipcode
+          description: ZIP or postal code
+          maxLength: 11
       required:
         - lineOne
         - city
