@@ -622,6 +622,48 @@ paths:
       description: "Create a merchant profile in Lianlian Pay system. \n\n**This method is hosted in both US and CN**, US profiles should be created via US endpoint, and CN/HK profiles should be created via CN endpoint.\n\nAll required supporting documents, such as `regCertificateCopy`, `idFrontImg`, `idBackImg`, etc, should be uploaded into Lianlina Pay system via **Upload Document** API before making the **Create Profile** request.\n\nReturn type is `Profile` object"
       tags:
         - Profiles
+  '/developers/{developerId}/token/{refreshToken}':
+    parameters:
+      - schema:
+          type: string
+        name: refreshToken
+        in: path
+        required: true
+      - schema:
+          type: string
+        name: developerId
+        in: path
+        required: true
+    get:
+      summary: 1. Refresh Developer Master Token
+      tags:
+        - Developers
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  developerId:
+                    type: string
+                    description: 'Developer id '
+                  masterToken:
+                    type: string
+                    description: Refreshed new master token
+                  createTime:
+                    type: string
+                    format: date-time
+                    example: '2019-01-01T00:00:00Z'
+                    description: Master Token refreshed time
+                required:
+                  - developerId
+                  - masterToken
+                  - createTime
+        '500':
+          description: Internal Server Error
+      operationId: get-developers-token-refreshToken
 components:
   schemas:
     Event:
