@@ -682,7 +682,6 @@ paths:
                   id:
                     type: string
                     description: Profile id
-                    maxLength: 32
                   status:
                     type: string
                     description: Profile status
