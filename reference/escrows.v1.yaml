@@ -887,15 +887,18 @@ components:
         name:
           type: string
           description: "Legal representative's name in English"
+          maxLength: 128
         idNumber:
           type: string
           description: "Legal representative's ID number"
         idFrontCopy:
           type: string
           description: "The legal representative's ID front page photocopy document id in LianlianPay's system returned by `Upload Document`API. Supported ID types:\n\nCN \n\n| Value | Description |\n|-------|-------------|\n| IDCARD | National ID Card |\n\nHK\n\n| Value | Description |\n|-------|-------------|\n| PASSPORT | Passport |\n| IDCARD | ID Card |\n\nUS, HK\n\n| Value | Description |\n|-------|-------------|\n| PASSPORT | Passport |\n| DRIVERS_LICENSE | Drivers License |"
+          maxLength: 32
         idBackCopy:
           type: string
           description: "The legal representative's ID back page photocopy document id in LianlianPay's system returned by `Upload Document`API. Supported ID types:\n\nCN \n\n| Value | Description |\n|-------|-------------|\n| IDCARD | National ID Card |\n\nHK\n\n| Value | Description |\n|-------|-------------|\n| PASSPORT | Passport |\n| IDCARD | ID Card |\n\nUS, HK\n\n| Value | Description |\n|-------|-------------|\n| PASSPORT | Passport |\n| DRIVERS_LICENSE | Drivers License |"
+          maxLength: 32
       required:
         - name
         - idFrontCopy
@@ -912,12 +915,15 @@ components:
         name:
           type: string
           description: Entity Name in English
+          maxLength: 128
         registrationNumber:
           type: string
           description: Registry Number/EIN Number
+          maxLength: 128
         registrationCertificateCopy:
           type: string
           description: "The business registration certificate photocopy document id in LianlianPay's system returned by `Upload Document` API."
+          maxLength: 32
         registrationCertificateCopyType:
           $ref: '#/components/schemas/Certificate-Document-Type'
         address:
@@ -943,15 +949,18 @@ components:
         name:
           type: string
           description: Name in English
+          maxLength: 128
         idNumber:
           type: string
           description: ID number
         idFrontCopy:
           type: string
           description: "The ID front page photocopy document id in LianlianPay's system returned by `Upload Document`API. Supported ID types:\n\nCN \n\n| Value | Description |\n|-------|-------------|\n| IDCARD | National ID Card |\n\nHK\n\n| Value | Description |\n|-------|-------------|\n| PASSPORT | Passport |\n| IDCARD | ID Card |\n\nUS, HK\n\n| Value | Description |\n|-------|-------------|\n| PASSPORT | Passport |\n| DRIVERS_LICENSE | Drivers License |"
+          maxLength: 32
         idBackCopy:
           type: string
           description: "The ID back page photocopy document id in LianlianPay's system returned by `Upload Document`API. Supported ID types:\n\nCN \n\n| Value | Description |\n|-------|-------------|\n| IDCARD | National ID Card |\n\nHK\n\n| Value | Description |\n|-------|-------------|\n| PASSPORT | Passport |\n| IDCARD | ID Card |\n\nUS, HK\n\n| Value | Description |\n|-------|-------------|\n| PASSPORT | Passport |\n| DRIVERS_LICENSE | Drivers License |"
+          maxLength: 32
         address:
           $ref: '#/components/schemas/Address'
       required:
