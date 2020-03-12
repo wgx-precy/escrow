@@ -303,108 +303,6 @@ paths:
         description: ''
       tags:
         - Documents
-  '/profiles/{profileId}':
-    parameters:
-      - schema:
-          type: string
-        name: profileId
-        in: path
-        required: true
-    get:
-      summary: 2. Get Profile
-      tags:
-        - Profiles
-      responses:
-        '200':
-          description: OK
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Profile'
-        '404':
-          description: Not Found
-        '500':
-          description: Internal Server Error
-      operationId: get-profiles-profileId
-      description: "Get a single profile by `profileId`. \n\n**This method will be hosted in both US and CN**, US profiles can be retrieved via US endpoint and CN/HK endpoint can be retrieved via CN endpoint. Otherwise `404 resoucre not found` will be returned.  \n\nReturn type is `Profile` object"
-    put:
-      summary: 3. Confirm Onboard
-      operationId: put-profiles-profileId
-      responses:
-        '200':
-          description: OK
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  id:
-                    type: string
-                    description: "Profile id from Avalara's system"
-                    maxLength: 32
-                  status:
-                    type: string
-                    description: "Profile status in Lianlian Pay's system"
-                    enum:
-                      - APPROVED
-                required:
-                  - id
-                  - status
-        '400':
-          description: |-
-            Bad Request
-
-            Possible error codes:
-
-            | Code | Description |
-            |------|-------------|
-            | 108002 | Invalid profile. Only `ACTIVE` profile can be approved onboard. |
-        '404':
-          description: Not Found
-        '500':
-          description: Internal Server Error
-      tags:
-        - Profiles
-      description: "Approve a single profile by `profileID`. \n\nReturn type is `Profile` object"
-    delete:
-      summary: 4. Cancel Profile
-      operationId: delete-profiles-profileId
-      responses:
-        '200':
-          description: OK
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  id:
-                    type: string
-                    description: "Profile id from Avalara's system"
-                  status:
-                    type: string
-                    description: "Profile status in Lianlian Pay's system"
-                    enum:
-                      - CANCELED
-                      - FAILED
-                required:
-                  - id
-                  - status
-        '400':
-          description: |-
-            Bad Request
-
-            Possible error codes:
-
-            | Code | Description |
-            |------|-------------|
-            | 108003 | Invalide profile. Only `INIT`, `ERROR`, `ACTIVE`, `APPROVED` profile can be canceled. |
-        '404':
-          description: Not Found
-        '500':
-          description: Internal Server Error
-      description: "Cancel a profile by its `profileId`. \n\nReturn type is `Profile` object."
-      tags:
-        - Profiles
   /profiles:
     post:
       summary: 1. Create Profile
@@ -693,6 +591,122 @@ paths:
         Refresh developer's master token with Lianlian Pay assigned refresh token. Master token can be refreshed at anytime with a valid refresh token. After refresh, previous master token will be expired instantly.
 
         Refresh token can be updated via offline process.
+  '/profiles/{profileId}':
+    parameters:
+      - schema:
+          type: string
+        name: profileId
+        in: path
+        required: true
+    get:
+      summary: 2. Get Profile
+      tags:
+        - Profiles
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Profile'
+        '404':
+          description: Not Found
+        '500':
+          description: Internal Server Error
+      operationId: get-profiles-profileId
+      description: "Get a single profile by `profileId`. \n\n**This method will be hosted in both US and CN**, US profiles can be retrieved via US endpoint and CN/HK endpoint can be retrieved via CN endpoint. Otherwise `404 resoucre not found` will be returned.  \n\nReturn type is `Profile` object"
+  '/profiles/{profileId}/cancel':
+    parameters:
+      - schema:
+          type: string
+        name: profileId
+        in: path
+        required: true
+    put:
+      summary: 4. Cancel Profile
+      operationId: put-profiles-profileId-cancel
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: string
+                    description: Profile id
+                    maxLength: 32
+                  status:
+                    type: string
+                    description: Profile status
+                    enum:
+                      - CANCELED
+                required:
+                  - id
+                  - status
+        '400':
+          description: |-
+            Bad Request
+
+            Possible error codes:
+
+            | Code | Description |
+            |------|-------------|
+            | 108003 | Invalide profile. Only `INIT`, `ERROR`, `ACTIVE`, `APPROVED` profile can be canceled. |
+        '404':
+          description: Not Found
+        '500':
+          description: Internal Server Error
+      tags:
+        - Profiles
+      description: "Approve a single profile by `profileID`. \n\n`profileId` and updated `status` will be returned"
+  '/profiles/{profileId}/approve':
+    parameters:
+      - schema:
+          type: string
+        name: profileId
+        in: path
+        required: true
+    put:
+      summary: 3. Confirm Onboard
+      operationId: put-profiles-profileId
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: string
+                    description: Profile id
+                    maxLength: 32
+                  status:
+                    type: string
+                    description: Profile status
+                    enum:
+                      - APPROVED
+                required:
+                  - id
+                  - status
+        '400':
+          description: |-
+            Bad Request
+
+            Possible error codes:
+
+            | Code | Description |
+            |------|-------------|
+            | 108002 | Invalid profile. Only `ACTIVE` profile can be approved onboard. |
+        '404':
+          description: Not Found
+        '500':
+          description: Internal Server Error
+      tags:
+        - Profiles
+      description: "Approve a single profile by `profileID`. \n\n`profileId` and updated `status` will be returned"
 components:
   schemas:
     Event:
