@@ -131,8 +131,8 @@ paths:
       summary: 4. Delete Webhook Registration
       operationId: delete-webhook-webhookId
       responses:
-        '200':
-          description: OK
+        '204':
+          description: No Content
         '404':
           description: Not Found
         '500':
