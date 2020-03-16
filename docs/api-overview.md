@@ -30,10 +30,10 @@ After process, Lianlian Pay will replay with:
 The `Authorization` header must be included in all requests with the following format:
 
 ```
-Authorization: Basic {token}
+Authorization: Basic {master_token}
 ```
 
-Your API keys carry many privileges, so be sure to keep them secure! Do not share your secret API keys in publicly accessible areas such as GitHub, client-side code, and so forth.
+Your API keys carry many privileges, so be sure to keep them secure! Do not share your API tokens in publicly accessible areas such as GitHub, client-side code, and so forth.
 
 All API requests must be made over HTTPS. Calls made over plain HTTP will fail. API requests without authentication will fail.
 
