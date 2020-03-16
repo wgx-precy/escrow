@@ -1,6 +1,6 @@
 # API Introduction
 
-The LianLian API is organized around REST. Our API has predictable resource-oriented URLs, accepts JSON-encoded request bodies, returns JSON-encoded responses, and uses standard HTTP response codes, authentication, and verbs.
+The LianLianPay API is organized around REST. Our API has predictable resource-oriented URLs, accepts JSON-encoded request bodies, returns JSON-encoded responses, and uses standard HTTP response codes, authentication, and verbs.
 
 # Versioning
 
@@ -39,7 +39,7 @@ All API requests must be made over HTTPS. Calls made over plain HTTP will fail. 
 
 # Preventing replay attacks
 
-A replay attack is when an attacker intercepts a valid payload and its signature, then re-transmits them. To mitigate such attacks, LianLian includes a timestamp in the **LLPAY-Signature** header for requests and for responses. Because this timestamp is part of the signed payload, it is also verified by the signature, so an attacker cannot change the timestamp without invalidating the signature. If the signature is valid but the timestamp is too old, the call will be rejected.
+A replay attack is when an attacker intercepts a valid payload and its signature, then re-transmits them. To mitigate such attacks, LianLian Pay includes a timestamp in the **LLPAY-Signature** header for requests and for responses. Because this timestamp is part of the signed payload, it is also verified by the signature, so an attacker cannot change the timestamp without invalidating the signature. If the signature is valid but the timestamp is too old, the call will be rejected.
 
 ### Verifying signatures
 
@@ -101,7 +101,7 @@ Achieve this by concatenating:
 
 ### Result Signature
 
-LianLian result headers also contain the `LLPAY-Signature` header as described above but signed with Lianlian Pay's private RSA key.  You may verify the signature corresponds to the Result body by calculating the signature and comparing it to the unencrypted version of `LLPAY-Signature` using the Lianlian Pay's public RSA key.  Here are the steps:
+LianLian Pay result headers also contain the `LLPAY-Signature` header as described above but signed with Lianlian Pay's private RSA key.  You may verify the signature corresponds to the Result body by calculating the signature and comparing it to the unencrypted version of `LLPAY-Signature` using the Lianlian Pay's public RSA key.  Here are the steps:
 
 **Step 1:** Determine the signature `payload`
 
