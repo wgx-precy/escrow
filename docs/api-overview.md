@@ -30,10 +30,10 @@ After process, Lianlian Pay will replay with:
 The `Authorization` header must be included in all requests with the following format:
 
 ```
-Authorization: Basic {master_token}
+Authorization: Basic {token}
 ```
 
-Your API keys carry many privileges, so be sure to keep them secure! Do not share your API tokens in publicly accessible areas such as GitHub, client-side code, and so forth.
+Your API keys carry many privileges, so be sure to keep them secure! Do not share your secret API keys in publicly accessible areas such as GitHub, client-side code, and so forth.
 
 All API requests must be made over HTTPS. Calls made over plain HTTP will fail. API requests without authentication will fail.
 
@@ -55,7 +55,9 @@ Lianlian Pay and clients shall exchange each party’s public key.  The LLPAY-Si
 
 **Step 1:** Determine the signature payload
 
-Create a `payload` string which is the following connected with `&`
+Create a `payload` string with the following formula:
+
+**HTTP_METHOD&URI&REQUEST_EPOCH[&REQUEST_PAYLOAD]**
 
 * HTTP_METHOD: The actual method defined for specific API endpoint `POST`
 * URI: The request's URL Path, such as `/profiles/{profileId}`
@@ -198,7 +200,9 @@ Each API request has an associated request identifier. You can find this value i
 
 # Idempotent Requests
 
-Some requests such as the payment POST request are idempotent.  When a repeat request is sent with the same Client ID, the service responds with the same success or failure response as it is assumed the client never received it to begin with.  In any repeat responses, however, a new header `Repeat-Id` is addd and contains the Request Id Of the original response.  In this way the client knows the response is a repeat - this helps in debugging issues.
+The API supports idempotency for safely retrying requests without accidentally performing the same operation twice. This is useful when an API call is disrupted in transit and you do not receive a response. For example, if a request to create a charge does not respond due to a network connection error, you can retry the request with the same idempotency key to guarantee that no more than one charge is created.
+
+To perform an idempotent request, provide an additional Idempotency-Key: <key> header to the request.
 
 
 
