@@ -65,6 +65,10 @@ paths:
                 $ref: '#/components/schemas/Webhook'
         '400':
           description: "Bad Request\n\nPossible error codes:\n\n| Code | Description |\n|------|-------------|\n| 999995 | \\[PARAMETER\\] ERROR_MESSAGE |\n| 108012 | Duplicate Webhook Registration |"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
         '500':
           description: Internal Server Error
       description: |-
@@ -193,6 +197,10 @@ paths:
                   - list
         '400':
           description: "Bad Request\n\nPossible error codes:\n\n| Code | Description |\n|------|-------------|\n| 999995 | \\[PARAMETER\\] ERROR_MESSAGE |"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
         '500':
           description: Internal Server Error
       operationId: get-events
@@ -316,6 +324,10 @@ paths:
                 $ref: '#/components/schemas/Profile'
         '400':
           description: "Bad Request\n\nPossible error codes:\n\n| Code | Description |\n|------|-------------|\n| 108001 | `profileId` already exists |\n| 999995 | \\[PARAMETER\\] ERROR_MESSAGE |"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
         '500':
           description: Internal Server Error
       requestBody:
@@ -597,6 +609,10 @@ paths:
             | Code | Description |
             |------|-------------|
             | 108003 | Invalide profile. Only `INIT`, `ERROR`, `ACTIVE`, `APPROVED` profile can be canceled. |
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
         '404':
           description: Not Found
         '500':
@@ -642,6 +658,10 @@ paths:
             | Code | Description |
             |------|-------------|
             | 108002 | Invalid profile. Only `ACTIVE` profile can be approved onboard. |
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
         '404':
           description: Not Found
         '500':
