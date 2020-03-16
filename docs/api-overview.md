@@ -4,15 +4,30 @@ The LianLian API is organized around REST. Our API has predictable resource-orie
 
 # Versioning
 
-When we make backwards-incompatible changes to the API, we release new versions.  The version to use is specified in the URL.  The current version for the Payments API is v1 such as:
+When we make backwards-incompatible changes to the API, we release new versions.  The version to use is specified in the URL. For example, the current version for our EU VAT KYC api is:
 
 ```
-https://api....com/payments/v1/...
+https://global-api.lianlianpay.com/kyc/v1...
 ```
+
 
 # Authentication
 
-The LianLian API uses an API key to authenticate requests. You will receive your `token` from LianLian Global.  The `Authorization` header must be included in all requests with the following format:
+LianLian Pay API uses an API key to authenticate requests. To request Lianlian Pay developer account, send the following two information to `fx_support@lianlianpay.com`:
+<!-- theme: info -->
+>**developer_name**
+>
+>**developer_public_key**
+
+After process, Lianlian Pay will replay with:
+<!-- theme: info -->
+>**developer_master_token** - api authentication
+>
+>**developer_refresh_token** - refresh developer master token, valid for a year. Can be updated by sending request to `fx_support@lianlianpay.com`
+>
+>**LianlianPay_public_key**
+
+The `Authorization` header must be included in all requests with the following format:
 
 ```
 Authorization: Basic {token}
@@ -28,7 +43,7 @@ A replay attack is when an attacker intercepts a valid payload and its signature
 
 ### Verifying signatures
 
-The LLPAY-Signature header contains a timestamp and one or more signatures. The timestamp is prefixed by t=, and each signature is prefixed by a scheme. Schemes start with v, potentially followed by an integer. Currently, the only valid signature scheme is v.  When the signature changes it will move to v1, v2, ...
+The LLPAY-Signature header contains a timestamp and one or more signatures. The timestamp is prefixed by t=, and each signature is prefixed by a scheme. Schemes start with v, potentially followed by an integer.
 
 ```
 LLPAY-Signature: t=1492774577, v=5257a869e7ecebeda32affa62cdca3fa51cad7e77a0e56ff536d0ce8e108d8bd
@@ -40,59 +55,74 @@ Lianlian Pay and clients shall exchange each party’s public key.  The LLPAY-Si
 
 **Step 1:** Determine the signature payload
 
-Create a `payload` string which is the following separated by `&`
+Create a `payload` string which is the following connected with `&`
 
 * HTTP_METHOD: The actual method defined for specific API endpoint `POST`
-* URI: The request's URL Path, URI.  `/api/mkt/balance`
-* REQUEST_EPOCH: The seconds elapsed since 1970/1/1 00:00:00 GMT  same as value of `t`
-* REQUEST_PAYLOAD: The contents of request body, typically in JSON format  `{"currency":"USD"}`
-* QUERY_STRING: The query string of the URL, URL Encoded.  `attr1%3Dvalue1%26attr2%3Dvalue2`
+* URI: The request's URL Path, such as `/profiles/{profileId}`
+* REQUEST_EPOCH: The seconds elapsed since 1970/1/1 00:00:00 GMT, same as value of `t`
+* REQUEST_PAYLOAD: The contents of request body in JSON format. 
+* QUERY_STRING: The query string of the URL, URL Encoded, such as `attr1%3Dvalue1%26attr2%3Dvalue2`
+
+<!-- theme: info -->
+>Case 1: QUERY_STRING is empty:
+>
+>**Formula is**: HTTP_METHOD&URI&REQUEST_EPOCH&REQUEST_PAYLOAD
+>
+>---
+>Case 2: REQUEST_PAYLOAD is empty:
+>
+>**Formula is**: HTTP_METHOD&URI&REQUEST_EPOCH&&QUERY_STRING
+>
+>---
+>Case 3: REQUEST_PAYLOAD and QUERY_STRING both are empty:
+>
+>**Formula is**: HTTP_METHOD&URI&REQUEST_EPOCH&
+
 
 Put typical GET and POST examples here.
 
 Example POST `payload`:
 ```
-POST&payments/v1/merchants&19879234&{"currency":"USD"}
+POST&kyc/v1/profiles&19879234&{"profileId":"string","countryOfOrigin":"CN","type":"COMPANY","email":"abc@xyz.com","mobile":"string","indicator":"string","kyc":{"name":"string","idNumber":"string","idFrontCopy":"string","idBackCopy":"string","address":{"lineOne":"string","lineTwo":"string","city":"string","province":"string","region":"string","postalCode":"string"}}}
 ```
 
 Example GET `payload`:
 ```
-GET&payments/v1/payments/602837&19879234&&amp;currency%3DUSD
+GET&events/v1&19879234&&amp;status%3DMAXIMUM_RETRIES_REACHED
 ```
 
 
 
 **Step 2:** Prepare the `LLPAY-Signature` string
 
-You achieve this by concatenating:
+Achieve this by concatenating:
 * The timestamp (Seconds elapsed since 1970/1/1 00:00:00 GMT as a string)
-* The character `,`
-* Use your RSA private key and calculate the string `BASE64(RSAwithSHA256(payload))` from Step 1
+* Use your RSA private key and calculate the string `BASE64(RSAwithSHA256(STEP_1_RESULT)))` from Step 1
 
 ### Result Signature
 
-LianLian result headers also contain the `LLPAY-Signature` header as described above but signed with Lian Lian Global's private RSA key.  You may verify the signature corresponds to the Result body by calculating the signature and comparing it to the unencrypted version of `LLPAY-Signature` using the Lian Lian Global public RSA key.  Here are the steps:
+LianLian result headers also contain the `LLPAY-Signature` header as described above but signed with Lianlian Pay's private RSA key.  You may verify the signature corresponds to the Result body by calculating the signature and comparing it to the unencrypted version of `LLPAY-Signature` using the Lianlian Pay's public RSA key.  Here are the steps:
 
 **Step 1:** Determine the signature `payload`
 
 Create a `payload` string which is the following separated by `&`
 
 * Response Timestamp: Extract t from LLPay-Signature and use it as timestamp
-* Response Payload: The contents of response body, typically in JSON format  `{"currency":"USD"}`
+* Response Payload: The contents of response body in JSON format
 
 Example `payload`:
 ```
-19879234&{"currency":"USD"}
+19879234&{"profileId":"string","countryOfOrigin":"CN","type":"COMPANY","email":"abc@xyz.com","mobile":"string","indicator":"string","kyc":{"name":"string","idNumber":"string","idFrontCopy":"string","idBackCopy":"string","address":{"lineOne":"string","lineTwo":"string","city":"string","province":"string","region":"string","postalCode":"string"}}}
 ```
 
 **Step 2:** Use RSA Verify to compare signatures
 
-Compare the LLPay-Signature received with the `payload` calculated in Step 1 using the Lian Lian Global Public Key using the following algorithm:
+Compare the LLPay-Signature received with the `payload` calculated in Step 1 using the Lianlian Pay's Public Key using the following algorithm:
 
 ```
 RSA.verify( LLPAY-Signature, 
-            '19879234&{" currency":"USD"}', 
-            Lian Lian Global Public Key )
+            '19879234&{"profileId":"string","countryOfOrigin":"CN","type":"COMPANY","email":"abc@xyz.com","mobile":"string","indicator":"string","kyc":{"name":"string","idNumber":"string","idFrontCopy":"string","idBackCopy":"string","address":{"lineOne":"string","lineTwo":"string","city":"string","province":"string","region":"string","postalCode":"string"}}}', 
+            Lianlian Pay Public Key )
 ```
 
 
@@ -104,27 +134,33 @@ A successful API call returns a conventional HTTP response with status 2xx indic
 
 ```
 {
-  "name": "Merchant Name",
-  ...
-}
-```
-or
-```
-[
-  {
-    "name": "Merchant Name",
-    ...
+  "profileId": "SMAPLE_PROFILE_ID",
+  "countryOfOrigin": "US",
+  "type": "COMPANY", 
+  "email": "sample@abc.com",
+  "mobile":"1234567890123",
+  "kyc": {
+    "name": "SAMPLE_COMPANY_ABC",
+    "registrationNumber":"123456789", 
+    "registrationCertificateCopyType":"BUSINESS_LICENSE",
+    "registrationCertificateCopy":"SAMPLE_DOCUMENT_ID", 
+    "address": {
+      "lineOne": "line 1",
+      "lineTwo": "line 2",
+      "city": "town",
+      "province": "state",
+      "region": "US",
+      "postalCode": "12345"
+    },
+    "legalRepresentative":{}
   },
-  {
-    "name": "Merchant Name 2",
-    ...
-  }
-]
+  "status":"ACTIVE"
+}
 ```
 
 #### Errors
 
-LianLian uses conventional HTTP response codes to indicate the success or failure of an API request. In general: Codes in the 2xx range indicate success. Codes in the 4xx range indicate an error that failed given the information provided (e.g., a required parameter was omitted, a charge failed, etc.). Codes in the 5xx range indicate an error with LianLian's servers (these are rare).
+LianLian Pay API uses conventional HTTP response codes to indicate the success or failure of an API request. In general: Codes in the 2xx range indicate success. Codes in the 4xx range indicate an error that failed given the information provided (e.g., a required parameter was omitted, a charge failed, etc.). Codes in the 5xx range indicate an error with LianLian's servers (these are rare).
 
 Some 4xx errors that could be handled programmatically (e.g., a validation error) include an error code that briefly explains the error reported.
 
@@ -134,11 +170,11 @@ Some 4xx errors that could be handled programmatically (e.g., a validation error
 |CODE | DESCRIPTION|
 |---------|----------|
 |200 | Success. |
- |400 | API Error. Detailed error codes & error message are included in each API method.|
- |401 | Unauthorized.	No valid API key provided.|
- |403 | Forbidden.	The API key doesn't have permissions to perform the request.|
- |404 | Resource Not Found.	The requested resource doesn't exist.|
- |500 | Internal Server Error. Contact Lianlian Pay for technical support|
+|400 | API Error. Detailed error codes & error message are included in each API method.|
+|401 | Unauthorized.	No valid API key provided.|
+|403 | Forbidden.	The API key doesn't have permissions to perform the request.|
+|404 | Resource Not Found.	The requested resource doesn't exist.|
+|500 | Internal Server Error. Contact Lianlian Pay for technical support|
 
 ### Error Result
 
@@ -150,8 +186,8 @@ See definition of Error Model in API Reference.
 
 ```
 {
-  "code": "154008",
-  "message": "Client has insufficient balance to pay merchant"
+  "code": "108001",
+  "message": "`profileId` already exists"
  }
  ```
 
@@ -164,26 +200,5 @@ Each API request has an associated request identifier. You can find this value i
 
 Some requests such as the payment POST request are idempotent.  When a repeat request is sent with the same Client ID, the service responds with the same success or failure response as it is assumed the client never received it to begin with.  In any repeat responses, however, a new header `Repeat-Id` is addd and contains the Request Id Of the original response.  In this way the client knows the response is a repeat - this helps in debugging issues.
 
-
-# Argument and Field Naming
-
-LianLian arguments and object field names follow standard underscore naming such as:
-
-```
-https://api...com/resource/?filter_by="filter"
-```
-
-```
-{
-  "store_name": "My Store",
-  "kyc_status": "success"
-}
-```
-
-# Webhook Endpoints
-
-You can configure webhook endpoints via the API to be notified about events that happen in your Lian Lian Group account.
-
-Note: The Webhook APIs are not implemented yet.  This is a Draft of the API design coming soon...
 
 
