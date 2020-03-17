@@ -46,10 +46,9 @@ A replay attack is when an attacker intercepts a valid payload and its signature
 The LLPAY-Signature header contains a timestamp and one or more signatures. The timestamp is prefixed by t=, and each signature is prefixed by a scheme. Schemes start with v, potentially followed by an integer.
 
 ```
-LLPAY-Signature: t=1492774577, v=5257a869e7ecebeda32affa62cdca3fa51cad7e77a0e56ff536d0ce8e108d8bd
-```
+LLPAY-Signature: t=1492774577, v=5257a869e7ecebeda32afCreate a `payload` string with the following formula:
 
-Note that newlines have been added in the example above for clarity, but a real LLPAY-Signature header will be all one line.
+**HTTP_METHOD&URI&REQUEST_EPOCH&REQUEST_PAYLOAD[&QUERY_STRING]**es have been added in the example above for clarity, but a real LLPAY-Signature header will be all one line.
 
 Lianlian Pay and clients shall exchange each party’s public key.  The LLPAY-Signature will be signed by with the RSA private key.
 
