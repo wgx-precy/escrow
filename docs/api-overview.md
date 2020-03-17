@@ -28,7 +28,7 @@ A replay attack is when an attacker intercepts a valid payload and its signature
 
 ### Verifying signatures
 
-The LLPAY-Signature header contains a timestamp and one or more signatures. The timestamp is prefixed by t=, and each signature is prefixed by a scheme. Schemes start with v, potentially followed by an integer. Currently, the only valid signature scheme is v.  When the signature changes it will move to v1, v2, ...
+The LLPAY-Signature header contains a timestamp and one signature. The timestamp is prefixed by t=, and each signature is prefixed by a scheme. Schemes start with v, potentially followed by an integer. Currently, the only valid signature scheme is v.  When the signature changes it will move to v1, v2, ...
 
 ```
 LLPAY-Signature: t=1492774577, v=5257a869e7ecebeda32affa62cdca3fa51cad7e77a0e56ff536d0ce8e108d8bd
@@ -122,9 +122,9 @@ or
 ]
 ```
 
-#### Errors
+###Create a `payload` string with the following formula:
 
-LianLian uses conventional HTTP response codes to indicate the success or failure of an API request. In general: Codes in the 2xx range indicate success. Codes in the 4xx range indicate an error that failed given the information provided (e.g., a required parameter was omitted, a charge failed, etc.). Codes in the 5xx range indicate an error with LianLian's servers (these are rare).
+**HTTP_METHOD&URI&REQUEST_EPOCH&REQUEST_PAYLOAD[&QUERY_STRING]**ate the success or failure of an API request. In general: Codes in the 2xx range indicate success. Codes in the 4xx range indicate an error that failed given the information provided (e.g., a required parameter was omitted, a charge failed, etc.). Codes in the 5xx range indicate an error with LianLian's servers (these are rare).
 
 Some 4xx errors that could be handled programmatically (e.g., a validation error) include an error code that briefly explains the error reported.
 
