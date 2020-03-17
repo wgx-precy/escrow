@@ -15,7 +15,7 @@ info:
 
     Due to data security policy and requirements of China and United States, PII related Lianlian Pay API(s) are hosted both in China and United States, corresponding PII data will be store and processed within data receiving country, PII data will not be shared between two environments. None PII related API(s) will be hosted in China only. Detailed APIs and its hosting environments are:
 
-    ![](https://raw.githubusercontent.com/wgx-precy/escrow/master/assets/images/apis_host.png)
+    ![](https://raw.githubusercontent.com/wgx-precy/escrow/master/assets/images/api_hosts.png)
   contact:
     email: fx_support@lianlianpay.com
     name: Lianlian Pay
