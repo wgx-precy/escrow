@@ -806,6 +806,7 @@ components:
         | EXPIRED | Bill expired |
         | FUNDED | Bill funded |
         | CANCELED | Bill canceled|
+        | PROCESSING | Bill payment approved, under system processing |
         | PAID | Bill paid to its payee |
         | PAYMENT_FAILED | Bill payment failed |
       enum:
