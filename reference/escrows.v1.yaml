@@ -515,7 +515,7 @@ paths:
                   maxLength: 256
                 kyc:
                   oneOf:
-                    - description: Individual/Sole Trader data set
+                    - description: US/HK Sole Trader KYC data set
                       properties:
                         name:
                           type: string
@@ -570,7 +570,7 @@ paths:
                         - idFrontCopy
                         - idBackCopy
                         - address
-                    - description: Company data set
+                    - description: CN/HK/US Company KYC data set and CN Sole Trader data set
                       properties:
                         name:
                           type: string
@@ -677,7 +677,15 @@ paths:
                 - mobile
                 - indicator
                 - kyc
-        description: ''
+        description: |-
+          | Origin | Profile Type | KYC Data Set |
+          |--------|--------------|--------------|
+          | US | Company | Company Data Set|
+          | US | Sole Trader | Sole Trader/Individual Data Set |
+          | CN | Company | Company Data Set|
+          | CN | Sole Trader | Company Data Set|
+          | HK | Company | Company Data Set|
+          | HK | Sole Trader | Sole Trader/Individual Data Set |
       description: "Create a profile in Lianlian Pay's system. \n\n**This method will be hosted in both US and CN**, US profiles should be created via US endpoint, and CN/HK profiles should be created via CN endpoint.\n\n| environment | endpoint |\n|-------------|----------|\n| US Sandbox | https://global-api-us-sandbox.lianlianpay-inc.com/escrow/v1 |\n| US Production | https://global-api-us.lianlianpay.com/escrow/v1 |\n| CN Sandbox |https://global-api-sandbox.lianlianpay-inc.com/escrow/v1 |\n| CN Production | https://global-api.lianlianpay.com/escrow/v1 |\n\nAll required supporting documents, such as `regCertificateCopy`, `idFrontImg`, `idBackImg`, etc, should be uploaded into Lianlina Pay system via **Upload Document** API before making **Create Profile** request.\n\nReturn type is `Profile` object"
       tags:
         - Profiles
