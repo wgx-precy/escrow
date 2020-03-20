@@ -288,15 +288,14 @@ paths:
                   masterToken:
                     type: string
                     description: New master token
-                  createTime:
+                  updateTime:
                     type: string
                     format: date-time
                     example: '2019-01-01T00:00:00Z'
                     description: Master Token refreshed time
                 required:
-                  - developerId
                   - masterToken
-                  - createTime
+                  - updateTime
         '400':
           description: "Bad Request\n\nPossible error codes:\n\n| Code | Description |\n|------|-------------|\n| 999995 | \\[PARAMETER\\] ERROR_MESSAGE |\n"
           content:
