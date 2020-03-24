@@ -270,6 +270,57 @@ paths:
         description: ''
       tags:
         - Documents
+  /developers/tokens:
+    parameters: []
+    put:
+      summary: 1. Refresh Developer Master Token
+      tags:
+        - Developers
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  masterToken:
+                    type: string
+                    description: New master token
+                  updateTime:
+                    type: string
+                    format: date-time
+                    example: '2019-01-01T00:00:00Z'
+                    description: Master Token refreshed time
+                required:
+                  - masterToken
+                  - updateTime
+        '400':
+          description: "Bad Request\n\nPossible error codes:\n\n| Code | Description |\n|------|-------------|\n| 999995 | \\[PARAMETER\\] ERROR_MESSAGE |\n"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '404':
+          description: Not Found
+        '500':
+          description: Internal Server Error
+      operationId: get-developers-token-refreshToken
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                refreshToken:
+                  type: string
+                  description: Developer refresh token
+              required:
+                - refreshToken
+      description: |-
+        Refresh developer's master token with Lianlian Pay assigned refresh token. Master token can be refreshed at anytime with a valid refresh token. After refresh, previous master token will expire instantly.
+
+        Refresh token can be updated via offline process.
   '/webhooks/{webhookId}':
     parameters:
       - schema:
