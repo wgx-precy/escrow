@@ -985,7 +985,7 @@ components:
           type: array
           description: Error information details if applicable
           items:
-            $ref: '#/components/schemas/Errors'
+            $ref: '#/components/schemas/Error'
       required:
         - id
         - jurisdiction
