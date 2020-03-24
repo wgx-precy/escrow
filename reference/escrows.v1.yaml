@@ -39,11 +39,11 @@ paths:
           content:
             application/json:
               schema:
+                type: array
+                maxItems: 200
+                description: Registered webhook list
                 items:
                   $ref: '#/components/schemas/Webhook'
-                description: Registered webhook list
-                maxItems: 200
-                type: array
         '500':
           description: Internal Server Error
       operationId: get-webhooks
@@ -143,6 +143,9 @@ paths:
             application/json:
               schema:
                 type: object
+                required:
+                  - total
+                  - list
                 properties:
                   total:
                     type: integer
@@ -152,9 +155,6 @@ paths:
                     description: Event data list
                     items:
                       $ref: '#/components/schemas/Event'
-                required:
-                  - total
-                  - list
         '400':
           description: "Bad Request\n\nPossible error codes:\n\n| Code | Description |\n|------|-------------|\n| 999995 | \\[PARAMETER\\] ERROR_MESSAGE |"
           content:
@@ -230,9 +230,9 @@ paths:
           content:
             application/json:
               schema:
-                type: string
-                format: byte
                 description: Byte streaming
+                format: byte
+                type: string
         '404':
           description: Not Found
         '500':
@@ -271,6 +271,46 @@ paths:
         description: ''
       tags:
         - Documents
+  '/webhooks/{webhookId}':
+    parameters:
+      - schema:
+          type: string
+        name: webhookId
+        in: path
+        required: true
+    get:
+      summary: 3. Get Webhook Registration
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Webhook'
+        '404':
+          description: Not Found
+        '500':
+          description: Internal Server Error
+      operationId: get-webhook-webhookId
+      description: |-
+        Get a webhook registration details by `webhookId`.
+
+        Return type is `Webhook` object
+      tags:
+        - Webhooks
+    delete:
+      summary: 4. Delete Webhook Registration
+      operationId: delete-webhook-webhookId
+      responses:
+        '200':
+          description: OK
+        '404':
+          description: Not Found
+        '500':
+          description: Internal Server Error
+      description: Delete a webhook registration by `webhookId`.
+      tags:
+        - Webhooks
   /developers/tokens:
     parameters: []
     put:
@@ -322,128 +362,6 @@ paths:
         Refresh developer's master token with Lianlian Pay assigned refresh token. Master token can be refreshed at anytime with a valid refresh token. After refresh, previous master token will expire instantly.
 
         Refresh token can be updated via offline process.
-  '/profiles/{profileId}/approve':
-    parameters:
-      - schema:
-          type: string
-        name: profileId
-        in: path
-        required: true
-    put:
-      summary: 3. Confirm Onboard
-      operationId: put-profiles-profileId
-      responses:
-        '200':
-          description: OK
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  id:
-                    type: string
-                    description: Profile id
-                  status:
-                    type: string
-                    description: Profile status
-                    enum:
-                      - APPROVED
-                required:
-                  - id
-                  - status
-        '400':
-          description: |-
-            Bad Request
-
-            Possible error codes:
-
-            | Code | Description |
-            |------|-------------|
-            | 108002 | Invalid profile. Only `ACTIVE` profile can be approved onboard. |
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Error'
-        '404':
-          description: Not Found
-        '500':
-          description: Internal Server Error
-      tags:
-        - Profiles
-      description: "Approve a single profile by `profileID`. \n\n`profileId` and updated `status` will be returned"
-  '/profiles/{profileId}/cancel':
-    parameters:
-      - schema:
-          type: string
-        name: profileId
-        in: path
-        required: true
-    put:
-      summary: 4. Cancel Profile
-      operationId: put-profiles-profileId-cancel
-      responses:
-        '200':
-          description: OK
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  id:
-                    type: string
-                    description: Profile id
-                  status:
-                    type: string
-                    description: Profile status
-                    enum:
-                      - CANCELED
-                required:
-                  - id
-                  - status
-        '400':
-          description: |-
-            Bad Request
-
-            Possible error codes:
-
-            | Code | Description |
-            |------|-------------|
-            | 108003 | Invalide profile. Only `INIT`, `ERROR`, `ACTIVE`, `APPROVED` profile can be canceled. |
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Error'
-        '404':
-          description: Not Found
-        '500':
-          description: Internal Server Error
-      tags:
-        - Profiles
-      description: "Approve a single profile by `profileID`. \n\n`profileId` and updated `status` will be returned"
-  '/profiles/{profileId}':
-    parameters:
-      - schema:
-          type: string
-        name: profileId
-        in: path
-        required: true
-    get:
-      summary: 2. Get Profile
-      tags:
-        - Profiles
-      responses:
-        '200':
-          description: OK
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Profile'
-        '404':
-          description: Not Found
-        '500':
-          description: Internal Server Error
-      operationId: get-profiles-profileId
-      description: "Get a single profile by `profileId`. \n\n**This method will be hosted in both US and CN**, US profiles can be retrieved via US endpoint and CN/HK endpoint can be retrieved via CN endpoint. Otherwise `404 resoucre not found` will be returned.  \n\n| environment | endpoint |\n|-------------|----------|\n| US Sandbox | https://global-api-us-sandbox.lianlianpay-inc.com/escrow/v1 |\n| US Production | https://global-api-us.lianlianpay.com/escrow/v1 |\n| CN Sandbox |https://global-api-sandbox.lianlianpay-inc.com/escrow/v1 |\n| CN Production | https://global-api.lianlianpay.com/escrow/v1 |\n\nReturn type is `Profile` object"
   /profiles:
     post:
       summary: 1. Create Profile
@@ -688,46 +606,128 @@ paths:
       description: "Create a profile in Lianlian Pay's system. \n\n**This method will be hosted in both US and CN**, US profiles should be created via US endpoint, and CN/HK profiles should be created via CN endpoint.\n\n| environment | endpoint |\n|-------------|----------|\n| US Sandbox | https://global-api-us-sandbox.lianlianpay-inc.com/escrow/v1 |\n| US Production | https://global-api-us.lianlianpay.com/escrow/v1 |\n| CN Sandbox |https://global-api-sandbox.lianlianpay-inc.com/escrow/v1 |\n| CN Production | https://global-api.lianlianpay.com/escrow/v1 |\n\nAll required supporting documents, such as `regCertificateCopy`, `idFrontImg`, `idBackImg`, etc, should be uploaded into Lianlina Pay system via **Upload Document** API before making **Create Profile** request.\n\nReturn type is `Profile` object"
       tags:
         - Profiles
-  '/webhooks/{webhookId}':
+  '/profiles/{profileId}':
     parameters:
       - schema:
           type: string
-        name: webhookId
+        name: profileId
         in: path
         required: true
     get:
-      summary: 3. Get Webhook Registration
+      summary: 2. Get Profile
+      tags:
+        - Profiles
       responses:
         '200':
           description: OK
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Webhook'
+                $ref: '#/components/schemas/Profile'
         '404':
           description: Not Found
         '500':
           description: Internal Server Error
-      operationId: get-webhook-webhookId
-      description: |-
-        Get a webhook registration details by `webhookId`.
-
-        Return type is `Webhook` object
-      tags:
-        - Webhooks
-    delete:
-      summary: 4. Delete Webhook Registration
-      operationId: delete-webhook-webhookId
+      operationId: get-profiles-profileId
+      description: "Get a single profile by `profileId`. \n\n**This method will be hosted in both US and CN**, US profiles can be retrieved via US endpoint and CN/HK endpoint can be retrieved via CN endpoint. Otherwise `404 resoucre not found` will be returned.  \n\n| environment | endpoint |\n|-------------|----------|\n| US Sandbox | https://global-api-us-sandbox.lianlianpay-inc.com/escrow/v1 |\n| US Production | https://global-api-us.lianlianpay.com/escrow/v1 |\n| CN Sandbox |https://global-api-sandbox.lianlianpay-inc.com/escrow/v1 |\n| CN Production | https://global-api.lianlianpay.com/escrow/v1 |\n\nReturn type is `Profile` object"
+  '/profiles/{profileId}/cancel':
+    parameters:
+      - schema:
+          type: string
+        name: profileId
+        in: path
+        required: true
+    put:
+      summary: 4. Cancel Profile
+      operationId: put-profiles-profileId-cancel
       responses:
         '200':
           description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: string
+                    description: Profile id
+                  status:
+                    type: string
+                    description: Profile status
+                    enum:
+                      - CANCELED
+                required:
+                  - id
+                  - status
+        '400':
+          description: |-
+            Bad Request
+
+            Possible error codes:
+
+            | Code | Description |
+            |------|-------------|
+            | 108003 | Invalide profile. Only `INIT`, `ERROR`, `ACTIVE`, `APPROVED` profile can be canceled. |
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
         '404':
           description: Not Found
         '500':
           description: Internal Server Error
-      description: Delete a webhook registration by `webhookId`.
       tags:
-        - Webhooks
+        - Profiles
+      description: "Approve a single profile by `profileID`. \n\n`profileId` and updated `status` will be returned"
+  '/profiles/{profileId}/approve':
+    parameters:
+      - schema:
+          type: string
+        name: profileId
+        in: path
+        required: true
+    put:
+      summary: 3. Confirm Onboard
+      operationId: put-profiles-profileId
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: string
+                    description: Profile id
+                  status:
+                    type: string
+                    description: Profile status
+                    enum:
+                      - APPROVED
+                required:
+                  - id
+                  - status
+        '400':
+          description: |-
+            Bad Request
+
+            Possible error codes:
+
+            | Code | Description |
+            |------|-------------|
+            | 108002 | Invalid profile. Only `ACTIVE` profile can be approved onboard. |
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '404':
+          description: Not Found
+        '500':
+          description: Internal Server Error
+      tags:
+        - Profiles
+      description: "Approve a single profile by `profileID`. \n\n`profileId` and updated `status` will be returned"
 components:
   schemas:
     Event:
@@ -777,9 +777,6 @@ components:
           example: '2019-01-01T00:00:00Z'
         topic:
           $ref: '#/components/schemas/Event-Topic'
-        webhookURL:
-          type: string
-          description: Registered webhook url for this event
         status:
           type: string
           description: |-
@@ -794,13 +791,13 @@ components:
             - PROCESSING
             - SUCCESS
             - MAXIMUM_RETRIES_REACHED
+        webhookURL:
+          type: string
+          description: Registered webhook url for this event
       required:
-        - id
         - data
         - createTime
         - topic
-        - status
-        - webhookURL
     Event-Topic:
       type: string
       title: '| Event Topic Enumeration'
@@ -873,6 +870,216 @@ components:
         - id
         - name
         - createTime
+    Error:
+      title: '| Error Object'
+      type: object
+      description: Error object defined in Lianlian Pay system.
+      x-tags:
+        - Other
+      properties:
+        code:
+          type: string
+          description: Error code
+        message:
+          type: string
+          description: 'Error message '
+      required:
+        - code
+        - message
+    Certificate-Document-Type:
+      type: string
+      title: '| Certificate Document Type Enumeration'
+      description: |-
+        Supported **Company Certificate** type, one of:
+
+        | Code | Value |
+        |------|-------|
+        |CERTIFICATE_OF_INCORPORATION| Certificate of Incorporation|
+        |TAX_DOCUMENT| Tax Document|
+        |EIN_LETTER| EIN Letter|
+        |ARTICLES_OF_ASSOCIATION| Articles of Association |
+        |BUSINESS_LICENSE| Business License |
+        |CERTIFICATE_OF_REGISTRATION| Certificate of Registration |
+      enum:
+        - CERTIFICATE_OF_INCORPORATION
+        - TAX_DOCUMENT
+        - EIN_LETTER
+        - ARTICLES_OF_ASSOCIATION
+        - BUSINESS_LICENSE
+        - CERTIFICATE_OF_REGISTRATION
+      x-tags:
+        - Profiles
+    Legal-Representative:
+      title: '| Legal-Representative Object'
+      type: object
+      description: |
+        **Legal-Representative Object**
+        Data set of Legal-Representative in Lianlian Pay's system.
+      x-tags:
+        - Profiles
+      properties:
+        name:
+          type: string
+          description: "Legal representative's name in English"
+          maxLength: 128
+        idNumber:
+          type: string
+          description: "Legal representative's ID number"
+        idFrontCopy:
+          type: string
+          description: "The legal representative's ID front page photocopy document id in LianlianPay's system returned by `Upload Document`API. Supported ID types:\n\nCN \n\n| Value | Description |\n|-------|-------------|\n| IDCARD | National ID Card |\n\nHK\n\n| Value | Description |\n|-------|-------------|\n| PASSPORT | Passport |\n| IDCARD | ID Card |\n\nUS, HK\n\n| Value | Description |\n|-------|-------------|\n| PASSPORT | Passport |\n| DRIVERS_LICENSE | Drivers License |"
+          maxLength: 32
+        idBackCopy:
+          type: string
+          description: "The legal representative's ID back page photocopy document id in LianlianPay's system returned by `Upload Document`API. Supported ID types:\n\nCN \n\n| Value | Description |\n|-------|-------------|\n| IDCARD | National ID Card |\n\nHK\n\n| Value | Description |\n|-------|-------------|\n| PASSPORT | Passport |\n| IDCARD | ID Card |\n\nUS, HK\n\n| Value | Description |\n|-------|-------------|\n| PASSPORT | Passport |\n| DRIVERS_LICENSE | Drivers License |"
+          maxLength: 32
+      required:
+        - name
+        - idFrontCopy
+        - idBackCopy
+    KYC-Company:
+      title: '| KYC-Company Object'
+      type: object
+      description: |
+        **KYC-Company Object**
+        Data set of Company KYC basic information description in Lianlian Pay system.
+      x-tags:
+        - Profiles
+      properties:
+        name:
+          type: string
+          description: Entity Name in English
+          maxLength: 128
+        registrationNumber:
+          type: string
+          description: Registry Number/EIN Number
+          maxLength: 128
+        registrationCertificateCopy:
+          type: string
+          description: "The business registration certificate photocopy document id in LianlianPay's system returned by `Upload Document` API."
+          maxLength: 32
+        registrationCertificateCopyType:
+          $ref: '#/components/schemas/Certificate-Document-Type'
+        address:
+          $ref: '#/components/schemas/Address'
+        legalRepresentative:
+          $ref: '#/components/schemas/Legal-Representative'
+      required:
+        - name
+        - registrationNumber
+        - registrationCertificateCopy
+        - registrationCertificateCopyType
+        - address
+        - legalRepresentative
+    KYC-Individual:
+      title: '| KYC-Individual Object'
+      type: object
+      description: |
+        **KYC-Individual Object**
+        Data set of Individual KYC basic information description in Lianlian Pay system.
+      x-tags:
+        - Profiles
+      properties:
+        name:
+          type: string
+          description: Name in English
+          maxLength: 128
+        idNumber:
+          type: string
+          description: ID number
+        idFrontCopy:
+          type: string
+          description: "The ID front page photocopy document id in LianlianPay's system returned by `Upload Document`API. Supported ID types:\n\nCN \n\n| Value | Description |\n|-------|-------------|\n| IDCARD | National ID Card |\n\nHK\n\n| Value | Description |\n|-------|-------------|\n| PASSPORT | Passport |\n| IDCARD | ID Card |\n\nUS, HK\n\n| Value | Description |\n|-------|-------------|\n| PASSPORT | Passport |\n| DRIVERS_LICENSE | Drivers License |"
+          maxLength: 32
+        idBackCopy:
+          type: string
+          description: "The ID back page photocopy document id in LianlianPay's system returned by `Upload Document`API. Supported ID types:\n\nCN \n\n| Value | Description |\n|-------|-------------|\n| IDCARD | National ID Card |\n\nHK\n\n| Value | Description |\n|-------|-------------|\n| PASSPORT | Passport |\n| IDCARD | ID Card |\n\nUS, HK\n\n| Value | Description |\n|-------|-------------|\n| PASSPORT | Passport |\n| DRIVERS_LICENSE | Drivers License |"
+          maxLength: 32
+        address:
+          $ref: '#/components/schemas/Address'
+      required:
+        - name
+        - idFrontCopy
+        - idBackCopy
+        - address
+    Region:
+      title: '| Region Enumeration'
+      description: |
+        **Region/Country** Two and three character ISO 3166 region codes. One of:
+
+        | Region | Description |
+        |-------|-------------|
+        | CN | China |
+        | HK | Hongkong|
+        | US | United States |
+      type: string
+      x-tags:
+        - Other
+    Profile-Type:
+      title: '| Profile Type Enumeration'
+      description: |-
+        Profile type defined in Lianlian Pay system. One of:
+
+        | Value | Description |
+        |-------|-------------|
+        | COMPANY |  Company/Entity |
+        | SOLE_TRADER | Individual/Sole Trader |
+      type: string
+      x-tags:
+        - Profiles
+    Profile-Status:
+      title: '| Profile Status Enumeration'
+      type: string
+      description: |-
+        Profile status defined in Lianlian Pay system. One of:
+
+        | Value | Description |
+        |-------|-------------|
+        | UNDER_REVIEW | Profile KYC is in progress |
+        | ERROR | KYC error, need aditional information to complete KYC review |
+        | FAILED | KYC failed, cannot provide service |
+        | ACTIVE | KYC complete, waiting for profile to be approved |
+        | APPROVED| Profile approved, ready to provide VAT services |
+        | CANCELED | Profile canceled, VAT service stopped |
+      x-tags:
+        - Profiles
+    Address:
+      title: '| Address Object'
+      type: object
+      description: |-
+        **Address Object**
+        Address data set defined in Lianlian Pay system.
+      x-tags:
+        - Other
+      properties:
+        lineOne:
+          type: string
+          description: 'Address line 1 (e.g., street, PO Box, or company name)'
+          maxLength: 50
+        lineTwo:
+          type: string
+          description: 'Address line 2 (e.g., apartment, suite, unit, or building)'
+          maxLength: 100
+        city:
+          type: string
+          description: City/Town
+          maxLength: 50
+        province:
+          type: string
+          description: 'State, county, province, or region'
+          maxLength: 50
+        region:
+          $ref: '#/components/schemas/Region'
+        postalCode:
+          type: string
+          description: ZIP or postal code
+          maxLength: 11
+      required:
+        - lineOne
+        - city
+        - province
+        - region
+        - postalCode
     Profile:
       title: '| Profile Object'
       type: object
@@ -927,214 +1134,4 @@ components:
         - status
         - email
         - mobile
-    Address:
-      title: '| Address Object'
-      type: object
-      description: |-
-        **Address Object**
-        Address data set defined in Lianlian Pay system.
-      x-tags:
-        - Other
-      properties:
-        lineOne:
-          type: string
-          description: 'Address line 1 (e.g., street, PO Box, or company name)'
-          maxLength: 50
-        lineTwo:
-          type: string
-          description: 'Address line 2 (e.g., apartment, suite, unit, or building)'
-          maxLength: 100
-        city:
-          type: string
-          description: City/Town
-          maxLength: 50
-        province:
-          type: string
-          description: 'State, county, province, or region'
-          maxLength: 50
-        region:
-          $ref: '#/components/schemas/Region'
-        postalCode:
-          type: string
-          description: ZIP or postal code
-          maxLength: 11
-      required:
-        - lineOne
-        - city
-        - province
-        - region
-        - postalCode
-    Error:
-      title: '| Error Object'
-      type: object
-      description: Error object defined in Lianlian Pay system.
-      x-tags:
-        - Other
-      properties:
-        code:
-          type: string
-          description: Error code
-        message:
-          type: string
-          description: 'Error message '
-      required:
-        - code
-        - message
-    Profile-Status:
-      title: '| Profile Status Enumeration'
-      type: string
-      description: |-
-        Profile status defined in Lianlian Pay system. One of:
-
-        | Value | Description |
-        |-------|-------------|
-        | UNDER_REVIEW | Profile KYC is in progress |
-        | ERROR | KYC error, need aditional information to complete KYC review |
-        | FAILED | KYC failed, cannot provide service |
-        | ACTIVE | KYC complete, waiting for profile to be approved |
-        | APPROVED| Profile approved, ready to provide VAT services |
-        | CANCELED | Profile canceled, VAT service stopped |
-      x-tags:
-        - Profiles
-    Profile-Type:
-      title: '| Profile Type Enumeration'
-      description: |-
-        Profile type defined in Lianlian Pay system. One of:
-
-        | Value | Description |
-        |-------|-------------|
-        | COMPANY |  Company/Entity |
-        | SOLE_TRADER | Individual/Sole Trader |
-      type: string
-      x-tags:
-        - Profiles
-    Region:
-      title: '| Region Enumeration'
-      description: |
-        **Region/Country** Two and three character ISO 3166 region codes. One of:
-
-        | Region | Description |
-        |-------|-------------|
-        | CN | China |
-        | HK | Hongkong|
-        | US | United States |
-      type: string
-      x-tags:
-        - Other
-    KYC-Individual:
-      title: '| KYC-Individual Object'
-      type: object
-      description: |
-        **KYC-Individual Object**
-        Data set of Individual KYC basic information description in Lianlian Pay system.
-      x-tags:
-        - Profiles
-      properties:
-        name:
-          type: string
-          description: Name in English
-          maxLength: 128
-        idNumber:
-          type: string
-          description: ID number
-        idFrontCopy:
-          type: string
-          description: "The ID front page photocopy document id in LianlianPay's system returned by `Upload Document`API. Supported ID types:\n\nCN \n\n| Value | Description |\n|-------|-------------|\n| IDCARD | National ID Card |\n\nHK\n\n| Value | Description |\n|-------|-------------|\n| PASSPORT | Passport |\n| IDCARD | ID Card |\n\nUS, HK\n\n| Value | Description |\n|-------|-------------|\n| PASSPORT | Passport |\n| DRIVERS_LICENSE | Drivers License |"
-          maxLength: 32
-        idBackCopy:
-          type: string
-          description: "The ID back page photocopy document id in LianlianPay's system returned by `Upload Document`API. Supported ID types:\n\nCN \n\n| Value | Description |\n|-------|-------------|\n| IDCARD | National ID Card |\n\nHK\n\n| Value | Description |\n|-------|-------------|\n| PASSPORT | Passport |\n| IDCARD | ID Card |\n\nUS, HK\n\n| Value | Description |\n|-------|-------------|\n| PASSPORT | Passport |\n| DRIVERS_LICENSE | Drivers License |"
-          maxLength: 32
-        address:
-          $ref: '#/components/schemas/Address'
-      required:
-        - name
-        - idFrontCopy
-        - idBackCopy
-        - address
-    KYC-Company:
-      title: '| KYC-Company Object'
-      type: object
-      description: |
-        **KYC-Company Object**
-        Data set of Company KYC basic information description in Lianlian Pay system.
-      x-tags:
-        - Profiles
-      properties:
-        name:
-          type: string
-          description: Entity Name in English
-          maxLength: 128
-        registrationNumber:
-          type: string
-          description: Registry Number/EIN Number
-          maxLength: 128
-        registrationCertificateCopy:
-          type: string
-          description: "The business registration certificate photocopy document id in LianlianPay's system returned by `Upload Document` API."
-          maxLength: 32
-        registrationCertificateCopyType:
-          $ref: '#/components/schemas/Certificate-Document-Type'
-        address:
-          $ref: '#/components/schemas/Address'
-        legalRepresentative:
-          $ref: '#/components/schemas/Legal-Representative'
-      required:
-        - name
-        - registrationNumber
-        - registrationCertificateCopy
-        - registrationCertificateCopyType
-        - address
-        - legalRepresentative
-    Legal-Representative:
-      title: '| Legal-Representative Object'
-      type: object
-      description: |
-        **Legal-Representative Object**
-        Data set of Legal-Representative in Lianlian Pay's system.
-      x-tags:
-        - Profiles
-      properties:
-        name:
-          type: string
-          description: "Legal representative's name in English"
-          maxLength: 128
-        idNumber:
-          type: string
-          description: "Legal representative's ID number"
-        idFrontCopy:
-          type: string
-          description: "The legal representative's ID front page photocopy document id in LianlianPay's system returned by `Upload Document`API. Supported ID types:\n\nCN \n\n| Value | Description |\n|-------|-------------|\n| IDCARD | National ID Card |\n\nHK\n\n| Value | Description |\n|-------|-------------|\n| PASSPORT | Passport |\n| IDCARD | ID Card |\n\nUS, HK\n\n| Value | Description |\n|-------|-------------|\n| PASSPORT | Passport |\n| DRIVERS_LICENSE | Drivers License |"
-          maxLength: 32
-        idBackCopy:
-          type: string
-          description: "The legal representative's ID back page photocopy document id in LianlianPay's system returned by `Upload Document`API. Supported ID types:\n\nCN \n\n| Value | Description |\n|-------|-------------|\n| IDCARD | National ID Card |\n\nHK\n\n| Value | Description |\n|-------|-------------|\n| PASSPORT | Passport |\n| IDCARD | ID Card |\n\nUS, HK\n\n| Value | Description |\n|-------|-------------|\n| PASSPORT | Passport |\n| DRIVERS_LICENSE | Drivers License |"
-          maxLength: 32
-      required:
-        - name
-        - idFrontCopy
-        - idBackCopy
-    Certificate-Document-Type:
-      type: string
-      title: '| Certificate Document Type Enumeration'
-      description: |-
-        Supported **Company Certificate** type, one of:
-
-        | Code | Value |
-        |------|-------|
-        |CERTIFICATE_OF_INCORPORATION| Certificate of Incorporation|
-        |TAX_DOCUMENT| Tax Document|
-        |EIN_LETTER| EIN Letter|
-        |ARTICLES_OF_ASSOCIATION| Articles of Association |
-        |BUSINESS_LICENSE| Business License |
-        |CERTIFICATE_OF_REGISTRATION| Certificate of Registration |
-      enum:
-        - CERTIFICATE_OF_INCORPORATION
-        - TAX_DOCUMENT
-        - EIN_LETTER
-        - ARTICLES_OF_ASSOCIATION
-        - BUSINESS_LICENSE
-        - CERTIFICATE_OF_REGISTRATION
-      x-tags:
-        - Profiles
   securitySchemes: {}
