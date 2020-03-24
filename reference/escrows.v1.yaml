@@ -554,10 +554,6 @@ paths:
       responses:
         '200':
           description: OK
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Account'
       requestBody:
         content:
           application/json:
@@ -578,10 +574,7 @@ paths:
                 - currency
                 - region
         description: ''
-      description: |-
-        Create a single Lianlian Pay account for a profile
-
-        Return type is `Account` object
+      description: "Create a single Lianlian Pay account for a profile.\n "
       tags:
         - Accounts
   '/accounts/{accountId}':
