@@ -703,31 +703,20 @@ components:
           description: Webhook registration id in Lianlian Pay system
         url:
           type: string
-          description: Client webhook url
+          description: Client callback url
+          maxLength: 64
         createTime:
           type: string
           description: 'Webhook registration time, UTC+0 timestamp'
           format: date-time
           example: '2019-01-01T00:00:00Z'
-        isEnabled:
-          type: boolean
-          description: Enable/disable callbacks
-        modifyTime:
-          type: string
-          description: 'Webhook last modified time, UTC+0 timestamp'
-          format: date-time
-          example: '2019-01-01T00:00:00Z'
-        type:
-          type: array
-          description: Event topics in Lianlian Pay system
-          items:
-            $ref: '#/components/schemas/Event-Topic'
+        topic:
+          $ref: '#/components/schemas/Event-Topic'
       required:
         - id
         - url
-        - isEnabled
-        - type
         - createTime
+        - topic
     Document:
       title: '| Document Object'
       type: object
