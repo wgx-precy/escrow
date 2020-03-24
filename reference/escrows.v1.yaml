@@ -677,13 +677,15 @@ components:
 
         | Topic | Description |
         |--------|------------|
-        | paymentaccount.created | Payment account created in Lianlian Pay system. Return data `Account` object. |
-        | bill.funded | Bill fully funded, `Bill.isFullyFunded` equals `true`. Return data `Bill` object.  |
-        | bill.paid | Bill paid, after receiving payment request(Submit Bill), Lianlian Pay made payment to bill payee. `Bill.ispaid` equals `false`. Return data `Bill` object. |
-        | bill.expired | No funding or short funding after bill expiration date. Return data `Bill` object. |
-        | bill.expired | No funding or short funding after bill expiration date. Return data `Bill` object. |
-        | reconciliation.billReport.created | Avalara bill report generated |
-        | reconciliation.fundingAccountBalanceReport.created | Customer funding account balance report generated |
+        | account.paymentaccount.created | Payment account created in Lianlian Pay system. |
+        | bill.funded | Bill fully funded, `Bill.isFullyFunded` equals `true`. |
+        | bill.paid | Bill paid, after receiving payment request(Submit Bill), Lianlian Pay made payment to bill payee. `Bill.ispaid` equals `false`. |
+        | bill.canceled | After receiving void bill request, Lianlian Pay canceled the bill. |
+        | bill.expired | No funding or short funding after bill expiration date. |
+        | profile.failed | Profile KYC failed, Lianlian Pay cannot provide service to this profile. |
+        | profile.active | Profile KYC passed, profile active in Lianlian Pay system.  |
+        | profile.error | Profile KYC error, need more information to complete Lianlian Pay KYC. Detailed information can be found in `Profile.feedback`. |
+        | profile.rar.complete | Profile KYC Risk Assessment Report complete. |
       x-tags:
         - Events
     Webhook:
