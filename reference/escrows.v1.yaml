@@ -270,7 +270,7 @@ paths:
         description: ''
       tags:
         - Documents
-  '/webhook/{webhookId}':
+  '/webhooks/{webhookId}':
     parameters:
       - schema:
           type: string
@@ -288,6 +288,8 @@ paths:
                 $ref: '#/components/schemas/Webhook'
         '404':
           description: Not Found
+        '500':
+          description: Internal Server Error
       operationId: get-webhook-webhookId
       description: |-
         Get a webhook registration details by `webhookId`.
@@ -295,74 +297,16 @@ paths:
         Return type is `Webhook` object
       tags:
         - Webhooks
-    put:
-      summary: 4. Edit Webhook Registration
-      operationId: put-webhook-webhookId
-      responses:
-        '200':
-          description: OK
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Webhook'
-        '404':
-          description: Not Found
-      description: |-
-        Edit a webhook registration by `webhookId`, such as turn on/off webhook, update webhook callback url, update registration topics.
-
-        Return type is `Webhook` object
-      requestBody:
-        content:
-          application/json:
-            schema:
-              type: object
-              properties:
-                isEnabled:
-                  type: boolean
-                  description: Webhook On/Off flag
-                url:
-                  type: string
-                  description: Webhook callback urk
-                topic:
-                  type: array
-                  description: Webhook event topics.
-                  enum:
-                    - paymentaccount.created
-                    - bill.funded
-                    - bill.paid
-                    - bill.expired
-                    - bill.expired
-                    - reconciliation.billReport
-                    - reconciliation.fundingAccountBalance
-                  uniqueItems: true
-                  items:
-                    type: string
-      tags:
-        - Webhooks
     delete:
-      summary: 5. Delete Webhook Registration
+      summary: 4. Delete Webhook Registration
       operationId: delete-webhook-webhookId
       responses:
         '200':
           description: OK
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  id:
-                    type: string
-                    description: "Webhook registration id in Lianlian Pay's system"
-                  status:
-                    type: string
-                    description: Webhook registration status
-                    enum:
-                      - DELETED
-                required:
-                  - id
-                  - status
         '404':
           description: Not Found
+        '500':
+          description: Internal Server Error
       description: Delete a webhook registration by `webhookId`.
       tags:
         - Webhooks
