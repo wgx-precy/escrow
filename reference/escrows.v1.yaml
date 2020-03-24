@@ -739,22 +739,22 @@ components:
         - id
         - name
         - createTime
-    Errors:
-      title: Error Object
+    Error:
+      title: '| Error Object'
       type: object
-      description: "Error object defined in Lianlian Pay's system. This object will be returned either in API response body or inside feedback block of a `Bill` object if applicable."
+      description: Error object defined in Lianlian Pay system.
+      x-tags:
+        - Other
       properties:
         code:
           type: string
           description: Error code
         message:
           type: string
-          description: Error message
+          description: 'Error message '
       required:
         - code
         - message
-      x-tags:
-        - Errors
     Bank-Account-Region:
       type: string
       title: '| Bank Account Region Enumeration'
