@@ -197,13 +197,10 @@ paths:
                 description: Byte streaming
         '404':
           description: Not Found
+        '500':
+          description: Internal Server Error
       operationId: get-documents-name
-      description: |+
-        Download document file by `dcoumentId`
-
-        **This method is hosted in both US and CN**, US profiles related RAR report should be downloaded via US endpoint and CN/HK profiles related RAR report should be downloaded via CN endpoint.
-
-
+      description: "Download document file by `dcoumentId`. \n\n**This method will be hosted in both US and CN**, US profile RAR report should be downloaded via the US endpoint and CN/HK profile RAR report should be downloaded via the CN endpoint.\n\n| environment | endpoint |\n|-------------|----------|\n| US Sandbox | https://global-api-us-sandbox.lianlianpay-inc.com/escrow/v1 |\n| US Production | https://global-api-us.lianlianpay.com/escrow/v1 |\n| CN Sandbox |https://global-api-sandbox.lianlianpay-inc.com/escrow/v1 |\n| CN Production | https://global-api.lianlianpay.com/escrow/v1 |\n\nLianlian Pay deployed hypermedia in APIs to provide additional information. For example, `profile.rar.complete` event contains the profile RAR report download API endpoint.\n\n"
   /documents:
     post:
       summary: 1. Upload Document
@@ -215,7 +212,11 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Document'
-      description: "Upload document to Lianlian Pay system. \n\n**This method is hosted in both US and CN**, support document(s) for US profiles should be uploaded via US endpoint and supported document(s) for US/HK profiles should be uploaded via CN endpoint.\n\nAttachments can be one of the format PDF, JPG, JPEG, or PNG. To upload a multi-page image, please use the PDF data type.\n\nReturn type is `Document` object"
+        '400':
+          description: "Bad Request\n\nPossible error codes:\n\n| Code | Description |\n|------|-------------|\n| 510002 | Unsupported document type. |\n| 999995 | \\[PARAMETER\\] ERROR_MESSAGE |\n"
+        '500':
+          description: Internal Server Error
+      description: "Upload document to Lianlian Pay system. \n\n**This method will be hosted in both US and CN**, support document(s) for US profiles should be uploaded via US endpoint and supported document(s) for CN/HK profiles should be uploaded via CN endpoint. \n\n| environment | endpoint |\n|-------------|----------|\n| US Sandbox | https://global-api-us-sandbox.lianlianpay-inc.com/escrow/v1 |\n| US Production | https://global-api-us.lianlianpay.com/escrow/v1 |\n| CN Sandbox |https://global-api-sandbox.lianlianpay-inc.com/escrow/v1 |\n| CN Production | https://global-api.lianlianpay.com/escrow/v1 |\n\nLianlian Pay system supported document types are **PDF**, **JPG**, **JPEG** and **PNG**.\n\nReturn type is `Document` object. `Document.id` should be used in other APIs if a support document is required."
       requestBody:
         content:
           application/json:
@@ -224,7 +225,7 @@ paths:
               properties:
                 name:
                   type: string
-                  description: Document name
+                  description: Document name(including extension)
                   maxLength: 128
               required:
                 - name
